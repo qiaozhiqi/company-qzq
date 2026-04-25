@@ -1,0 +1,127 @@
+{
+    "pages": [
+        {
+            "path": "pages/login/login",
+            "style": {
+                "navigationBarTitleText": "企业账号登录",
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "pages/taxi/index",
+            "style": {
+                "navigationBarTitleText": "公务打车",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/taxi/address-select",
+            "style": {
+                "navigationBarTitleText": "选择地址"
+            }
+        },
+        {
+            "path": "pages/taxi/order-confirm",
+            "style": {
+                "navigationBarTitleText": "确认订单"
+            }
+        },
+        {
+            "path": "pages/taxi/trip-detail",
+            "style": {
+                "navigationBarTitleText": "行程详情"
+            }
+        },
+        {
+            "path": "pages/hotel/index",
+            "style": {
+                "navigationBarTitleText": "酒店预订",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/hotel/hotel-detail",
+            "style": {
+                "navigationBarTitleText": "酒店详情"
+            }
+        },
+        {
+            "path": "pages/hotel/room-detail",
+            "style": {
+                "navigationBarTitleText": "房型详情"
+            }
+        },
+        {
+            "path": "pages/hotel/order-confirm",
+            "style": {
+                "navigationBarTitleText": "确认预订"
+            }
+        },
+        {
+            "path": "pages/hotel/order-detail",
+            "style": {
+                "navigationBarTitleText": "订单详情"
+            }
+        },
+        {
+            "path": "pages/orders/index",
+            "style": {
+                "navigationBarTitleText": "我的订单",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/orders/order-detail",
+            "style": {
+                "navigationBarTitleText": "订单详情"
+            }
+        },
+        {
+            "path": "pages/profile/index",
+            "style": {
+                "navigationBarTitleText": "我的"
+            }
+        }
+    ],
+    "globalStyle": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "企业商旅",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "backgroundColor": "#F5F5F5",
+        "app-plus": {
+            "background": "#efeff4"
+        }
+    },
+    "tabBar": {
+        "color": "#999999",
+        "selectedColor": "#1890FF",
+        "backgroundColor": "#FFFFFF",
+        "borderStyle": "black",
+        "list": [
+            {
+                "pagePath": "pages/taxi/index",
+                "text": "公务打车",
+                "iconPath": "static/icons/taxi.png",
+                "selectedIconPath": "static/icons/taxi-active.png"
+            },
+            {
+                "pagePath": "pages/hotel/index",
+                "text": "酒店预订",
+                "iconPath": "static/icons/hotel.png",
+                "selectedIconPath": "static/icons/hotel-active.png"
+            },
+            {
+                "pagePath": "pages/orders/index",
+                "text": "我的订单",
+                "iconPath": "static/icons/order.png",
+                "selectedIconPath": "static/icons/order-active.png"
+            },
+            {
+                "pagePath": "pages/profile/index",
+                "text": "我的",
+                "iconPath": "static/icons/profile.png",
+                "selectedIconPath": "static/icons/profile-active.png"
+            }
+        ]
+    }
+}
