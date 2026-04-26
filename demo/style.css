@@ -1,0 +1,1313 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    color: #333333;
+    background: #f5f5f5;
+}
+
+.app-container {
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.page {
+    display: none;
+    min-height: 100vh;
+}
+
+.page.active {
+    display: block;
+}
+
+/* 登录页面 */
+.login-container {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #E6F7FF 0%, #FFFFFF 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px;
+}
+
+.login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px;
+    padding-bottom: 60px;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(24, 144, 255, 0.2);
+}
+
+.app-name {
+    font-size: 36px;
+    font-weight: bold;
+    color: #1890FF;
+    margin-top: 24px;
+}
+
+.app-desc {
+    font-size: 14px;
+    color: #999999;
+    margin-top: 12px;
+}
+
+.login-form {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.form-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.form-item:last-of-type {
+    border-bottom: none;
+}
+
+.form-label {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    height: 36px;
+    font-size: 16px;
+    color: #333333;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.form-input::placeholder {
+    color: #CCCCCC;
+}
+
+.password-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toggle-password {
+    font-size: 14px;
+    color: #1890FF;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.form-tip {
+    margin-top: 24px;
+    padding: 12px 16px;
+    background: #FFFBE6;
+    border-radius: 8px;
+}
+
+.tip-text {
+    font-size: 12px;
+    color: #FAAD14;
+    line-height: 1.6;
+}
+
+.login-btn {
+    width: 100%;
+    height: 56px;
+    margin-top: 36px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 500;
+    border: none;
+    border-radius: 28px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.login-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.login-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 36px 0;
+    margin-top: auto;
+}
+
+.footer-text {
+    font-size: 12px;
+    color: #CCCCCC;
+}
+
+/* 主应用容器 */
+#main-app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 顶部导航栏 */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding: 0 16px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #F0F0F0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333333;
+}
+
+/* 内容区域 */
+.content-area {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 60px;
+}
+
+.sub-page {
+    display: none;
+}
+
+.sub-page.active {
+    display: block;
+}
+
+/* 底部 TabBar */
+.tabbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 56px;
+    background: #FFFFFF;
+    border-top: 1px solid #E8E8E8;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    z-index: 1000;
+}
+
+.tabbar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 6px 0;
+    cursor: pointer;
+}
+
+.tabbar-item.active .tabbar-icon {
+    color: #1890FF;
+}
+
+.tabbar-item.active .tabbar-label {
+    color: #1890FF;
+}
+
+.tabbar-icon {
+    width: 24px;
+    height: 24px;
+    color: #999999;
+    margin-bottom: 2px;
+}
+
+.tabbar-label {
+    font-size: 10px;
+    color: #999999;
+}
+
+/* 打车页面 */
+.map-placeholder {
+    height: 240px;
+    background: linear-gradient(180deg, #E6F7FF 0%, #FFFFFF 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.map-tip {
+    font-size: 14px;
+    color: #999999;
+    margin-top: 16px;
+}
+
+.address-card {
+    background: #FFFFFF;
+    margin: -24px 16px 0;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.address-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+}
+
+.address-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+}
+
+.blue-dot {
+    background: #1890FF;
+}
+
+.green-dot {
+    background: #52C41A;
+}
+
+.address-info {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.address-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.address-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.arrow {
+    flex-shrink: 0;
+}
+
+.address-divider {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 8px 0;
+    margin-left: 20px;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: #F0F0F0;
+}
+
+.swap-btn {
+    position: absolute;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: #E6F7FF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.car-type-section {
+    margin-top: 20px;
+    padding: 0 16px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 16px;
+}
+
+.car-type-list {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.car-type-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    min-width: 100px;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.car-type-item.active {
+    border-color: #1890FF;
+    background: #E6F7FF;
+}
+
+.car-type-item.active .car-icon {
+    color: #1890FF;
+}
+
+.car-icon {
+    margin-bottom: 8px;
+    color: #666666;
+}
+
+.car-name {
+    font-size: 14px;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.car-price {
+    display: flex;
+    align-items: baseline;
+}
+
+.car-price .symbol {
+    font-size: 12px;
+    color: #1890FF;
+}
+
+.car-price .value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1890FF;
+}
+
+.car-price .unit {
+    font-size: 12px;
+    color: #999999;
+}
+
+.quick-locations {
+    margin-top: 20px;
+    padding: 0 16px;
+}
+
+.location-list {
+    background: #FFFFFF;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.location-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #F5F5F5;
+    cursor: pointer;
+}
+
+.location-item:last-child {
+    border-bottom: none;
+}
+
+.location-icon {
+    width: 48px;
+    height: 48px;
+    background: #E6F7FF;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    color: #1890FF;
+}
+
+.location-info {
+    flex: 1;
+}
+
+.location-name {
+    font-size: 16px;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.location-address {
+    font-size: 13px;
+    color: #999999;
+}
+
+/* 酒店页面 */
+.search-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: #FFFFFF;
+    gap: 12px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    background: #F5F5F5;
+    border-radius: 20px;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.city-text {
+    font-size: 14px;
+    color: #333333;
+    font-weight: 500;
+}
+
+.search-input-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    background: #F5F5F5;
+    border-radius: 20px;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.search-placeholder {
+    font-size: 13px;
+    color: #999999;
+}
+
+.filter-section {
+    background: #FFFFFF;
+    margin-top: 12px;
+    padding: 16px;
+}
+
+.date-filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+}
+
+.date-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.date-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.date-value {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.date-week {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 2px;
+}
+
+.date-arrow {
+    padding: 0 16px;
+    color: #1890FF;
+}
+
+.nights-badge {
+    background: #1890FF;
+    color: #FFFFFF;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.quick-filter {
+    background: #FFFFFF;
+    margin-top: 12px;
+    padding: 12px 0;
+}
+
+.filter-list {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 0 16px;
+}
+
+.filter-item {
+    display: inline-flex;
+    padding: 8px 16px;
+    background: #F5F5F5;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #666666;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.filter-item.active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.hotel-list {
+    padding: 16px;
+}
+
+.hotel-card {
+    display: flex;
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+.hotel-image {
+    width: 140px;
+    height: 120px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hotel-info {
+    flex: 1;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.hotel-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hotel-tags {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    font-size: 11px;
+    color: #1890FF;
+    background: #E6F7FF;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.hotel-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    font-size: 14px;
+    color: #CCCCCC;
+}
+
+.star.filled {
+    color: #FAAD14;
+}
+
+.star.half {
+    color: #FAAD14;
+}
+
+.rating-score {
+    font-size: 14px;
+    font-weight: 500;
+    color: #FAAD14;
+}
+
+.review-count {
+    font-size: 12px;
+    color: #999999;
+}
+
+.hotel-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #999999;
+}
+
+.location-text {
+    font-size: 12px;
+}
+
+.hotel-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-left: 8px;
+}
+
+.hotel-price .price-symbol {
+    font-size: 12px;
+    color: #FF4D4F;
+}
+
+.hotel-price .price-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.hotel-price .price-unit {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 订单页面 */
+.tabs-section {
+    background: #FFFFFF;
+    padding: 12px 0;
+    margin-top: 0;
+}
+
+.tabs-list {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 16px;
+}
+
+.tab-item {
+    font-size: 15px;
+    color: #666666;
+    padding: 8px 16px;
+    position: relative;
+    cursor: pointer;
+}
+
+.tab-item.active {
+    color: #1890FF;
+    font-weight: 500;
+}
+
+.tab-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 3px;
+    background: #1890FF;
+    border-radius: 2px;
+}
+
+.orders-list {
+    padding: 16px;
+}
+
+.order-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F5F5F5;
+    margin-bottom: 12px;
+}
+
+.order-type {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.type-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.type-icon.taxi {
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+}
+
+.type-icon.hotel {
+    background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
+}
+
+.type-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.order-status {
+    font-size: 14px;
+}
+
+.order-status.completed {
+    color: #52C41A;
+}
+
+.order-status.cancelled {
+    color: #999999;
+}
+
+.order-status.confirmed,
+.order-status.matched {
+    color: #1890FF;
+}
+
+.order-status.active {
+    color: #FAAD14;
+}
+
+.order-content {
+    margin-bottom: 12px;
+}
+
+.route-info {
+    flex: 1;
+}
+
+.route-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.route-line {
+    width: 1px;
+    height: 24px;
+    background: #E8E8E8;
+    margin-left: 6px;
+}
+
+.order-subtitle {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 8px;
+    padding-left: 22px;
+}
+
+.order-main {
+    display: flex;
+}
+
+.hotel-image-small {
+    width: 120px;
+    height: 90px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hotel-info-small {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.hotel-name-small {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hotel-subtitle {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 4px;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+}
+
+.order-time {
+    font-size: 12px;
+    color: #999999;
+}
+
+.order-price {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.order-price .price-label {
+    font-size: 12px;
+    color: #999999;
+    margin-right: 4px;
+}
+
+.order-price .price-symbol {
+    font-size: 12px;
+    color: #FF4D4F;
+}
+
+.order-price .price-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.order-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+}
+
+.action-btn {
+    padding: 8px 20px;
+    border-radius: 16px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.action-btn.secondary {
+    background: #F5F5F5;
+    color: #666666;
+}
+
+.action-btn.primary {
+    background: #1890FF;
+    color: #FFFFFF;
+}
+
+/* 个人中心页面 */
+.user-card {
+    display: flex;
+    align-items: center;
+    padding: 24px 16px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.user-info {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.user-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+}
+
+.user-company {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 4px;
+}
+
+.user-department {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.menu-section {
+    background: #FFFFFF;
+    margin-top: 12px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #F5F5F5;
+    cursor: pointer;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.menu-icon.taxi {
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+}
+
+.menu-icon.hotel {
+    background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
+}
+
+.menu-icon.address {
+    background: linear-gradient(135deg, #FAAD14 0%, #D48806 100%);
+}
+
+.menu-icon.invoice {
+    background: linear-gradient(135deg, #722ED1 0%, #531DAB 100%);
+}
+
+.menu-icon.contact {
+    background: linear-gradient(135deg, #13C2C2 0%, #08979C 100%);
+}
+
+.menu-icon.help {
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+}
+
+.menu-icon.feedback {
+    background: linear-gradient(135deg, #FA8C16 0%, #D46B08 100%);
+}
+
+.menu-icon.about {
+    background: linear-gradient(135deg, #8C8C8C 0%, #595959 100%);
+}
+
+.menu-content {
+    flex: 1;
+}
+
+.menu-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 2px;
+}
+
+.menu-desc {
+    font-size: 12px;
+    color: #999999;
+}
+
+.logout-section {
+    padding: 24px 16px;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid #FFE8E6;
+    cursor: pointer;
+}
+
+.logout-text {
+    font-size: 16px;
+    color: #FF4D4F;
+    font-weight: 500;
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0 80px;
+}
+
+.footer-text {
+    font-size: 12px;
+    color: #CCCCCC;
+    margin-bottom: 4px;
+}
+
+.version-text {
+    font-size: 11px;
+    color: #DDDDDD;
+}
+
+/* 弹窗 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: flex-end;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border-radius: 16px 16px 0 0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999999;
+}
+
+.modal-body {
+    padding: 16px;
+}
+
+.search-section {
+    margin-bottom: 16px;
+}
+
+.search-section .search-box {
+    background: #F5F5F5;
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+.address-list-modal {
+    background: #FFFFFF;
+}
+
+.address-item-modal {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #F5F5F5;
+    cursor: pointer;
+}
+
+.address-item-modal:last-child {
+    border-bottom: none;
+}
+
+.address-icon-modal {
+    width: 40px;
+    height: 40px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    color: #666666;
+}
+
+.address-icon-modal.current {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.address-info-modal {
+    flex: 1;
+}
+
+.address-name-modal {
+    font-size: 15px;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.address-detail-modal {
+    font-size: 12px;
+    color: #999999;
+}
+
+.section-divider {
+    padding: 12px 0;
+}
+
+.divider-text {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #FFFFFF;
+    padding: 16px 24px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 3000;
+    min-width: 120px;
+}
+
+.toast.hidden {
+    display: none;
+}
+
+.toast-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.toast-text {
+    font-size: 14px;
+}
+
+/* 响应式优化 */
+@media (max-width: 375px) {
+    .login-container {
+        padding: 0 16px;
+    }
+    
+    .login-form {
+        padding: 24px;
+    }
+    
+    .car-type-item {
+        min-width: 80px;
+        padding: 12px 16px;
+    }
+}
