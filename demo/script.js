@@ -65,6 +65,11 @@ function showSubPage(pageName) {
     });
     
     AppState.currentSubPage = pageName;
+    
+    // 加载订单列表
+    if (pageName === 'orders-index') {
+        loadOrderList();
+    }
 }
 
 // 显示 Toast
@@ -206,7 +211,18 @@ function switchOrderTab(type) {
         }
     });
     
-    showToast('已切换到' + (type === 'all' ? '全部' : type === 'taxi' ? '打车' : '酒店') + '订单');
+    // 更新当前订单类型过滤状态
+    AppState.currentOrderType = type;
+    
+    // 重新渲染订单列表
+    renderOrderList(AppState.orders || []);
+    
+    const typeNames = {
+        'all': '全部',
+        'taxi': '打车',
+        'hotel': '酒店'
+    };
+    showToast('已切换到' + (typeNames[type] || '全部') + '订单');
 }
 
 // 切换价格筛选
@@ -353,44 +369,7 @@ function initEventListeners() {
         });
     });
     
-    // 酒店卡片点击
-    const hotelCards = document.querySelectorAll('.hotel-card');
-    hotelCards.forEach((card, index) => {
-        card.addEventListener('click', function() {
-            const hotelNames = ['北京希尔顿酒店', '全季酒店(北京三里屯店)', '北京国贸大酒店'];
-            showToast('正在查看: ' + hotelNames[index]);
-        });
-    });
-    
-    // 订单卡片点击
-    const orderCards = document.querySelectorAll('.order-card');
-    orderCards.forEach((card, index) => {
-        card.addEventListener('click', function(e) {
-            // 不阻止操作按钮的点击
-            if (e.target.classList.contains('action-btn') || 
-                e.target.closest('.action-btn')) {
-                return;
-            }
-            showToast('正在查看订单详情');
-        });
-    });
-    
-    // 操作按钮点击
-    const actionBtns = document.querySelectorAll('.action-btn');
-    actionBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const text = this.textContent.trim();
-            
-            if (text === '联系客服') {
-                showToast('客服功能开发中');
-            } else if (text === '取消订单') {
-                showToast('订单已取消');
-            } else if (text === '查看行程') {
-                showToast('正在查看行程');
-            }
-        });
-    });
+
     
     // 菜单项目点击
     const menuItems = document.querySelectorAll('.menu-item');
@@ -974,7 +953,7 @@ function renderOrderDetail(order) {
     // 渲染创建时间
     const createTimeEl = document.getElementById('detailCreateTime');
     if (createTimeEl) {
-        createTimeEl.textContent = order.createdAt ? formatDateTime(order.createdAt) : '';
+        createTimeEl.textContent = order.createTime ? formatDateTime(order.createTime) : '';
     }
     
     // 渲染酒店图片
@@ -1029,6 +1008,167 @@ function renderOrderDetail(order) {
         // 其他状态隐藏取消按钮
         if (actionsEl) actionsEl.style.display = 'none';
     }
+}
+
+// 加载订单列表
+async function loadOrderList() {
+    try {
+        const data = await getOrders();
+        AppState.orders = data.list || [];
+        renderOrderList(data.list || []);
+    } catch (error) {
+        console.error('加载订单列表失败:', error);
+        renderOrderList([]);
+    }
+}
+
+// 渲染订单列表
+function renderOrderList(orders) {
+    const listEl = document.querySelector('#orders-index .orders-list');
+    if (!listEl) return;
+    
+    // 根据当前订单类型过滤订单
+    const currentType = AppState.currentOrderType || 'all';
+    let filteredOrders = orders || [];
+    
+    if (currentType === 'hotel') {
+        // 酒店订单：有 hotel 字段的订单
+        filteredOrders = filteredOrders.filter(order => order.hotel);
+    } else if (currentType === 'taxi') {
+        // 打车订单：没有 hotel 字段的订单（目前没有数据）
+        filteredOrders = filteredOrders.filter(order => !order.hotel);
+    }
+    
+    // 根据订单类型显示不同的空状态
+    if (!filteredOrders || filteredOrders.length === 0) {
+        let emptyText = '暂无订单';
+        let emptyTip = '去预订一个酒店吧';
+        
+        if (currentType === 'hotel') {
+            emptyText = '暂无酒店订单';
+            emptyTip = '去预订一个酒店吧';
+        } else if (currentType === 'taxi') {
+            emptyText = '暂无打车订单';
+            emptyTip = '去打一个车吧';
+        }
+        
+        listEl.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                        <rect x="4" y="8" width="56" height="48" rx="4" stroke="#999999" stroke-width="2"/>
+                        <line x1="4" y1="20" x2="60" y2="20" stroke="#999999" stroke-width="2"/>
+                        <path d="M20 40L28 48L44 32" stroke="#999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="empty-text">${emptyText}</div>
+                <div class="empty-tip">${emptyTip}</div>
+            </div>
+        `;
+        return;
+    }
+    
+    listEl.innerHTML = filteredOrders.map(order => {
+        const hotel = order.hotel || {};
+        const roomType = order.roomType || {};
+        
+        const statusMap = {
+            'confirmed': { text: '已确认', class: 'confirmed' },
+            'completed': { text: '已完成', class: 'completed' },
+            'cancelled': { text: '已取消', class: 'cancelled' },
+            'active': { text: '行程中', class: 'active' }
+        };
+        
+        const status = statusMap[order.status] || statusMap['confirmed'];
+        
+        let actionsHtml = '';
+        if (order.status === 'confirmed') {
+            actionsHtml = `
+                <div class="order-actions">
+                    <div class="action-btn secondary">联系客服</div>
+                    <div class="action-btn primary" data-order-id="${order.id}">取消订单</div>
+                </div>
+            `;
+        } else if (order.status === 'active') {
+            actionsHtml = `
+                <div class="order-actions">
+                    <div class="action-btn secondary">联系客服</div>
+                    <div class="action-btn primary">查看行程</div>
+                </div>
+            `;
+        }
+        
+        return `
+            <div class="order-card" data-order-id="${order.id}">
+                <div class="order-header">
+                    <div class="order-type">
+                        <div class="type-icon hotel">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L2 10H4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10H22L12 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 22V16H16V22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <span class="type-text">酒店预订</span>
+                    </div>
+                    <span class="order-status ${status.class}">${status.text}</span>
+                </div>
+                <div class="order-content">
+                    <div class="order-main">
+                        <div class="hotel-image-small" style="${hotel.image ? `background-image: url(${hotel.image}); background-size: cover; background-position: center;` : 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);'}">
+                            ${!hotel.image ? `
+                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" style="opacity: 0.5;">
+                                    <rect x="4" y="10" width="32" height="26" rx="3" fill="white"/>
+                                    <rect x="8" y="4" width="24" height="12" rx="3" fill="white" opacity="0.7"/>
+                                </svg>
+                            ` : ''}
+                        </div>
+                        <div class="hotel-info-small">
+                            <div class="hotel-name-small">${hotel.name || '未知酒店'}</div>
+                            <div class="hotel-subtitle">${roomType.name || ''} · ${order.checkInDate || ''} 入住 ${order.nights || 1}晚</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-footer">
+                    <span class="order-time">${order.createTime ? formatDateTime(order.createTime) : ''}</span>
+                    <div class="order-price">
+                        <span class="price-label">订单金额</span>
+                        <span class="price-symbol">¥</span>
+                        <span class="price-value">${order.totalPrice || 0}</span>
+                    </div>
+                </div>
+                ${actionsHtml}
+            </div>
+        `;
+    }).join('');
+    
+    // 绑定订单卡片点击事件
+    const orderCards = listEl.querySelectorAll('.order-card');
+    orderCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // 不阻止操作按钮的点击
+            if (e.target.classList.contains('action-btn') || e.target.closest('.action-btn')) {
+                return;
+            }
+            const orderId = this.dataset.orderId;
+            if (orderId) {
+                showOrderDetailPage(orderId);
+            }
+        });
+    });
+    
+    // 绑定取消订单按钮事件
+    const cancelBtns = listEl.querySelectorAll('.action-btn.primary');
+    cancelBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const orderId = this.dataset.orderId;
+            if (orderId) {
+                // 先加载订单详情，然后显示取消弹窗
+                loadOrderDetail(orderId);
+                showCancelOrderModal();
+            }
+        });
+    });
 }
 
 // ==================== 订单操作 ====================

@@ -2355,11 +2355,7 @@ html, body {
     display: none;
 }
 
-/* 隐藏 TabBar 时的内容区域调整 */
 
-.sub-page.active ~ .tabbar {
-    display: none;
-}
 
 /* 订单详情页操作按钮 */
 
