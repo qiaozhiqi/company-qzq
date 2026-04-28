@@ -1,3 +1,7 @@
+// 登录状态常量
+const LOGIN_EXPIRE_MINUTES = 30;
+const STORAGE_KEY_LOGIN = 'user_login_info';
+
 // 应用状态管理
 const AppState = {
     currentPage: 'login',
@@ -7,6 +11,45 @@ const AppState = {
     selectedCarType: 'comfort',
     addressSelectType: null
 };
+
+// 登录状态管理函数
+function saveLoginInfo(userInfo) {
+    const loginData = {
+        user: userInfo,
+        loginTime: Date.now(),
+        expireMinutes: LOGIN_EXPIRE_MINUTES
+    };
+    localStorage.setItem(STORAGE_KEY_LOGIN, JSON.stringify(loginData));
+}
+
+function getLoginInfo() {
+    const stored = localStorage.getItem(STORAGE_KEY_LOGIN);
+    if (!stored) return null;
+    
+    try {
+        const loginData = JSON.parse(stored);
+        const now = Date.now();
+        const expireTime = loginData.loginTime + (loginData.expireMinutes * 60 * 1000);
+        
+        if (now > expireTime) {
+            clearLoginInfo();
+            return null;
+        }
+        
+        return loginData.user;
+    } catch (e) {
+        clearLoginInfo();
+        return null;
+    }
+}
+
+function clearLoginInfo() {
+    localStorage.removeItem(STORAGE_KEY_LOGIN);
+}
+
+function isLoggedIn() {
+    return getLoginInfo() !== null;
+}
 
 // DOM 元素
 const loginPage = document.getElementById('login-page');
@@ -109,6 +152,16 @@ function handleLogin() {
     // 模拟登录
     showToast('登录成功');
     
+    // 存储登录信息
+    const userInfo = {
+        companyCode: companyCode,
+        username: username,
+        name: '张三',
+        company: '某某科技有限公司',
+        department: '技术部 · 高级工程师'
+    };
+    saveLoginInfo(userInfo);
+    
     setTimeout(() => {
         showPage('main');
         showSubPage('taxi-index');
@@ -118,6 +171,9 @@ function handleLogin() {
 // 退出登录
 function handleLogout() {
     showToast('已退出登录');
+    
+    // 清除登录状态
+    clearLoginInfo();
     
     setTimeout(() => {
         showPage('login');
@@ -262,6 +318,18 @@ function initEventListeners() {
         item.addEventListener('click', function() {
             const page = this.dataset.page;
             if (page) {
+                // 检查是否需要登录
+                const pagesRequiringLogin = ['orders-index', 'profile-index'];
+                if (pagesRequiringLogin.includes(page) && !isLoggedIn()) {
+                    // 未登录，跳转登录页面
+                    showToast('请先登录', 'error');
+                    setTimeout(() => {
+                        showPage('login');
+                    }, 500);
+                    return;
+                }
+                
+                // 已登录或不需要登录的页面
                 showSubPage(page);
             }
         });
@@ -446,9 +514,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // 更新日期显示
     updateDates();
     
-    // 显示登录页面
-    showPage('login');
+    // 检查登录状态，决定显示哪个页面
+    if (isLoggedIn()) {
+        // 已登录，显示主页面
+        const userInfo = getLoginInfo();
+        // 更新个人中心显示的用户信息
+        updateProfileInfo(userInfo);
+        showPage('main');
+        showSubPage('taxi-index');
+    } else {
+        // 未登录，显示登录页面
+        showPage('login');
+    }
 });
+
+// 更新个人中心用户信息
+function updateProfileInfo(userInfo) {
+    if (!userInfo) return;
+    
+    const userNameEl = document.querySelector('#profile-index .user-name');
+    const userCompanyEl = document.querySelector('#profile-index .user-company');
+    const userDepartmentEl = document.querySelector('#profile-index .user-department');
+    
+    if (userNameEl && userInfo.name) userNameEl.textContent = userInfo.name;
+    if (userCompanyEl && userInfo.company) userCompanyEl.textContent = userInfo.company;
+    if (userDepartmentEl && userInfo.department) userDepartmentEl.textContent = userInfo.department;
+}
 
 // ==================== API 配置 ====================
 const API_BASE_URL = 'http://localhost:8080/api';
