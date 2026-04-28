@@ -1311,3 +1311,1104 @@ html, body {
         padding: 12px 16px;
     }
 }
+
+/* ==================== 详情页面通用样式 ==================== */
+
+.detail-page {
+    min-height: 100vh;
+    background: #F5F5F5;
+    padding-bottom: 80px;
+}
+
+/* 酒店详情页样式 */
+
+.hotel-detail-header {
+    position: relative;
+    height: 240px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.hotel-detail-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.hotel-detail-info {
+    background: #FFFFFF;
+    margin-top: -16px;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.hotel-detail-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 12px;
+}
+
+.hotel-detail-tags {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.hotel-detail-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.hotel-detail-rating .rating-score {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FAAD14;
+}
+
+.hotel-detail-rating .review-count {
+    font-size: 12px;
+    color: #999999;
+}
+
+.hotel-detail-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    color: #999999;
+}
+
+.hotel-detail-location .location-text {
+    font-size: 13px;
+}
+
+.hotel-detail-description {
+    font-size: 13px;
+    color: #666666;
+    line-height: 1.6;
+    margin-top: 8px;
+}
+
+/* 分隔线样式 */
+
+.section-divider-detail {
+    padding: 16px;
+    background: #F5F5F5;
+}
+
+.divider-text-detail {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+}
+
+/* 房型列表样式 */
+
+.room-types-list {
+    background: #FFFFFF;
+    padding: 16px;
+}
+
+.room-type-card {
+    display: flex;
+    background: #FFFFFF;
+    border: 1px solid #F0F0F0;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.room-type-card:hover {
+    border-color: #1890FF;
+    box-shadow: 0 2px 12px rgba(24, 144, 255, 0.1);
+}
+
+.room-card-image {
+    width: 120px;
+    height: 90px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);
+    flex-shrink: 0;
+}
+
+.room-card-info {
+    flex: 1;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.room-card-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.room-card-specs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.room-card-specs .spec-text {
+    font-size: 12px;
+    color: #999999;
+    background: #F5F5F5;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.room-card-cancel {
+    font-size: 11px;
+    color: #52C41A;
+    margin-bottom: 4px;
+}
+
+.room-card-availability {
+    font-size: 11px;
+    color: #FAAD14;
+}
+
+.room-card-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    margin-left: 12px;
+}
+
+.room-card-price .price-symbol {
+    font-size: 12px;
+    color: #FF4D4F;
+}
+
+.room-card-price .price-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.room-card-price .price-unit {
+    font-size: 11px;
+    color: #999999;
+}
+
+.room-card-price .original-price {
+    font-size: 11px;
+    color: #999999;
+    text-decoration: line-through;
+    margin-top: 2px;
+}
+
+.empty-rooms {
+    text-align: center;
+    padding: 40px;
+    color: #999999;
+    font-size: 14px;
+}
+
+/* 房型详情页样式 */
+
+.room-detail-header {
+    position: relative;
+    height: 240px;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.room-detail-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.room-detail-info {
+    background: #FFFFFF;
+    margin-top: -16px;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.room-detail-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 12px;
+}
+
+.room-detail-price {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 16px;
+}
+
+.room-detail-price .price-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+}
+
+.room-detail-price .price-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.room-detail-price .price-unit {
+    font-size: 13px;
+    color: #999999;
+    margin-left: 4px;
+}
+
+.room-detail-price .original-price {
+    font-size: 14px;
+    color: #999999;
+    text-decoration: line-through;
+    margin-left: 8px;
+}
+
+.room-detail-specs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.room-detail-specs .spec-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #666666;
+}
+
+.room-detail-specs .spec-text {
+    font-size: 13px;
+}
+
+.room-detail-cancel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.room-detail-cancel .cancel-text {
+    font-size: 13px;
+    color: #52C41A;
+}
+
+.room-detail-availability {
+    font-size: 13px;
+    color: #FAAD14;
+    font-weight: 500;
+}
+
+.room-detail-availability .available-count {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* 房型设施列表 */
+
+.room-facilities-list {
+    background: #FFFFFF;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.facility-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #F5F5F5;
+    border-radius: 8px;
+}
+
+.facility-item .facility-text {
+    font-size: 13px;
+    color: #333333;
+}
+
+.no-facilities {
+    text-align: center;
+    padding: 40px;
+    color: #999999;
+    font-size: 14px;
+    grid-column: span 2;
+}
+
+/* 底部操作栏 */
+
+.detail-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: #FFFFFF;
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #F0F0F0;
+    z-index: 1000;
+}
+
+.bottom-bar-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.bottom-bar-price .bottom-price-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 2px;
+}
+
+.bottom-bar-price .bottom-price-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+}
+
+.bottom-bar-price .bottom-price-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.bottom-bar-btn {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.bottom-bar-btn:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+}
+
+.bottom-bar-btn.secondary {
+    background: #F5F5F5;
+    color: #666666;
+}
+
+.bottom-bar-btn.primary {
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+}
+
+/* 订单确认页样式 */
+
+.order-confirm-section {
+    background: #FFFFFF;
+    margin-bottom: 12px;
+}
+
+.confirm-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    padding: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.confirm-hotel-card {
+    display: flex;
+    padding: 16px;
+}
+
+.confirm-hotel-image {
+    width: 100px;
+    height: 80px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);
+    flex-shrink: 0;
+}
+
+.confirm-hotel-info {
+    flex: 1;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.confirm-hotel-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.confirm-room-name {
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 8px;
+}
+
+.confirm-dates {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.confirm-dates .date-label {
+    font-size: 12px;
+    color: #999999;
+}
+
+.confirm-dates .date-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.confirm-dates .date-arrow {
+    color: #1890FF;
+    font-weight: bold;
+}
+
+.confirm-dates .nights-badge-detail {
+    background: #1890FF;
+    color: #FFFFFF;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* 确认表单样式 */
+
+.confirm-form {
+    padding: 0 16px;
+}
+
+.form-item-confirm {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.form-item-confirm:last-child {
+    border-bottom: none;
+}
+
+.form-label-confirm {
+    width: 80px;
+    font-size: 14px;
+    color: #333333;
+    flex-shrink: 0;
+}
+
+.form-input-confirm {
+    flex: 1;
+    font-size: 14px;
+    color: #333333;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.form-input-confirm::placeholder {
+    color: #CCCCCC;
+}
+
+.guest-count-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.guest-count-selector .count-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    color: #666666;
+    cursor: pointer;
+}
+
+.guest-count-selector .count-btn:active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.guest-count-selector .count-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* 价格明细样式 */
+
+.price-detail-list {
+    padding: 0 16px;
+}
+
+.price-detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.price-detail-item .price-label-detail {
+    font-size: 14px;
+    color: #666666;
+}
+
+.price-detail-item .price-value-detail {
+    font-size: 14px;
+    color: #333333;
+}
+
+.price-total-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-top: 1px solid #F5F5F5;
+    margin-top: 8px;
+}
+
+.price-total-line .total-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.price-total-line .total-price {
+    display: flex;
+    align-items: baseline;
+}
+
+.price-total-line .total-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+}
+
+.price-total-line .total-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+/* 支付方式样式 */
+
+.payment-options {
+    padding: 12px 16px;
+}
+
+.payment-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.payment-item.active {
+    background: #E6F7FF;
+    border-color: #1890FF;
+}
+
+.payment-item .payment-text {
+    flex: 1;
+    font-size: 14px;
+    color: #333333;
+    margin-left: 10px;
+}
+
+.payment-item .check-icon {
+    display: none;
+}
+
+.payment-item.active .check-icon {
+    display: block;
+}
+
+/* 订单详情页样式 */
+
+.order-status-header {
+    display: flex;
+    align-items: center;
+    padding: 24px 16px;
+    background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);
+}
+
+.order-status-info {
+    margin-left: 16px;
+}
+
+.order-status-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1890FF;
+    margin-bottom: 4px;
+}
+
+.order-status-desc {
+    font-size: 13px;
+    color: #666666;
+}
+
+.order-detail-section {
+    background: #FFFFFF;
+    margin-bottom: 12px;
+}
+
+.detail-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    padding: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.order-detail-card {
+    padding: 0 16px;
+}
+
+.detail-order-no,
+.detail-order-time {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.detail-order-time {
+    border-bottom: none;
+}
+
+.detail-order-no .detail-label,
+.detail-order-time .detail-label {
+    font-size: 14px;
+    color: #999999;
+}
+
+.detail-order-no .detail-value,
+.detail-order-time .detail-value {
+    font-size: 14px;
+    color: #333333;
+}
+
+.detail-hotel-card {
+    display: flex;
+    padding: 16px;
+}
+
+.detail-hotel-image {
+    width: 100px;
+    height: 80px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);
+    flex-shrink: 0;
+}
+
+.detail-hotel-info {
+    flex: 1;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-hotel-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.detail-room-name {
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 12px;
+}
+
+.detail-dates-info {
+    display: flex;
+    gap: 16px;
+}
+
+.detail-dates-info .date-info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-dates-info .date-info-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.detail-dates-info .date-info-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.detail-guest-card {
+    padding: 0 16px;
+}
+
+.detail-guest-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.detail-guest-item:last-child {
+    border-bottom: none;
+}
+
+.detail-guest-item .detail-guest-label {
+    font-size: 14px;
+    color: #999999;
+}
+
+.detail-guest-item .detail-guest-value {
+    font-size: 14px;
+    color: #333333;
+}
+
+.detail-price-card {
+    padding: 0 16px;
+}
+
+.detail-price-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.detail-price-item:last-child {
+    border-bottom: none;
+}
+
+.detail-price-item .detail-price-label {
+    font-size: 14px;
+    color: #666666;
+}
+
+.detail-price-item .detail-price-value {
+    font-size: 14px;
+    color: #333333;
+}
+
+.detail-price-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid #F5F5F5;
+    margin-top: 8px;
+}
+
+.detail-price-total .detail-total-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.detail-price-total .detail-total-value {
+    display: flex;
+    align-items: baseline;
+}
+
+.detail-price-total .detail-total-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+}
+
+.detail-price-total .detail-total-amount {
+    font-size: 22px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.detail-payment-method {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-top: 1px solid #F5F5F5;
+}
+
+.detail-payment-method .payment-method-label {
+    font-size: 14px;
+    color: #999999;
+}
+
+.detail-payment-method .payment-method-value {
+    font-size: 14px;
+    color: #333333;
+}
+
+/* 取消订单弹窗样式 */
+
+.modal-small .modal-content {
+    max-height: 80vh;
+}
+
+.cancel-reason-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 12px;
+}
+
+.cancel-reason-list {
+    margin-bottom: 20px;
+}
+
+.cancel-reason-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.cancel-reason-item:last-child {
+    border-bottom: none;
+}
+
+.cancel-reason-item.active {
+    color: #1890FF;
+}
+
+.reason-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #CCCCCC;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+}
+
+.reason-radio.checked {
+    border-color: #1890FF;
+}
+
+.reason-radio.checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #1890FF;
+    border-radius: 50%;
+}
+
+.reason-text {
+    font-size: 14px;
+    color: #333333;
+}
+
+.cancel-reason-item.active .reason-text {
+    color: #1890FF;
+}
+
+.cancel-confirm-section {
+    border-top: 1px solid #F5F5F5;
+    padding-top: 16px;
+}
+
+.cancel-warning {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #FFFBE6;
+    border-radius: 8px;
+}
+
+.warning-text {
+    font-size: 13px;
+    color: #D48806;
+}
+
+.cancel-confirm-btn {
+    width: 100%;
+    padding: 14px;
+    background: #FF4D4F;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.cancel-confirm-btn:active {
+    opacity: 0.9;
+}
+
+/* 加载遮罩样式 */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-overlay.hidden {
+    display: none;
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+}
+
+.loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #FFFFFF;
+}
+
+/* Toast 图标样式扩展 */
+
+.toast-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.toast-icon.success svg circle {
+    fill: #52C41A;
+}
+
+.toast-icon.error svg circle {
+    fill: #FF4D4F;
+}
+
+.toast-icon.error path {
+    stroke: #FF4D4F;
+}
+
+/* 导航栏返回按钮 */
+
+#backBtn {
+    display: none;
+}
+
+/* 隐藏 TabBar 时的内容区域调整 */
+
+.sub-page.active ~ .tabbar {
+    display: none;
+}
+
+/* 订单详情页操作按钮 */
+
+#orderDetailActions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+#orderDetailActions .bottom-bar-btn {
+    flex: 1;
+    text-align: center;
+}
+
+/* 星星评分样式 */
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    font-size: 14px;
+    color: #CCCCCC;
+}
+
+.star.filled {
+    color: #FAAD14;
+}
+
+.star.half {
+    color: #FAAD14;
+    position: relative;
+}
+
+/* 图片占位符样式 */
+
+.hotel-detail-image svg,
+.room-detail-image svg,
+.room-card-image svg,
+.confirm-hotel-image svg,
+.detail-hotel-image svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* 页面滚动优化 */
+
+.detail-page {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
