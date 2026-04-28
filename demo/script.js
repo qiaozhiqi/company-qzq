@@ -162,6 +162,9 @@ function handleLogin() {
     };
     saveLoginInfo(userInfo);
     
+    // 更新个人中心显示的用户信息
+    updateProfileInfo(userInfo);
+    
     setTimeout(() => {
         showPage('main');
         showSubPage('taxi-index');
@@ -174,6 +177,9 @@ function handleLogout() {
     
     // 清除登录状态
     clearLoginInfo();
+    
+    // 清除个人中心显示的用户信息
+    clearProfileInfo();
     
     setTimeout(() => {
         showPage('login');
@@ -530,15 +536,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 更新个人中心用户信息
 function updateProfileInfo(userInfo) {
-    if (!userInfo) return;
-    
     const userNameEl = document.querySelector('#profile-index .user-name');
     const userCompanyEl = document.querySelector('#profile-index .user-company');
     const userDepartmentEl = document.querySelector('#profile-index .user-department');
     
-    if (userNameEl && userInfo.name) userNameEl.textContent = userInfo.name;
-    if (userCompanyEl && userInfo.company) userCompanyEl.textContent = userInfo.company;
-    if (userDepartmentEl && userInfo.department) userDepartmentEl.textContent = userInfo.department;
+    if (userInfo && userInfo.name) {
+        if (userNameEl) userNameEl.textContent = userInfo.name;
+    }
+    if (userInfo && userInfo.company) {
+        if (userCompanyEl) userCompanyEl.textContent = userInfo.company;
+    }
+    if (userInfo && userInfo.department) {
+        if (userDepartmentEl) userDepartmentEl.textContent = userInfo.department;
+    }
+}
+
+// 清除个人中心用户信息
+function clearProfileInfo() {
+    const userNameEl = document.querySelector('#profile-index .user-name');
+    const userCompanyEl = document.querySelector('#profile-index .user-company');
+    const userDepartmentEl = document.querySelector('#profile-index .user-department');
+    
+    if (userNameEl) userNameEl.textContent = '未登录';
+    if (userCompanyEl) userCompanyEl.textContent = '';
+    if (userDepartmentEl) userDepartmentEl.textContent = '';
 }
 
 // ==================== API 配置 ====================
