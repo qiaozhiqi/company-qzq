@@ -7,6 +7,10 @@ import type {
   Hotel,
   RoomType,
   HotelOrder,
+  Flight,
+  FlightOrder,
+  Train,
+  TrainOrder,
   Order,
   OrderQueryParams,
   PageResult,
@@ -149,6 +153,101 @@ export const hotelApi = {
   }
 }
 
+// ==================== 机票相关接口 ====================
+
+export const flightApi = {
+  searchFlights: (params: {
+    departureCity: string
+    arrivalCity: string
+    priceRange?: string
+    isDirect?: boolean
+    page?: number
+    pageSize?: number
+  }) => {
+    return http.get<PageResult<Flight>>('/flights', params)
+  },
+
+  getFlightDetail: (flightId: string) => {
+    return http.get<Flight>(`/flights/${flightId}`)
+  },
+
+  createOrder: (params: {
+    flightId: string
+    departureDate: string
+    passengerName: string
+    passengerId: string
+    passengerPhone: string
+    cabinClass: string
+    seatCount: number
+    insurance: boolean
+  }) => {
+    return http.post<FlightOrder>('/flight-orders', params)
+  },
+
+  cancelOrder: (orderId: string, reason: string) => {
+    return http.post<void>(`/flight-orders/${orderId}/cancel`, { reason })
+  },
+
+  getOrderDetail: (orderId: string) => {
+    return http.get<FlightOrder>(`/flight-orders/${orderId}`)
+  },
+
+  getOrderList: (params?: {
+    status?: string
+    page?: number
+    pageSize?: number
+  }) => {
+    return http.get<PageResult<FlightOrder>>('/flight-orders', params)
+  }
+}
+
+// ==================== 火车票相关接口 ====================
+
+export const trainApi = {
+  searchTrains: (params: {
+    departureCity: string
+    arrivalCity: string
+    trainType?: string
+    page?: number
+    pageSize?: number
+  }) => {
+    return http.get<PageResult<Train>>('/trains', params)
+  },
+
+  getTrainDetail: (trainId: string) => {
+    return http.get<Train>(`/trains/${trainId}`)
+  },
+
+  createOrder: (params: {
+    trainId: string
+    departureDate: string
+    passengerName: string
+    passengerId: string
+    passengerPhone: string
+    seatType: string
+    seatCount: number
+    insurance: boolean
+  }) => {
+    return http.post<TrainOrder>('/train-orders', params)
+  },
+
+  cancelOrder: (orderId: string, reason: string) => {
+    return http.post<void>(`/train-orders/${orderId}/cancel`, { reason })
+  },
+
+  getOrderDetail: (orderId: string) => {
+    return http.get<TrainOrder>(`/train-orders/${orderId}`)
+  },
+
+  getOrderList: (params?: {
+    status?: string
+    page?: number
+    pageSize?: number
+  }) => {
+    return http.get<PageResult<TrainOrder>>('/train-orders', params)
+  }
+}
+
 // ==================== 订单相关接口（统一查询） ====================
 
 export const orderApi = {
@@ -226,6 +325,8 @@ export default {
   auth: authApi,
   taxi: taxiApi,
   hotel: hotelApi,
+  flight: flightApi,
+  train: trainApi,
   order: orderApi,
   address: addressApi,
   company: companyApi

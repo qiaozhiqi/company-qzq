@@ -70,6 +70,84 @@ type HotelOrder struct {
 	CreatedAt     time.Time `json:"createTime"`
 }
 
+type Flight struct {
+	ID              string   `json:"id"`
+	Airline         string   `json:"airline"`
+	FlightNo        string   `json:"flightNo"`
+	AircraftType    string   `json:"aircraftType"`
+	DepartureCity   string   `json:"departureCity"`
+	ArrivalCity     string   `json:"arrivalCity"`
+	DepartureAirport string  `json:"departureAirport"`
+	ArrivalAirport  string   `json:"arrivalAirport"`
+	DepartureTime   string   `json:"departureTime"`
+	ArrivalTime     string   `json:"arrivalTime"`
+	Duration        string   `json:"duration"`
+	IsDirect        bool     `json:"isDirect"`
+	StopCities      []string `json:"stopCities"`
+	Price           float64  `json:"price"`
+	OriginalPrice   float64  `json:"originalPrice"`
+	AvailableSeats  int      `json:"availableSeats"`
+	CabinClass      string   `json:"cabinClass"`
+	Meal            string   `json:"meal"`
+	BaggagePolicy   string   `json:"baggagePolicy"`
+}
+
+type FlightOrder struct {
+	ID            string    `json:"id"`
+	OrderNo       string    `json:"orderNo"`
+	Status        string    `json:"status"`
+	FlightID      string    `json:"-"`
+	DepartureDate string    `json:"departureDate"`
+	PassengerName string    `json:"passengerName"`
+	PassengerID   string    `json:"passengerId"`
+	PassengerPhone string   `json:"passengerPhone"`
+	CabinClass    string    `json:"cabinClass"`
+	SeatCount     int       `json:"seatCount"`
+	TotalPrice    float64   `json:"totalPrice"`
+	ActualPrice   float64   `json:"actualPrice"`
+	Insurance     bool      `json:"insurance"`
+	CancelReason  string    `json:"cancelReason,omitempty"`
+	CancelTime    string    `json:"cancelTime,omitempty"`
+	CreatedAt     time.Time `json:"createTime"`
+}
+
+type Train struct {
+	ID              string   `json:"id"`
+	TrainNo         string   `json:"trainNo"`
+	TrainType       string   `json:"trainType"`
+	DepartureCity   string   `json:"departureCity"`
+	ArrivalCity     string   `json:"arrivalCity"`
+	DepartureStation string  `json:"departureStation"`
+	ArrivalStation  string   `json:"arrivalStation"`
+	DepartureTime   string   `json:"departureTime"`
+	ArrivalTime     string   `json:"arrivalTime"`
+	Duration        string   `json:"duration"`
+	IsThrough       bool     `json:"isThrough"`
+	PassStations    []string `json:"passStations"`
+	Price           float64  `json:"price"`
+	SeatType        string   `json:"seatType"`
+	AvailableSeats  int      `json:"availableSeats"`
+}
+
+type TrainOrder struct {
+	ID            string    `json:"id"`
+	OrderNo       string    `json:"orderNo"`
+	Status        string    `json:"status"`
+	TrainID       string    `json:"-"`
+	DepartureDate string    `json:"departureDate"`
+	PassengerName string    `json:"passengerName"`
+	PassengerID   string    `json:"passengerId"`
+	PassengerPhone string   `json:"passengerPhone"`
+	SeatType      string    `json:"seatType"`
+	SeatCount     int       `json:"seatCount"`
+	TotalPrice    float64   `json:"totalPrice"`
+	ActualPrice   float64   `json:"actualPrice"`
+	Insurance     bool      `json:"insurance"`
+	CancelReason  string    `json:"cancelReason,omitempty"`
+	CancelTime    string    `json:"cancelTime,omitempty"`
+	CreatedAt     time.Time `json:"createTime"`
+}
+
 type ApiResponse struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
@@ -87,11 +165,17 @@ type PageResult struct {
 // ==================== 数据存储 ====================
 
 var (
-	hotels     = make(map[string]*Hotel)
-	roomTypes  = make(map[string]*RoomType)
-	orders     = make(map[string]*HotelOrder)
-	orderList  []*HotelOrder
-	mu         sync.RWMutex
+	hotels         = make(map[string]*Hotel)
+	roomTypes      = make(map[string]*RoomType)
+	orders         = make(map[string]*HotelOrder)
+	orderList      []*HotelOrder
+	flights        = make(map[string]*Flight)
+	flightOrders   = make(map[string]*FlightOrder)
+	flightOrderList []*FlightOrder
+	trains         = make(map[string]*Train)
+	trainOrders    = make(map[string]*TrainOrder)
+	trainOrderList []*TrainOrder
+	mu             sync.RWMutex
 )
 
 // ==================== 初始化数据 ====================
@@ -295,6 +379,212 @@ func initData() {
 		orderList = append(orderList, o)
 	}
 
+	// 机票数据
+	flightData := []*Flight{
+		{
+			ID:               "flight_001",
+			Airline:          "中国国际航空",
+			FlightNo:         "CA1234",
+			AircraftType:     "波音737",
+			DepartureCity:    "北京",
+			ArrivalCity:      "上海",
+			DepartureAirport: "北京首都国际机场",
+			ArrivalAirport:   "上海浦东国际机场",
+			DepartureTime:    "08:30",
+			ArrivalTime:      "10:45",
+			Duration:         "2小时15分",
+			IsDirect:         true,
+			StopCities:       []string{},
+			Price:            580,
+			OriginalPrice:    880,
+			AvailableSeats:   25,
+			CabinClass:       "经济舱",
+			Meal:             "含早餐",
+			BaggagePolicy:    "2件23公斤",
+		},
+		{
+			ID:               "flight_002",
+			Airline:          "中国东方航空",
+			FlightNo:         "MU5678",
+			AircraftType:     "空客A320",
+			DepartureCity:    "北京",
+			ArrivalCity:      "上海",
+			DepartureAirport: "北京大兴国际机场",
+			ArrivalAirport:   "上海虹桥国际机场",
+			DepartureTime:    "12:00",
+			ArrivalTime:      "14:15",
+			Duration:         "2小时15分",
+			IsDirect:         true,
+			StopCities:       []string{},
+			Price:            480,
+			OriginalPrice:    680,
+			AvailableSeats:   18,
+			CabinClass:       "经济舱",
+			Meal:             "含正餐",
+			BaggagePolicy:    "1件23公斤",
+		},
+		{
+			ID:               "flight_003",
+			Airline:          "中国南方航空",
+			FlightNo:         "CZ9012",
+			AircraftType:     "波音787",
+			DepartureCity:    "北京",
+			ArrivalCity:      "广州",
+			DepartureAirport: "北京首都国际机场",
+			ArrivalAirport:   "广州白云国际机场",
+			DepartureTime:    "09:00",
+			ArrivalTime:      "12:15",
+			Duration:         "3小时15分",
+			IsDirect:         true,
+			StopCities:       []string{},
+			Price:            720,
+			OriginalPrice:    1080,
+			AvailableSeats:   32,
+			CabinClass:       "经济舱",
+			Meal:             "含正餐",
+			BaggagePolicy:    "2件23公斤",
+		},
+		{
+			ID:               "flight_004",
+			Airline:          "海南航空",
+			FlightNo:         "HU3456",
+			AircraftType:     "空客A330",
+			DepartureCity:    "北京",
+			ArrivalCity:      "深圳",
+			DepartureAirport: "北京首都国际机场",
+			ArrivalAirport:   "深圳宝安国际机场",
+			DepartureTime:    "14:30",
+			ArrivalTime:      "18:00",
+			Duration:         "3小时30分",
+			IsDirect:         false,
+			StopCities:       []string{"厦门"},
+			Price:            650,
+			OriginalPrice:    980,
+			AvailableSeats:   15,
+			CabinClass:       "经济舱",
+			Meal:             "含正餐",
+			BaggagePolicy:    "1件23公斤",
+		},
+		{
+			ID:               "flight_005",
+			Airline:          "中国国际航空",
+			FlightNo:         "CA8888",
+			AircraftType:     "波音747",
+			DepartureCity:    "北京",
+			ArrivalCity:      "成都",
+			DepartureAirport: "北京首都国际机场",
+			ArrivalAirport:   "成都天府国际机场",
+			DepartureTime:    "16:00",
+			ArrivalTime:      "19:30",
+			Duration:         "3小时30分",
+			IsDirect:         true,
+			StopCities:       []string{},
+			Price:            580,
+			OriginalPrice:    780,
+			AvailableSeats:   28,
+			CabinClass:       "经济舱",
+			Meal:             "含晚餐",
+			BaggagePolicy:    "2件23公斤",
+		},
+	}
+
+	for _, f := range flightData {
+		flights[f.ID] = f
+	}
+
+	// 火车票数据
+	trainData := []*Train{
+		{
+			ID:              "train_001",
+			TrainNo:         "G1",
+			TrainType:       "高铁",
+			DepartureCity:   "北京",
+			ArrivalCity:     "上海",
+			DepartureStation: "北京南站",
+			ArrivalStation:  "上海虹桥站",
+			DepartureTime:   "07:00",
+			ArrivalTime:     "11:28",
+			Duration:        "4小时28分",
+			IsThrough:       true,
+			PassStations:    []string{"天津南", "济南西", "徐州东", "南京南"},
+			Price:           553,
+			SeatType:        "二等座",
+			AvailableSeats:  45,
+		},
+		{
+			ID:              "train_002",
+			TrainNo:         "G5",
+			TrainType:       "高铁",
+			DepartureCity:   "北京",
+			ArrivalCity:     "上海",
+			DepartureStation: "北京南站",
+			ArrivalStation:  "上海站",
+			DepartureTime:   "10:00",
+			ArrivalTime:     "14:38",
+			Duration:        "4小时38分",
+			IsThrough:       true,
+			PassStations:    []string{"德州东", "泰安", "曲阜东", "蚌埠南"},
+			Price:           553,
+			SeatType:        "二等座",
+			AvailableSeats:  38,
+		},
+		{
+			ID:              "train_003",
+			TrainNo:         "D701",
+			TrainType:       "动车",
+			DepartureCity:   "北京",
+			ArrivalCity:     "上海",
+			DepartureStation: "北京站",
+			ArrivalStation:  "上海站",
+			DepartureTime:   "19:15",
+			ArrivalTime:     "07:38",
+			Duration:        "12小时23分",
+			IsThrough:       true,
+			PassStations:    []string{"天津西", "沧州西", "济南西", "徐州东", "南京南", "苏州"},
+			Price:           342,
+			SeatType:        "二等座",
+			AvailableSeats:  60,
+		},
+		{
+			ID:              "train_004",
+			TrainNo:         "G81",
+			TrainType:       "高铁",
+			DepartureCity:   "北京",
+			ArrivalCity:     "广州",
+			DepartureStation: "北京西站",
+			ArrivalStation:  "广州南站",
+			DepartureTime:   "13:00",
+			ArrivalTime:     "21:08",
+			Duration:        "8小时8分",
+			IsThrough:       true,
+			PassStations:    []string{"石家庄", "郑州东", "武汉", "长沙南"},
+			Price:           862,
+			SeatType:        "二等座",
+			AvailableSeats:  52,
+		},
+		{
+			ID:              "train_005",
+			TrainNo:         "G89",
+			TrainType:       "高铁",
+			DepartureCity:   "北京",
+			ArrivalCity:     "成都",
+			DepartureStation: "北京西站",
+			ArrivalStation:  "成都东站",
+			DepartureTime:   "06:53",
+			ArrivalTime:     "14:41",
+			Duration:        "7小时48分",
+			IsThrough:       true,
+			PassStations:    []string{"石家庄", "郑州东", "西安北"},
+			Price:           778,
+			SeatType:        "二等座",
+			AvailableSeats:  48,
+		},
+	}
+
+	for _, t := range trainData {
+		trains[t.ID] = t
+	}
+
 	log.Println("Data initialized successfully!")
 }
 
@@ -319,11 +609,807 @@ func generateOrderID() string {
 	return "hotel_" + uuid.New().String()[:8]
 }
 
+func generateFlightOrderID() string {
+	return "flight_" + uuid.New().String()[:8]
+}
+
+func generateTrainOrderID() string {
+	return "train_" + uuid.New().String()[:8]
+}
+
 func generateOrderNo(prefix string) string {
 	return prefix + time.Now().Format("20060102150405") + fmt.Sprintf("%04d", uuid.New().ID()%10000)
 }
 
 // ==================== 处理器 ====================
+
+// 获取机票列表
+func getFlightList(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	// 获取查询参数
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	if page <= 0 {
+		page = 1
+	}
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+	departureCity := r.URL.Query().Get("departureCity")
+	arrivalCity := r.URL.Query().Get("arrivalCity")
+	priceRange := r.URL.Query().Get("priceRange")
+	isDirect := r.URL.Query().Get("isDirect")
+
+	// 过滤机票
+	var filteredFlights []*Flight
+	for _, f := range flights {
+		// 出发城市筛选
+		if departureCity != "" && departureCity != "全部" && !strings.Contains(f.DepartureCity, departureCity) {
+			continue
+		}
+		// 到达城市筛选
+		if arrivalCity != "" && arrivalCity != "全部" && !strings.Contains(f.ArrivalCity, arrivalCity) {
+			continue
+		}
+		// 直飞筛选
+		if isDirect == "true" && !f.IsDirect {
+			continue
+		}
+		// 价格区间筛选
+		if priceRange != "" && priceRange != "all" {
+			switch priceRange {
+			case "low":
+				if f.Price >= 300 {
+					continue
+				}
+			case "mid":
+				if f.Price < 300 || f.Price >= 800 {
+					continue
+				}
+			case "high":
+				if f.Price < 800 || f.Price >= 1500 {
+					continue
+				}
+			case "luxury":
+				if f.Price < 1500 {
+					continue
+				}
+			}
+		}
+		filteredFlights = append(filteredFlights, f)
+	}
+
+	// 分页
+	total := int64(len(filteredFlights))
+	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
+	start := (page - 1) * pageSize
+	end := start + pageSize
+	if end > len(filteredFlights) {
+		end = len(filteredFlights)
+	}
+
+	var pagedFlights []*Flight
+	if start < len(filteredFlights) {
+		pagedFlights = filteredFlights[start:end]
+	}
+
+	jsonResponse(w, 200, "success", PageResult{
+		List:       pagedFlights,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: totalPages,
+	})
+}
+
+// 获取机票详情
+func getFlightDetail(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/flights/")
+	flightID := strings.TrimSuffix(path, "/")
+	if flightID == "" {
+		jsonResponse(w, 400, "机票ID不能为空", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	flight, exists := flights[flightID]
+	if !exists {
+		jsonResponse(w, 404, "机票不存在", nil)
+		return
+	}
+
+	jsonResponse(w, 200, "success", flight)
+}
+
+// 创建机票订单
+func createFlightOrder(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		jsonResponse(w, 400, "读取请求体失败", nil)
+		return
+	}
+	defer r.Body.Close()
+
+	var req struct {
+		FlightID      string `json:"flightId"`
+		DepartureDate string `json:"departureDate"`
+		PassengerName string `json:"passengerName"`
+		PassengerID   string `json:"passengerId"`
+		PassengerPhone string `json:"passengerPhone"`
+		CabinClass    string `json:"cabinClass"`
+		SeatCount     int    `json:"seatCount"`
+		Insurance     bool   `json:"insurance"`
+	}
+
+	if err := json.Unmarshal(body, &req); err != nil {
+		jsonResponse(w, 400, "参数解析失败: "+err.Error(), nil)
+		return
+	}
+
+	// 参数验证
+	if req.FlightID == "" || req.DepartureDate == "" || req.PassengerName == "" || req.PassengerID == "" || req.PassengerPhone == "" {
+		jsonResponse(w, 400, "参数不完整", nil)
+		return
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	// 检查机票是否存在
+	flight, exists := flights[req.FlightID]
+	if !exists {
+		jsonResponse(w, 400, "机票不存在", nil)
+		return
+	}
+
+	// 检查座位是否可用
+	seatCount := req.SeatCount
+	if seatCount <= 0 {
+		seatCount = 1
+	}
+	if flight.AvailableSeats < seatCount {
+		jsonResponse(w, 400, "座位不足", nil)
+		return
+	}
+
+	// 计算总价
+	insurancePrice := 0.0
+	if req.Insurance {
+		insurancePrice = 30.0 * float64(seatCount)
+	}
+	totalPrice := flight.Price*float64(seatCount) + insurancePrice
+
+	// 创建订单
+	order := &FlightOrder{
+		ID:            generateFlightOrderID(),
+		OrderNo:       generateOrderNo("FL"),
+		Status:        "confirmed",
+		FlightID:      req.FlightID,
+		DepartureDate: req.DepartureDate,
+		PassengerName: req.PassengerName,
+		PassengerID:   req.PassengerID,
+		PassengerPhone: req.PassengerPhone,
+		CabinClass:    req.CabinClass,
+		SeatCount:     seatCount,
+		TotalPrice:    totalPrice,
+		ActualPrice:   totalPrice,
+		Insurance:     req.Insurance,
+		CreatedAt:     time.Now(),
+	}
+
+	// 保存订单
+	flightOrders[order.ID] = order
+	flightOrderList = append([]*FlightOrder{order}, flightOrderList...) // 插入到开头
+
+	// 减少可用座位数
+	flight.AvailableSeats -= seatCount
+
+	// 构建完整响应
+	type OrderResponse struct {
+		*FlightOrder
+		Flight *Flight `json:"flight"`
+	}
+
+	resp := OrderResponse{
+		FlightOrder: order,
+		Flight:      flight,
+	}
+
+	jsonResponse(w, 200, "订单创建成功", resp)
+}
+
+// 获取机票订单列表
+func getFlightOrderList(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	if page <= 0 {
+		page = 1
+	}
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+	status := r.URL.Query().Get("status")
+
+	// 过滤订单
+	var filteredOrders []*FlightOrder
+	for _, o := range flightOrderList {
+		if status != "" && status != "all" && o.Status != status {
+			continue
+		}
+		filteredOrders = append(filteredOrders, o)
+	}
+
+	// 构建完整的订单响应（包含机票信息）
+	type OrderResponse struct {
+		*FlightOrder
+		Flight *Flight `json:"flight"`
+	}
+
+	var orderResponses []OrderResponse
+	for _, o := range filteredOrders {
+		orderResponses = append(orderResponses, OrderResponse{
+			FlightOrder: o,
+			Flight:      flights[o.FlightID],
+		})
+	}
+
+	// 分页
+	total := int64(len(orderResponses))
+	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
+	start := (page - 1) * pageSize
+	end := start + pageSize
+	if end > len(orderResponses) {
+		end = len(orderResponses)
+	}
+
+	var pagedOrders []OrderResponse
+	if start < len(orderResponses) {
+		pagedOrders = orderResponses[start:end]
+	}
+
+	jsonResponse(w, 200, "success", PageResult{
+		List:       pagedOrders,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: totalPages,
+	})
+}
+
+// 获取机票订单详情
+func getFlightOrderDetail(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/flight-orders/")
+	path = strings.TrimSuffix(path, "/cancel")
+	orderID := strings.TrimSuffix(path, "/")
+	if orderID == "" {
+		jsonResponse(w, 400, "订单ID不能为空", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	order, exists := flightOrders[orderID]
+	if !exists {
+		// 尝试按订单号查找
+		for _, o := range flightOrders {
+			if o.OrderNo == orderID {
+				order = o
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			jsonResponse(w, 404, "订单不存在", nil)
+			return
+		}
+	}
+
+	// 构建完整响应
+	type OrderResponse struct {
+		*FlightOrder
+		Flight *Flight `json:"flight"`
+	}
+
+	resp := OrderResponse{
+		FlightOrder: order,
+		Flight:      flights[order.FlightID],
+	}
+
+	jsonResponse(w, 200, "success", resp)
+}
+
+// 取消机票订单
+func cancelFlightOrder(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/flight-orders/")
+	path = strings.TrimSuffix(path, "/cancel")
+	orderID := strings.TrimSuffix(path, "/")
+	if orderID == "" {
+		jsonResponse(w, 400, "订单ID不能为空", nil)
+		return
+	}
+
+	// 读取取消原因
+	var req struct {
+		CancelReason string `json:"cancelReason"`
+	}
+	body, _ := ioutil.ReadAll(r.Body)
+	json.Unmarshal(body, &req)
+	defer r.Body.Close()
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	order, exists := flightOrders[orderID]
+	if !exists {
+		// 尝试按订单号查找
+		for _, o := range flightOrders {
+			if o.OrderNo == orderID {
+				order = o
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			jsonResponse(w, 404, "订单不存在", nil)
+			return
+		}
+	}
+
+	// 检查订单状态
+	if order.Status == "cancelled" {
+		jsonResponse(w, 400, "订单已取消", nil)
+		return
+	}
+	if order.Status == "completed" {
+		jsonResponse(w, 400, "已完成订单不能取消", nil)
+		return
+	}
+
+	// 更新订单状态
+	order.Status = "cancelled"
+	order.CancelReason = req.CancelReason
+	order.CancelTime = time.Now().Format("2006-01-02 15:04:05")
+
+	// 恢复可用座位数
+	flight := flights[order.FlightID]
+	if flight != nil {
+		flight.AvailableSeats += order.SeatCount
+	}
+
+	// 构建完整响应
+	type OrderResponse struct {
+		*FlightOrder
+		Flight *Flight `json:"flight"`
+	}
+
+	resp := OrderResponse{
+		FlightOrder: order,
+		Flight:      flight,
+	}
+
+	jsonResponse(w, 200, "订单取消成功", resp)
+}
+
+// 获取火车票列表
+func getTrainList(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	// 获取查询参数
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	if page <= 0 {
+		page = 1
+	}
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+	departureCity := r.URL.Query().Get("departureCity")
+	arrivalCity := r.URL.Query().Get("arrivalCity")
+	trainType := r.URL.Query().Get("trainType")
+
+	// 过滤火车票
+	var filteredTrains []*Train
+	for _, t := range trains {
+		// 出发城市筛选
+		if departureCity != "" && departureCity != "全部" && !strings.Contains(t.DepartureCity, departureCity) {
+			continue
+		}
+		// 到达城市筛选
+		if arrivalCity != "" && arrivalCity != "全部" && !strings.Contains(t.ArrivalCity, arrivalCity) {
+			continue
+		}
+		// 车次类型筛选
+		if trainType != "" && trainType != "all" && t.TrainType != trainType {
+			continue
+		}
+		filteredTrains = append(filteredTrains, t)
+	}
+
+	// 分页
+	total := int64(len(filteredTrains))
+	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
+	start := (page - 1) * pageSize
+	end := start + pageSize
+	if end > len(filteredTrains) {
+		end = len(filteredTrains)
+	}
+
+	var pagedTrains []*Train
+	if start < len(filteredTrains) {
+		pagedTrains = filteredTrains[start:end]
+	}
+
+	jsonResponse(w, 200, "success", PageResult{
+		List:       pagedTrains,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: totalPages,
+	})
+}
+
+// 获取火车票详情
+func getTrainDetail(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/trains/")
+	trainID := strings.TrimSuffix(path, "/")
+	if trainID == "" {
+		jsonResponse(w, 400, "火车票ID不能为空", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	train, exists := trains[trainID]
+	if !exists {
+		jsonResponse(w, 404, "火车票不存在", nil)
+		return
+	}
+
+	jsonResponse(w, 200, "success", train)
+}
+
+// 创建火车票订单
+func createTrainOrder(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		jsonResponse(w, 400, "读取请求体失败", nil)
+		return
+	}
+	defer r.Body.Close()
+
+	var req struct {
+		TrainID       string `json:"trainId"`
+		DepartureDate string `json:"departureDate"`
+		PassengerName string `json:"passengerName"`
+		PassengerID   string `json:"passengerId"`
+		PassengerPhone string `json:"passengerPhone"`
+		SeatType      string `json:"seatType"`
+		SeatCount     int    `json:"seatCount"`
+		Insurance     bool   `json:"insurance"`
+	}
+
+	if err := json.Unmarshal(body, &req); err != nil {
+		jsonResponse(w, 400, "参数解析失败: "+err.Error(), nil)
+		return
+	}
+
+	// 参数验证
+	if req.TrainID == "" || req.DepartureDate == "" || req.PassengerName == "" || req.PassengerID == "" || req.PassengerPhone == "" {
+		jsonResponse(w, 400, "参数不完整", nil)
+		return
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	// 检查火车票是否存在
+	train, exists := trains[req.TrainID]
+	if !exists {
+		jsonResponse(w, 400, "火车票不存在", nil)
+		return
+	}
+
+	// 检查座位是否可用
+	seatCount := req.SeatCount
+	if seatCount <= 0 {
+		seatCount = 1
+	}
+	if train.AvailableSeats < seatCount {
+		jsonResponse(w, 400, "座位不足", nil)
+		return
+	}
+
+	// 计算总价
+	insurancePrice := 0.0
+	if req.Insurance {
+		insurancePrice = 20.0 * float64(seatCount)
+	}
+	totalPrice := train.Price*float64(seatCount) + insurancePrice
+
+	// 创建订单
+	order := &TrainOrder{
+		ID:            generateTrainOrderID(),
+		OrderNo:       generateOrderNo("TR"),
+		Status:        "confirmed",
+		TrainID:       req.TrainID,
+		DepartureDate: req.DepartureDate,
+		PassengerName: req.PassengerName,
+		PassengerID:   req.PassengerID,
+		PassengerPhone: req.PassengerPhone,
+		SeatType:      req.SeatType,
+		SeatCount:     seatCount,
+		TotalPrice:    totalPrice,
+		ActualPrice:   totalPrice,
+		Insurance:     req.Insurance,
+		CreatedAt:     time.Now(),
+	}
+
+	// 保存订单
+	trainOrders[order.ID] = order
+	trainOrderList = append([]*TrainOrder{order}, trainOrderList...) // 插入到开头
+
+	// 减少可用座位数
+	train.AvailableSeats -= seatCount
+
+	// 构建完整响应
+	type OrderResponse struct {
+		*TrainOrder
+		Train *Train `json:"train"`
+	}
+
+	resp := OrderResponse{
+		TrainOrder: order,
+		Train:      train,
+	}
+
+	jsonResponse(w, 200, "订单创建成功", resp)
+}
+
+// 获取火车票订单列表
+func getTrainOrderList(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	if page <= 0 {
+		page = 1
+	}
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+	status := r.URL.Query().Get("status")
+
+	// 过滤订单
+	var filteredOrders []*TrainOrder
+	for _, o := range trainOrderList {
+		if status != "" && status != "all" && o.Status != status {
+			continue
+		}
+		filteredOrders = append(filteredOrders, o)
+	}
+
+	// 构建完整的订单响应（包含火车票信息）
+	type OrderResponse struct {
+		*TrainOrder
+		Train *Train `json:"train"`
+	}
+
+	var orderResponses []OrderResponse
+	for _, o := range filteredOrders {
+		orderResponses = append(orderResponses, OrderResponse{
+			TrainOrder: o,
+			Train:      trains[o.TrainID],
+		})
+	}
+
+	// 分页
+	total := int64(len(orderResponses))
+	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
+	start := (page - 1) * pageSize
+	end := start + pageSize
+	if end > len(orderResponses) {
+		end = len(orderResponses)
+	}
+
+	var pagedOrders []OrderResponse
+	if start < len(orderResponses) {
+		pagedOrders = orderResponses[start:end]
+	}
+
+	jsonResponse(w, 200, "success", PageResult{
+		List:       pagedOrders,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: totalPages,
+	})
+}
+
+// 获取火车票订单详情
+func getTrainOrderDetail(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/train-orders/")
+	path = strings.TrimSuffix(path, "/cancel")
+	orderID := strings.TrimSuffix(path, "/")
+	if orderID == "" {
+		jsonResponse(w, 400, "订单ID不能为空", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	order, exists := trainOrders[orderID]
+	if !exists {
+		// 尝试按订单号查找
+		for _, o := range trainOrders {
+			if o.OrderNo == orderID {
+				order = o
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			jsonResponse(w, 404, "订单不存在", nil)
+			return
+		}
+	}
+
+	// 构建完整响应
+	type OrderResponse struct {
+		*TrainOrder
+		Train *Train `json:"train"`
+	}
+
+	resp := OrderResponse{
+		TrainOrder: order,
+		Train:      trains[order.TrainID],
+	}
+
+	jsonResponse(w, 200, "success", resp)
+}
+
+// 取消火车票订单
+func cancelTrainOrder(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/train-orders/")
+	path = strings.TrimSuffix(path, "/cancel")
+	orderID := strings.TrimSuffix(path, "/")
+	if orderID == "" {
+		jsonResponse(w, 400, "订单ID不能为空", nil)
+		return
+	}
+
+	// 读取取消原因
+	var req struct {
+		CancelReason string `json:"cancelReason"`
+	}
+	body, _ := ioutil.ReadAll(r.Body)
+	json.Unmarshal(body, &req)
+	defer r.Body.Close()
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	order, exists := trainOrders[orderID]
+	if !exists {
+		// 尝试按订单号查找
+		for _, o := range trainOrders {
+			if o.OrderNo == orderID {
+				order = o
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			jsonResponse(w, 404, "订单不存在", nil)
+			return
+		}
+	}
+
+	// 检查订单状态
+	if order.Status == "cancelled" {
+		jsonResponse(w, 400, "订单已取消", nil)
+		return
+	}
+	if order.Status == "completed" {
+		jsonResponse(w, 400, "已完成订单不能取消", nil)
+		return
+	}
+
+	// 更新订单状态
+	order.Status = "cancelled"
+	order.CancelReason = req.CancelReason
+	order.CancelTime = time.Now().Format("2006-01-02 15:04:05")
+
+	// 恢复可用座位数
+	train := trains[order.TrainID]
+	if train != nil {
+		train.AvailableSeats += order.SeatCount
+	}
+
+	// 构建完整响应
+	type OrderResponse struct {
+		*TrainOrder
+		Train *Train `json:"train"`
+	}
+
+	resp := OrderResponse{
+		TrainOrder: order,
+		Train:      train,
+	}
+
+	jsonResponse(w, 200, "订单取消成功", resp)
+}
 
 // 获取酒店列表
 func getHotelList(w http.ResponseWriter, r *http.Request) {
@@ -874,6 +1960,48 @@ func main() {
 		}
 	})
 
+	// 机票相关
+	mux.HandleFunc("/api/flights", getFlightList)
+	mux.HandleFunc("/api/flights/", getFlightDetail)
+
+	// 机票订单相关
+	mux.HandleFunc("/api/flight-orders", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			createFlightOrder(w, r)
+		} else {
+			getFlightOrderList(w, r)
+		}
+	})
+	mux.HandleFunc("/api/flight-orders/", func(w http.ResponseWriter, r *http.Request) {
+		// 检查是否是取消订单请求
+		if strings.HasSuffix(r.URL.Path, "/cancel") {
+			cancelFlightOrder(w, r)
+		} else {
+			getFlightOrderDetail(w, r)
+		}
+	})
+
+	// 火车票相关
+	mux.HandleFunc("/api/trains", getTrainList)
+	mux.HandleFunc("/api/trains/", getTrainDetail)
+
+	// 火车票订单相关
+	mux.HandleFunc("/api/train-orders", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			createTrainOrder(w, r)
+		} else {
+			getTrainOrderList(w, r)
+		}
+	})
+	mux.HandleFunc("/api/train-orders/", func(w http.ResponseWriter, r *http.Request) {
+		// 检查是否是取消订单请求
+		if strings.HasSuffix(r.URL.Path, "/cancel") {
+			cancelTrainOrder(w, r)
+		} else {
+			getTrainOrderDetail(w, r)
+		}
+	})
+
 	log.Println("Server starting on :8080...")
 	log.Println("API endpoints:")
 	log.Println("  GET  /api/health")
@@ -884,6 +2012,18 @@ func main() {
 	log.Println("  POST /api/hotel-orders")
 	log.Println("  GET  /api/hotel-orders/{id}")
 	log.Println("  POST /api/hotel-orders/{id}/cancel")
+	log.Println("  GET  /api/flights")
+	log.Println("  GET  /api/flights/{id}")
+	log.Println("  GET  /api/flight-orders")
+	log.Println("  POST /api/flight-orders")
+	log.Println("  GET  /api/flight-orders/{id}")
+	log.Println("  POST /api/flight-orders/{id}/cancel")
+	log.Println("  GET  /api/trains")
+	log.Println("  GET  /api/trains/{id}")
+	log.Println("  GET  /api/train-orders")
+	log.Println("  POST /api/train-orders")
+	log.Println("  GET  /api/train-orders/{id}")
+	log.Println("  POST /api/train-orders/{id}/cancel")
 
 	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatalf("Failed to start server: %v", err)

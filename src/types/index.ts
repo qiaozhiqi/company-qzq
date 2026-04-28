@@ -117,10 +117,100 @@ export type HotelOrderStatus =
   | 'completed'    
   | 'cancelled'    
 
+export interface Flight {
+  id: string
+  airline: string
+  flightNo: string
+  aircraftType: string
+  departureCity: string
+  arrivalCity: string
+  departureAirport: string
+  arrivalAirport: string
+  departureTime: string
+  arrivalTime: string
+  duration: string
+  isDirect: boolean
+  stopCities: string[]
+  price: number
+  originalPrice: number
+  availableSeats: number
+  cabinClass: string
+  meal: string
+  baggagePolicy: string
+}
+
+export interface FlightOrder {
+  id: string
+  orderNo: string
+  status: FlightOrderStatus
+  flight: Flight
+  departureDate: string
+  passengerName: string
+  passengerId: string
+  passengerPhone: string
+  cabinClass: string
+  seatCount: number
+  totalPrice: number
+  actualPrice: number
+  insurance: boolean
+  createTime: string
+  cancelReason?: string
+  cancelTime?: string
+}
+
+export type FlightOrderStatus = 
+  | 'pending'      
+  | 'confirmed'    
+  | 'completed'    
+  | 'cancelled'    
+
+export interface Train {
+  id: string
+  trainNo: string
+  trainType: string
+  departureCity: string
+  arrivalCity: string
+  departureStation: string
+  arrivalStation: string
+  departureTime: string
+  arrivalTime: string
+  duration: string
+  isThrough: boolean
+  passStations: string[]
+  price: number
+  seatType: string
+  availableSeats: number
+}
+
+export interface TrainOrder {
+  id: string
+  orderNo: string
+  status: TrainOrderStatus
+  train: Train
+  departureDate: string
+  passengerName: string
+  passengerId: string
+  passengerPhone: string
+  seatType: string
+  seatCount: number
+  totalPrice: number
+  actualPrice: number
+  insurance: boolean
+  createTime: string
+  cancelReason?: string
+  cancelTime?: string
+}
+
+export type TrainOrderStatus = 
+  | 'pending'      
+  | 'confirmed'    
+  | 'completed'    
+  | 'cancelled'    
+
 export interface Order {
   id: string
   orderNo: string
-  type: 'taxi' | 'hotel'
+  type: 'taxi' | 'hotel' | 'flight' | 'train'
   status: string
   statusText: string
   title: string
@@ -129,10 +219,12 @@ export interface Order {
   createTime: string
   taxiOrder?: TaxiOrder
   hotelOrder?: HotelOrder
+  flightOrder?: FlightOrder
+  trainOrder?: TrainOrder
 }
 
 export interface OrderQueryParams {
-  type?: 'taxi' | 'hotel' | 'all'
+  type?: 'taxi' | 'hotel' | 'flight' | 'train' | 'all'
   status?: string
   page?: number
   pageSize?: number

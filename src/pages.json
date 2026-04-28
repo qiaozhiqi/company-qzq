@@ -64,6 +64,56 @@
             }
         },
         {
+            "path": "pages/flight/index",
+            "style": {
+                "navigationBarTitleText": "机票预订",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/flight/flight-detail",
+            "style": {
+                "navigationBarTitleText": "航班详情"
+            }
+        },
+        {
+            "path": "pages/flight/order-confirm",
+            "style": {
+                "navigationBarTitleText": "确认预订"
+            }
+        },
+        {
+            "path": "pages/flight/order-detail",
+            "style": {
+                "navigationBarTitleText": "订单详情"
+            }
+        },
+        {
+            "path": "pages/train/index",
+            "style": {
+                "navigationBarTitleText": "火车票预订",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/train/train-detail",
+            "style": {
+                "navigationBarTitleText": "车次详情"
+            }
+        },
+        {
+            "path": "pages/train/order-confirm",
+            "style": {
+                "navigationBarTitleText": "确认预订"
+            }
+        },
+        {
+            "path": "pages/train/order-detail",
+            "style": {
+                "navigationBarTitleText": "订单详情"
+            }
+        },
+        {
             "path": "pages/orders/index",
             "style": {
                 "navigationBarTitleText": "我的订单",
