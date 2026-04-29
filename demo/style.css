@@ -2408,3 +2408,541 @@ html, body {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
+
+/* ==================== 机票页面样式 ==================== */
+
+.flight-search-card {
+    background: #FFFFFF;
+    margin: 16px;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.flight-search-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.city-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 16px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.city-selector .city-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.city-selector .city-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.city-selector .arrow {
+    margin-top: 4px;
+}
+
+.flight-search-date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.flight-search-date .date-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flight-search-date .date-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.flight-search-date .date-value {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.flight-search-date .date-week {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 2px;
+}
+
+.flight-filter-section {
+    margin-bottom: 20px;
+}
+
+.flight-filter-section .filter-title {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 12px;
+}
+
+.flight-filter-section .filter-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.flight-filter-section .filter-option {
+    display: inline-flex;
+    padding: 8px 16px;
+    background: #F5F5F5;
+    border-radius: 16px;
+    font-size: 13px;
+    color: #666666;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.flight-filter-section .filter-option.active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.flight-search-btn {
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.flight-search-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.flight-list-section {
+    padding: 0 16px;
+    margin-top: 24px;
+}
+
+.flight-list {
+    margin-top: 16px;
+}
+
+.flight-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.flight-card:hover {
+    box-shadow: 0 4px 20px rgba(24, 144, 255, 0.15);
+}
+
+.flight-info {
+    margin-bottom: 12px;
+}
+
+.airline-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.airline-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.flight-no {
+    font-size: 12px;
+    color: #999999;
+}
+
+.flight-time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flight-time .time-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flight-time .time {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.flight-time .city {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 4px;
+}
+
+.flight-duration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+}
+
+.flight-duration::before,
+.flight-duration::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    width: 60px;
+    height: 1px;
+    background: #E8E8E8;
+}
+
+.flight-duration::before {
+    left: 0;
+}
+
+.flight-duration::after {
+    right: 0;
+}
+
+.flight-duration .duration {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.flight-duration .direct-tag,
+.flight-duration .overnight-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-top: 4px;
+}
+
+.flight-duration .direct-tag {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.flight-duration .overnight-tag {
+    background: #FFFBE6;
+    color: #FAAD14;
+}
+
+.flight-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+}
+
+.flight-price .price-info {
+    display: flex;
+    align-items: baseline;
+}
+
+.flight-price .price-symbol {
+    font-size: 12px;
+    color: #FF4D4F;
+}
+
+.flight-price .price-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.flight-price .price-unit {
+    font-size: 12px;
+    color: #999999;
+    margin-left: 4px;
+}
+
+.flight-price .seat-info {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* ==================== 火车票页面样式 ==================== */
+
+.train-search-card {
+    background: #FFFFFF;
+    margin: 16px;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.train-search-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.train-search-date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.train-search-date .date-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.train-search-date .date-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.train-search-date .date-value {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.train-search-date .date-week {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 2px;
+}
+
+.train-filter-section {
+    margin-bottom: 20px;
+}
+
+.train-filter-section .filter-title {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 12px;
+}
+
+.train-filter-section .filter-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.train-filter-section .filter-option {
+    display: inline-flex;
+    padding: 8px 16px;
+    background: #F5F5F5;
+    border-radius: 16px;
+    font-size: 13px;
+    color: #666666;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.train-filter-section .filter-option.active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.train-search-btn {
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.train-search-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.train-list-section {
+    padding: 0 16px;
+    margin-top: 24px;
+}
+
+.train-list {
+    margin-top: 16px;
+}
+
+.train-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.train-card:hover {
+    box-shadow: 0 4px 20px rgba(24, 144, 255, 0.15);
+}
+
+.train-info {
+    margin-bottom: 12px;
+}
+
+.train-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.train-no {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.train-type {
+    font-size: 11px;
+    padding: 2px 8px;
+    background: #F5F5F5;
+    color: #666666;
+    border-radius: 8px;
+}
+
+.train-time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.train-time .time-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.train-time .time {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.train-time .station {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 4px;
+}
+
+.train-duration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+}
+
+.train-duration::before,
+.train-duration::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    width: 60px;
+    height: 1px;
+    background: #E8E8E8;
+}
+
+.train-duration::before {
+    left: 0;
+}
+
+.train-duration::after {
+    right: 0;
+}
+
+.train-duration .duration {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.train-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.train-price .price-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 12px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    min-width: 80px;
+}
+
+.train-price .seat-type {
+    font-size: 11px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.train-price .price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FF4D4F;
+}
+
+.train-price .seat-status {
+    font-size: 10px;
+    margin-top: 4px;
+}
+
+.train-price .seat-status:not(.no-ticket):not(.waiting-list) {
+    color: #52C41A;
+}
+
+.train-price .seat-status.no-ticket {
+    color: #999999;
+}
+
+.train-price .seat-status.waiting-list {
+    color: #FAAD14;
+}

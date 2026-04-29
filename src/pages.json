@@ -161,6 +161,18 @@
                 "selectedIconPath": "static/icons/hotel-active.png"
             },
             {
+                "pagePath": "pages/flight/index",
+                "text": "机票预订",
+                "iconPath": "static/icons/flight.png",
+                "selectedIconPath": "static/icons/flight-active.png"
+            },
+            {
+                "pagePath": "pages/train/index",
+                "text": "火车票",
+                "iconPath": "static/icons/train.png",
+                "selectedIconPath": "static/icons/train-active.png"
+            },
+            {
                 "pagePath": "pages/orders/index",
                 "text": "我的订单",
                 "iconPath": "static/icons/order.png",

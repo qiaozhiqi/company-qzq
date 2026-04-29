@@ -93,6 +93,8 @@ function showSubPage(pageName) {
     const pageTitles = {
         'taxi-index': '公务打车',
         'hotel-index': '酒店预订',
+        'flight-index': '机票预订',
+        'train-index': '火车票',
         'orders-index': '我的订单',
         'profile-index': '我的'
     };
@@ -489,6 +491,160 @@ function initEventListeners() {
     
     // 初始化酒店预订相关事件
     initHotelBookingEventListeners();
+    
+    // 初始化机票预订相关事件
+    initFlightBookingEventListeners();
+    
+    // 初始化火车票预订相关事件
+    initTrainBookingEventListeners();
+}
+
+// 初始化机票预订事件监听
+function initFlightBookingEventListeners() {
+    // 出发城市选择
+    const flightSelectDeparture = document.getElementById('flightSelectDeparture');
+    if (flightSelectDeparture) {
+        flightSelectDeparture.addEventListener('click', function() {
+            showToast('城市选择功能开发中');
+        });
+    }
+    
+    // 到达城市选择
+    const flightSelectArrival = document.getElementById('flightSelectArrival');
+    if (flightSelectArrival) {
+        flightSelectArrival.addEventListener('click', function() {
+            showToast('城市选择功能开发中');
+        });
+    }
+    
+    // 交换城市
+    const flightSwapCities = document.getElementById('flightSwapCities');
+    if (flightSwapCities) {
+        flightSwapCities.addEventListener('click', function() {
+            const departureCity = document.getElementById('flightDepartureCity');
+            const arrivalCity = document.getElementById('flightArrivalCity');
+            
+            if (departureCity && arrivalCity) {
+                const temp = departureCity.textContent;
+                departureCity.textContent = arrivalCity.textContent;
+                arrivalCity.textContent = temp;
+                showToast('已交换出发/到达城市');
+            }
+        });
+    }
+    
+    // 日期选择
+    const flightSelectDate = document.getElementById('flightSelectDate');
+    if (flightSelectDate) {
+        flightSelectDate.addEventListener('click', function() {
+            showToast('日期选择功能开发中');
+        });
+    }
+    
+    // 筛选条件切换
+    const flightFilterOptions = document.querySelectorAll('#flight-index .filter-option');
+    flightFilterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            flightFilterOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+            showToast('已筛选: ' + this.textContent);
+        });
+    });
+    
+    // 搜索按钮
+    const flightSearchBtn = document.getElementById('flightSearchBtn');
+    if (flightSearchBtn) {
+        flightSearchBtn.addEventListener('click', function() {
+            showToast('搜索航班中...');
+            // 模拟搜索
+            setTimeout(() => {
+                showToast('搜索完成');
+            }, 1000);
+        });
+    }
+    
+    // 航班卡片点击
+    const flightCards = document.querySelectorAll('.flight-card');
+    flightCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const flightId = this.dataset.flightId;
+            showToast('航班详情功能开发中');
+        });
+    });
+}
+
+// 初始化火车票预订事件监听
+function initTrainBookingEventListeners() {
+    // 出发站选择
+    const trainSelectDeparture = document.getElementById('trainSelectDeparture');
+    if (trainSelectDeparture) {
+        trainSelectDeparture.addEventListener('click', function() {
+            showToast('车站选择功能开发中');
+        });
+    }
+    
+    // 到达站选择
+    const trainSelectArrival = document.getElementById('trainSelectArrival');
+    if (trainSelectArrival) {
+        trainSelectArrival.addEventListener('click', function() {
+            showToast('车站选择功能开发中');
+        });
+    }
+    
+    // 交换车站
+    const trainSwapStations = document.getElementById('trainSwapStations');
+    if (trainSwapStations) {
+        trainSwapStations.addEventListener('click', function() {
+            const departureCity = document.getElementById('trainDepartureCity');
+            const arrivalCity = document.getElementById('trainArrivalCity');
+            
+            if (departureCity && arrivalCity) {
+                const temp = departureCity.textContent;
+                departureCity.textContent = arrivalCity.textContent;
+                arrivalCity.textContent = temp;
+                showToast('已交换出发/到达车站');
+            }
+        });
+    }
+    
+    // 日期选择
+    const trainSelectDate = document.getElementById('trainSelectDate');
+    if (trainSelectDate) {
+        trainSelectDate.addEventListener('click', function() {
+            showToast('日期选择功能开发中');
+        });
+    }
+    
+    // 车次类型筛选
+    const trainFilterOptions = document.querySelectorAll('#train-index .filter-option');
+    trainFilterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            trainFilterOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+            showToast('已筛选: ' + this.textContent);
+        });
+    });
+    
+    // 搜索按钮
+    const trainSearchBtn = document.getElementById('trainSearchBtn');
+    if (trainSearchBtn) {
+        trainSearchBtn.addEventListener('click', function() {
+            showToast('搜索车票中...');
+            // 模拟搜索
+            setTimeout(() => {
+                showToast('搜索完成');
+            }, 1000);
+        });
+    }
+    
+    // 车次卡片点击
+    const trainCards = document.querySelectorAll('.train-card');
+    trainCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const trainId = this.dataset.trainId;
+            showToast('车次详情功能开发中');
+        });
+    });
 }
 
 // 更新日期显示
