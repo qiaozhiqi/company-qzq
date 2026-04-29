@@ -96,13 +96,10 @@ export const taxiApi = {
 
 export const hotelApi = {
   searchHotels: (params: {
-    city: string
+    city?: string
     keyword?: string
-    checkInDate: string
-    checkOutDate: string
-    minPrice?: number
-    maxPrice?: number
-    starLevel?: number
+    priceRange?: string
+    star?: string
     page?: number
     pageSize?: number
   }) => {
@@ -110,18 +107,14 @@ export const hotelApi = {
   },
 
   getHotelDetail: (hotelId: string) => {
-    return http.get<Hotel>(`/hotels/${hotelId}`)
+    return http.get<Hotel & { roomTypes: RoomType[] }>(`/hotels/${hotelId}`)
   },
 
-  getRoomTypes: (hotelId: string, params?: {
-    checkInDate?: string
-    checkOutDate?: string
-  }) => {
-    return http.get<RoomType[]>(`/hotels/${hotelId}/rooms`, params)
-  },
-
-  getRoomDetail: (roomId: string) => {
-    return http.get<RoomType>(`/hotels/rooms/${roomId}`)
+  getRoomTypeDetail: (roomTypeId: string) => {
+    return http.get<{
+      roomType: RoomType
+      hotel: Hotel
+    }>(`/room-types/${roomTypeId}`)
   },
 
   createOrder: (params: {
@@ -131,17 +124,17 @@ export const hotelApi = {
     checkOutDate: string
     guestName: string
     guestPhone: string
-    remark?: string
+    roomCount?: number
   }) => {
-    return http.post<HotelOrder>('/hotel/orders', params)
+    return http.post<HotelOrder>('/hotel-orders', params)
   },
 
-  cancelOrder: (orderId: string, reason: string) => {
-    return http.post<void>(`/hotel/orders/${orderId}/cancel`, { reason })
+  cancelOrder: (orderId: string, cancelReason: string) => {
+    return http.post<void>(`/hotel-orders/${orderId}/cancel`, { cancelReason })
   },
 
   getOrderDetail: (orderId: string) => {
-    return http.get<HotelOrder>(`/hotel/orders/${orderId}`)
+    return http.get<HotelOrder>(`/hotel-orders/${orderId}`)
   },
 
   getOrderList: (params?: {
@@ -149,7 +142,7 @@ export const hotelApi = {
     page?: number
     pageSize?: number
   }) => {
-    return http.get<PageResult<HotelOrder>>('/hotel/orders', params)
+    return http.get<PageResult<HotelOrder>>('/hotel-orders', params)
   }
 }
 

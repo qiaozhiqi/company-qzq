@@ -136,14 +136,16 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useOrderStore } from '@/store/order'
-import type { Order } from '@/types'
+import type { Order, HotelOrder } from '@/types'
 import { mockOrders, getTaxiOrderStatusText, getHotelOrderStatusText } from '@/mock'
+import { hotelApi } from '@/api'
 
 const orderStore = useOrderStore()
 
 const activeType = ref<'all' | 'taxi' | 'hotel'>('all')
 const activeStatus = ref<string>('all')
 const ordersList = ref<Order[]>([])
+const hotelOrders = ref<HotelOrder[]>([])
 const loading = ref(false)
 const hasMore = ref(true)
 const page = ref(1)
@@ -153,7 +155,7 @@ const currentCancelOrder = ref<Order | null>(null)
 const orderTypes = ref([
   { label: '全部', value: 'all' as const, count: 0 },
   { label: '打车', value: 'taxi' as const, count: 1 },
-  { label: '酒店', value: 'hotel' as const, count: 1 }
+  { label: '酒店', value: 'hotel' as const, count: 0 }
 ])
 
 const statusTabs = ref([
@@ -170,41 +172,98 @@ const cancelReasons = ref([
   { text: '其他原因', value: '其他原因' }
 ])
 
+const loadHotelOrders = async () => {
+  try {
+    const params: any = {
+      page: page.value,
+      pageSize: 10
+    }
+    
+    if (activeStatus.value !== 'all') {
+      if (activeStatus.value === 'pending') {
+        params.status = 'pending'
+      } else if (activeStatus.value === 'active') {
+        params.status = 'confirmed'
+      } else if (activeStatus.value === 'completed') {
+        params.status = 'completed'
+      }
+    }
+    
+    const res = await hotelApi.getOrderList(params)
+    
+    if (res.data && res.data.list) {
+      hotelOrders.value = res.data.list
+      
+      orderTypes.value.find(t => t.value === 'hotel')!.count = res.data.total
+      
+      hasMore.value = page.value < res.data.totalPages
+    }
+  } catch (error) {
+    console.error('加载酒店订单失败:', error)
+  }
+}
+
+const convertHotelOrderToOrder = (hotelOrder: HotelOrder): Order => {
+  return {
+    id: hotelOrder.id,
+    orderNo: hotelOrder.orderNo,
+    type: 'hotel',
+    status: hotelOrder.status,
+    statusText: getHotelOrderStatusText(hotelOrder.status),
+    title: hotelOrder.hotel?.name || '酒店预订',
+    subtitle: `${hotelOrder.roomType?.name || ''} · ${hotelOrder.checkInDate} 入住 ${hotelOrder.nights}晚`,
+    price: hotelOrder.totalPrice,
+    createTime: hotelOrder.createdAt ? new Date(hotelOrder.createdAt).toLocaleString() : '',
+    hotelOrder: hotelOrder
+  }
+}
+
 const loadOrders = async () => {
   if (loading.value || !hasMore.value) return
   
   loading.value = true
   
-  setTimeout(() => {
-    let filtered = [...mockOrders]
-    
-    if (activeType.value !== 'all') {
-      filtered = filtered.filter(order => order.type === activeType.value)
+  if (activeType.value === 'hotel' || activeType.value === 'all') {
+    await loadHotelOrders()
+  }
+  
+  let filtered = [...mockOrders.filter(o => o.type === 'taxi')]
+  
+  if (hotelOrders.value.length > 0) {
+    const convertedHotelOrders = hotelOrders.value.map(convertHotelOrderToOrder)
+    filtered = [...filtered, ...convertedHotelOrders]
+  }
+  
+  if (activeType.value !== 'all') {
+    filtered = filtered.filter(order => order.type === activeType.value)
+  }
+  
+  if (activeStatus.value !== 'all') {
+    if (activeStatus.value === 'pending') {
+      filtered = filtered.filter(order => ['pending', 'matching', 'matched'].includes(order.status))
+    } else if (activeStatus.value === 'active') {
+      filtered = filtered.filter(order => ['driver_arrived', 'on_ride', 'confirmed', 'checked_in'].includes(order.status))
+    } else if (activeStatus.value === 'completed') {
+      filtered = filtered.filter(order => order.status === 'completed')
     }
-    
-    if (activeStatus.value !== 'all') {
-      if (activeStatus.value === 'pending') {
-        filtered = filtered.filter(order => ['pending', 'matching', 'matched'].includes(order.status))
-      } else if (activeStatus.value === 'active') {
-        filtered = filtered.filter(order => ['driver_arrived', 'on_ride', 'confirmed', 'checked_in'].includes(order.status))
-      } else if (activeStatus.value === 'completed') {
-        filtered = filtered.filter(order => order.status === 'completed')
-      }
-    }
-    
-    if (page.value === 1) {
-      ordersList.value = filtered
-    } else {
-      ordersList.value = [...ordersList.value, ...filtered]
-    }
-    
-    page.value++
-    if (page.value > 2) {
-      hasMore.value = false
-    }
-    
-    loading.value = false
-  }, 600)
+  }
+  
+  filtered.sort((a, b) => {
+    return new Date(b.createTime).getTime() - new Date(a.createTime).getTime()
+  })
+  
+  if (page.value === 1) {
+    ordersList.value = filtered
+  } else {
+    ordersList.value = [...ordersList.value, ...filtered]
+  }
+  
+  page.value++
+  if (page.value > 2) {
+    hasMore.value = false
+  }
+  
+  loading.value = false
 }
 
 const switchType = (type: 'all' | 'taxi' | 'hotel') => {
@@ -248,27 +307,65 @@ const cancelOrder = (order: Order) => {
   showCancelSheet.value = true
 }
 
-const onCancelReasonSelect = (e: any) => {
+const onCancelReasonSelect = async (e: any) => {
   if (!currentCancelOrder.value) return
   
-  uni.showLoading({ title: '取消中...' })
+  const reason = e.text
   
-  setTimeout(() => {
-    uni.hideLoading()
-    uni.showToast({
-      title: '订单已取消',
-      icon: 'success'
-    })
+  if (currentCancelOrder.value.type === 'hotel') {
+    uni.showLoading({ title: '取消中...' })
     
-    const index = ordersList.value.findIndex(o => o.id === currentCancelOrder.value?.id)
-    if (index > -1) {
-      ordersList.value[index].status = 'cancelled'
-      ordersList.value[index].statusText = '已取消'
+    try {
+      await hotelApi.cancelOrder(currentCancelOrder.value.id, reason)
+      
+      uni.hideLoading()
+      uni.showToast({
+        title: '订单已取消',
+        icon: 'success'
+      })
+      
+      const index = ordersList.value.findIndex(o => o.id === currentCancelOrder.value?.id)
+      if (index > -1) {
+        ordersList.value[index].status = 'cancelled'
+        ordersList.value[index].statusText = '已取消'
+      }
+      
+      showCancelSheet.value = false
+      currentCancelOrder.value = null
+      
+      setTimeout(() => {
+        page.value = 1
+        hasMore.value = true
+        loadOrders()
+      }, 1000)
+    } catch (error: any) {
+      uni.hideLoading()
+      console.error('取消订单失败:', error)
+      uni.showToast({
+        title: error.message || '取消失败，请重试',
+        icon: 'none'
+      })
     }
+  } else {
+    uni.showLoading({ title: '取消中...' })
     
-    showCancelSheet.value = false
-    currentCancelOrder.value = null
-  }, 800)
+    setTimeout(() => {
+      uni.hideLoading()
+      uni.showToast({
+        title: '订单已取消',
+        icon: 'success'
+      })
+      
+      const index = ordersList.value.findIndex(o => o.id === currentCancelOrder.value?.id)
+      if (index > -1) {
+        ordersList.value[index].status = 'cancelled'
+        ordersList.value[index].statusText = '已取消'
+      }
+      
+      showCancelSheet.value = false
+      currentCancelOrder.value = null
+    }, 800)
+  }
 }
 
 const viewTrip = (order: Order) => {

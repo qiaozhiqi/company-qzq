@@ -122,7 +122,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import type { Hotel } from '@/types'
-import { mockHotels } from '@/mock'
+import { hotelApi } from '@/api'
 
 const currentCity = ref('北京')
 const checkInDate = ref('')
@@ -199,20 +199,47 @@ const loadHotels = async () => {
   
   loading.value = true
   
-  setTimeout(() => {
-    if (page.value === 1) {
-      hotelList.value = [...mockHotels]
-    } else {
-      hotelList.value = [...hotelList.value, ...mockHotels]
+  try {
+    const params: any = {
+      page: page.value,
+      pageSize: 10
     }
     
-    page.value++
-    if (page.value > 3) {
-      hasMore.value = false
+    if (currentCity.value && currentCity.value !== '全部') {
+      params.city = currentCity.value
     }
     
+    if (activePriceRange.value !== 'all') {
+      params.priceRange = activePriceRange.value
+    }
+    
+    if (activeStar.value !== 'all') {
+      params.star = activeStar.value
+    }
+    
+    const res = await hotelApi.searchHotels(params)
+    
+    if (res.data && res.data.list) {
+      if (page.value === 1) {
+        hotelList.value = res.data.list
+      } else {
+        hotelList.value = [...hotelList.value, ...res.data.list]
+      }
+      
+      page.value++
+      if (page.value > res.data.totalPages) {
+        hasMore.value = false
+      }
+    }
+  } catch (error) {
+    console.error('加载酒店列表失败:', error)
+    uni.showToast({
+      title: '加载失败，请重试',
+      icon: 'none'
+    })
+  } finally {
     loading.value = false
-  }, 800)
+  }
 }
 
 const selectPriceRange = (value: string) => {
