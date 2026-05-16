@@ -143,6 +143,10 @@ export const hotelApi = {
     pageSize?: number
   }) => {
     return http.get<PageResult<HotelOrder>>('/hotel-orders', params)
+  },
+
+  confirmPayment: (orderId: string) => {
+    return http.post<HotelOrder>(`/hotel-orders/${orderId}/pay`)
   }
 }
 

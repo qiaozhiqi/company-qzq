@@ -64,6 +64,12 @@
             }
         },
         {
+            "path": "pages/hotel/payment",
+            "style": {
+                "navigationBarTitleText": "企业对公支付"
+            }
+        },
+        {
             "path": "pages/flight/index",
             "style": {
                 "navigationBarTitleText": "机票预订",
@@ -130,6 +136,42 @@
             "path": "pages/profile/index",
             "style": {
                 "navigationBarTitleText": "我的"
+            }
+        },
+        {
+            "path": "pages/profile/addresses/index",
+            "style": {
+                "navigationBarTitleText": "常用地址"
+            }
+        },
+        {
+            "path": "pages/profile/invoice/index",
+            "style": {
+                "navigationBarTitleText": "发票信息"
+            }
+        },
+        {
+            "path": "pages/profile/contact/index",
+            "style": {
+                "navigationBarTitleText": "紧急联系人"
+            }
+        },
+        {
+            "path": "pages/profile/help/index",
+            "style": {
+                "navigationBarTitleText": "帮助中心"
+            }
+        },
+        {
+            "path": "pages/profile/feedback/index",
+            "style": {
+                "navigationBarTitleText": "意见反馈"
+            }
+        },
+        {
+            "path": "pages/profile/about/index",
+            "style": {
+                "navigationBarTitleText": "关于我们"
             }
         }
     ],

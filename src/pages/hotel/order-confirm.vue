@@ -140,6 +140,25 @@
       </view>
     </view>
     
+    <view class="payment-section">
+      <view class="section-header">
+        <text class="section-title">支付方式</text>
+      </view>
+      
+      <view class="payment-options">
+        <view class="payment-option" :class="{ active: selectedPayment === 'corporate' }" @click="selectedPayment = 'corporate'">
+          <view class="payment-info">
+            <u-icon name="company" size="36" color="#1890FF"></u-icon>
+            <view class="payment-details">
+              <text class="payment-name">企业对公支付</text>
+              <text class="payment-desc">无需个人垫付，企业账户直接支付</text>
+            </view>
+          </view>
+          <u-icon :name="selectedPayment === 'corporate' ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'" size="36" :color="selectedPayment === 'corporate' ? '#1890FF' : '#CCCCCC'"></u-icon>
+        </view>
+      </view>
+    </view>
+    
     <view class="tip-section">
       <view class="tip-item">
         <u-icon name="info-circle" size="32" color="#1890FF"></u-icon>
@@ -217,6 +236,8 @@ const guestForm = ref({
   guestPhone: '13800138000',
   roomCount: 1
 })
+
+const selectedPayment = ref('corporate')
 
 const roomColumns = computed(() => {
   const availableRooms = roomTypes.value.filter(r => r.availableCount > 0)
@@ -372,13 +393,13 @@ const submitOrder = async () => {
     
     if (res.code === 200) {
       uni.showToast({
-        title: '预订成功',
+        title: '订单创建成功',
         icon: 'success'
       })
       
       setTimeout(() => {
         uni.redirectTo({
-          url: `/pages/hotel/order-detail?id=${res.data.id}`
+          url: `/pages/hotel/payment?id=${res.data.id}`
         })
       }, 1000)
     } else {
@@ -432,7 +453,8 @@ onMounted(() => {
 .room-section,
 .date-section,
 .guest-section,
-.price-section {
+.price-section,
+.payment-section {
   background: #FFFFFF;
   padding: 32rpx;
 }
@@ -795,5 +817,55 @@ onMounted(() => {
   font-size: 28rpx;
   color: #666666;
   margin-top: 24rpx;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  border: 2rpx solid #F5F5F5;
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+  
+  &.active {
+    border-color: #1890FF;
+    background: #E6F7FF;
+  }
+  
+  &:hover {
+    border-color: #1890FF;
+  }
+}
+
+.payment-info {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  flex: 1;
+}
+
+.payment-details {
+  flex: 1;
+}
+
+.payment-name {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.payment-desc {
+  font-size: 24rpx;
+  color: #999999;
+  display: block;
 }
 </style>

@@ -83,6 +83,18 @@
           <text class="info-label">取消时间</text>
           <text class="info-value">{{ order.cancelTime }}</text>
         </view>
+        <view class="info-item">
+          <text class="info-label">支付方式</text>
+          <text class="info-value">企业对公支付</text>
+        </view>
+        <view class="info-item" v-if="order?.status === 'confirmed' || order?.status === 'checked_in' || order?.status === 'completed'">
+          <text class="info-label">支付状态</text>
+          <text class="info-value" style="color: #52C41A;">已支付</text>
+        </view>
+        <view class="info-item" v-if="order?.status === 'pending'">
+          <text class="info-label">支付状态</text>
+          <text class="info-value" style="color: #FAAD14;">待支付</text>
+        </view>
       </view>
     </view>
     
@@ -133,7 +145,7 @@
     
     <view class="bottom-placeholder"></view>
     
-    <view class="bottom-bar" v-if="showActionButtons">
+    <view class="bottom-bar" v-if="showActionButtons || canPay">
       <view class="action-buttons">
         <u-button 
           v-if="canCancel"
@@ -146,7 +158,17 @@
           取消订单
         </u-button>
         <u-button 
-          v-if="canContact"
+          v-if="canPay"
+          type="primary"
+          @click="goToPayment"
+          shape="circle"
+          height="88rpx"
+          customStyle="background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%); width: 220rpx;"
+        >
+          去支付
+        </u-button>
+        <u-button 
+          v-if="canContact && !canPay"
           type="primary"
           @click="contactService"
           shape="circle"
@@ -262,6 +284,18 @@ const canCancel = computed(() => {
 const canContact = computed(() => {
   return true
 })
+
+const canPay = computed(() => {
+  return order.value && ['pending', 'confirmed'].includes(order.value.status)
+})
+
+const goToPayment = () => {
+  if (order.value?.id) {
+    uni.redirectTo({
+      url: `/pages/hotel/payment?id=${order.value.id}`
+    })
+  }
+}
 
 const loadOrderDetail = async () => {
   loading.value = true

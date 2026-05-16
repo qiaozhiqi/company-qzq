@@ -158,44 +158,38 @@ const goToOrders = (type: 'taxi' | 'hotel') => {
 }
 
 const goToAddresses = () => {
-  uni.showToast({
-    title: '功能开发中',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/profile/addresses/index'
   })
 }
 
 const goToInvoice = () => {
-  uni.showToast({
-    title: '功能开发中',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/profile/invoice/index'
   })
 }
 
 const goToContact = () => {
-  uni.showToast({
-    title: '功能开发中',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/profile/contact/index'
   })
 }
 
 const goToHelp = () => {
-  uni.showToast({
-    title: '功能开发中',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/profile/help/index'
   })
 }
 
 const goToFeedback = () => {
-  uni.showToast({
-    title: '功能开发中',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/profile/feedback/index'
   })
 }
 
 const goToAbout = () => {
-  uni.showToast({
-    title: '功能开发中',
-    icon: 'none'
+  uni.navigateTo({
+    url: '/pages/profile/about/index'
   })
 }
 

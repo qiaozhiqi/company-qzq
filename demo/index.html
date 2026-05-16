@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>企业商旅 - 员工端</title>
+    <title>企业商旅服务平台</title>
     <link rel="stylesheet" href="style.css">
+    <!-- 高德地图API -->
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=6006576d6f908092e1e9b1a530c81e89"></script>
+    <!-- 高德地图UI组件库 -->
+    <script type="text/javascript" src="https://webapi.amap.com/ui/1.1/main.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uview-plus/dist/style.css">
 </head>
 <body>
@@ -82,15 +86,8 @@
             <div class="content-area" id="contentArea">
                 <!-- 打车首页 -->
                 <div id="taxi-index" class="sub-page active">
-                    <div class="map-placeholder">
-                        <div class="map-content">
-                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                                <path d="M40 10C23.4 10 10 23.4 10 40C10 56.6 23.4 70 40 70C56.6 70 70 56.6 70 40C70 23.4 56.6 10 40 10Z" stroke="#1890FF" stroke-width="4"/>
-                                <path d="M40 20C34.5 20 30 24.5 30 30C30 35.5 34.5 40 40 40C45.5 40 50 35.5 50 30C50 24.5 45.5 20 40 20Z" fill="#1890FF"/>
-                                <path d="M40 50C48.3 50 55 56.7 55 65C55 65 48.3 70 40 70C31.7 70 25 65 25 65C25 56.7 31.7 50 40 50Z" fill="#1890FF" opacity="0.3"/>
-                            </svg>
-                            <span class="map-tip">地图区域 - 显示当前位置</span>
-                        </div>
+                    <div class="map-container">
+                        <div id="map" style="width: 100%; height: 200px;"></div>
                     </div>
                     
                     <div class="address-card">
@@ -229,6 +226,10 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="call-taxi-section">
+                        <button class="call-taxi-btn" id="callTaxiBtn">立即叫车</button>
                     </div>
                 </div>
 
@@ -598,7 +599,7 @@
                         <div class="train-search-header">
                             <div class="city-selector" id="trainSelectDeparture">
                                 <div class="city-label">出发站</div>
-                                <div class="city-name" id="trainDepartureCity">北京南</div>
+                                <div class="city-name" id="trainDepartureCity">北京</div>
                                 <svg class="arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                     <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
@@ -612,7 +613,7 @@
                             </div>
                             <div class="city-selector" id="trainSelectArrival">
                                 <div class="city-label">到达站</div>
-                                <div class="city-name" id="trainArrivalCity">上海虹桥</div>
+                                <div class="city-name" id="trainArrivalCity">上海</div>
                                 <svg class="arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                     <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
@@ -797,6 +798,8 @@
                             <div class="tab-item active" data-type="all">全部</div>
                             <div class="tab-item" data-type="taxi">打车</div>
                             <div class="tab-item" data-type="hotel">酒店</div>
+                            <div class="tab-item" data-type="flight">机票</div>
+                            <div class="tab-item" data-type="train">火车票</div>
                         </div>
                     </div>
                     
@@ -1236,6 +1239,1239 @@
                     </div>
                 </div>
 
+                <!-- 常用地址添加/编辑页面 -->
+                <div id="addresses-edit" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title" id="addressEditTitle">添加地址</div>
+                            <div class="header-right" onclick="saveAddress()">
+                                <span class="save-btn">保存</span>
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="form-section">
+                                <div class="form-item">
+                                    <div class="label">地址类型</div>
+                                    <div class="type-options">
+                                        <div class="type-option active" onclick="selectAddressType('home')">家</div>
+                                        <div class="type-option" onclick="selectAddressType('company')">公司</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">收货人</div>
+                                    <input type="text" class="input" id="addressName" placeholder="请输入收货人姓名">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">手机号</div>
+                                    <input type="tel" class="input" id="addressPhone" placeholder="请输入手机号">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">详细地址</div>
+                                    <textarea class="textarea" id="addressDetail" placeholder="请输入详细地址" rows="4"></textarea>
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">设为默认</div>
+                                    <div class="switch-container">
+                                        <label class="switch">
+                                            <input type="checkbox" id="addressDefault">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 行程跟踪页面 -->
+                <div id="taxi-tracking" class="sub-page">
+                    <div class="detail-page">
+                        <div class="order-status-header" style="background: linear-gradient(135deg, #FAAD14 0%, #D48806 100%);">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <path d="M24 4L40 16V36C40 38.2 38.2 40 36 40H12C9.8 40 8 38.2 8 36V16L24 4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 40V24H32V40" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="18" cy="12" r="2" fill="white"/>
+                                <circle cx="30" cy="12" r="2" fill="white"/>
+                            </svg>
+                            <div class="order-status-info">
+                                <div class="order-status-text" id="trackingStatusText">司机正在赶来</div>
+                                <div class="order-status-desc" id="trackingStatusDesc">预计3分钟后到达</div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-confirm-section">
+                            <div class="confirm-section-title">行程信息</div>
+                            <div class="confirm-hotel-card">
+                                <div class="confirm-hotel-info">
+                                    <div class="route-info" style="padding: 0;">
+                                        <div class="route-item">
+                                            <div class="dot blue-dot"></div>
+                                            <span class="location-text" id="trackingStartLocation">公司总部</span>
+                                        </div>
+                                        <div class="route-line"></div>
+                                        <div class="route-item">
+                                            <div class="dot green-dot"></div>
+                                            <span class="location-text" id="trackingEndLocation">北京首都国际机场</span>
+                                        </div>
+                                    </div>
+                                    <div class="order-subtitle" style="padding-left: 22px; margin-top: 12px;">
+                                        <span id="trackingCarType">舒适型</span> · <span id="trackingDistance">28.5</span> 公里 · 预计 <span id="trackingDuration">45</span> 分钟
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-confirm-section">
+                            <div class="confirm-section-title">司机信息</div>
+                            <div class="confirm-hotel-card" style="align-items: center;">
+                                <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%); display: flex; align-items: center; justify-content: center; margin-right: 16px;">
+                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                        <circle cx="16" cy="12" r="4" fill="white"/>
+                                        <path d="M28 26C28 20.5 16 18 16 18C16 18 4 20.5 4 26C4 28.8 6.2 31 9 31H23C25.8 31 28 28.8 28 26Z" fill="white"/>
+                                    </svg>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 16px; font-weight: 600; color: #333333; margin-bottom: 4px;">李师傅</div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div style="display: flex; align-items: center; gap: 2px;">
+                                            <span class="star filled">★</span>
+                                            <span class="star filled">★</span>
+                                            <span class="star filled">★</span>
+                                            <span class="star filled">★</span>
+                                            <span class="star filled">★</span>
+                                        </div>
+                                        <span style="font-size: 12px; color: #666666;">4.9分</span>
+                                        <span style="font-size: 12px; color: #999999;">|</span>
+                                        <span style="font-size: 12px; color: #666666;">接单数: 328</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <div class="action-btn primary" style="padding: 6px 16px; font-size: 12px;">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-right: 4px;">
+                                            <path d="M2 6L6 2L14 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        联系司机
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-confirm-section">
+                            <div class="confirm-section-title">车辆信息</div>
+                            <div class="confirm-hotel-card">
+                                <div class="confirm-hotel-info">
+                                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px;">
+                                        <div style="width: 48px; height: 48px; background: #F5F5F5; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                                <rect x="4" y="10" width="24" height="14" rx="3" stroke="#1890FF" stroke-width="2"/>
+                                                <rect x="8" y="6" width="16" height="6" rx="2" stroke="#1890FF" stroke-width="2"/>
+                                                <circle cx="8" cy="26" r="3" fill="#1890FF"/>
+                                                <circle cx="24" cy="26" r="3" fill="#1890FF"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 16px; font-weight: 500; color: #333333; margin-bottom: 4px;">北京现代 · 白色</div>
+                                            <div style="font-size: 14px; color: #666666;">京A12345</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-bottom-bar">
+                            <div style="flex: 1; display: flex; gap: 8px;">
+                                <button class="bottom-bar-btn secondary" style="flex: 1;">取消订单</button>
+                            </div>
+                            <button class="bottom-bar-btn" style="flex: 1;">结束行程</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 打车订单确认页面 -->
+                <div id="taxi-order-confirm" class="sub-page">
+                    <div class="detail-page">
+                        <div class="order-confirm-section">
+                            <div class="confirm-section-title">行程信息</div>
+                            <div class="confirm-hotel-card">
+                                <div class="confirm-hotel-info">
+                                    <div class="route-info" style="padding: 0;">
+                                        <div class="route-item">
+                                            <div class="dot blue-dot"></div>
+                                            <span class="location-text" id="confirmStartLocation">请选择出发地点</span>
+                                        </div>
+                                        <div class="route-line"></div>
+                                        <div class="route-item">
+                                            <div class="dot green-dot"></div>
+                                            <span class="location-text" id="confirmEndLocation">请选择目的地</span>
+                                        </div>
+                                    </div>
+                                    <div class="order-subtitle" style="padding-left: 22px; margin-top: 12px;">
+                                        <span id="confirmCarType">舒适型</span> · 预估 <span id="confirmDistance">0</span> 公里 · 预估 <span id="confirmDuration">0</span> 分钟
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-confirm-section">
+                            <div class="confirm-section-title">价格明细</div>
+                            <div class="price-detail-list">
+                                <div class="price-detail-item">
+                                    <span class="price-label-detail">起步价</span>
+                                    <span class="price-value-detail" id="priceStart">¥10</span>
+                                </div>
+                                <div class="price-detail-item">
+                                    <span class="price-label-detail">里程费</span>
+                                    <span class="price-value-detail" id="priceDistance">¥0</span>
+                                </div>
+                                <div class="price-detail-item">
+                                    <span class="price-label-detail">时长费</span>
+                                    <span class="price-value-detail" id="priceDuration">¥0</span>
+                                </div>
+                                <div class="price-total-line">
+                                    <span class="total-label">预估总价</span>
+                                    <div class="total-price">
+                                        <span class="total-symbol">¥</span>
+                                        <span class="total-value" id="confirmTotalPrice">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-confirm-section">
+                            <div class="confirm-section-title">出行人信息</div>
+                            <div class="confirm-form">
+                                <div class="form-item-confirm">
+                                    <div class="form-label-confirm">姓名</div>
+                                    <input type="text" class="form-input-confirm" id="taxiPassengerName" placeholder="请输入姓名">
+                                </div>
+                                <div class="form-item-confirm">
+                                    <div class="form-label-confirm">手机号</div>
+                                    <input type="tel" class="form-input-confirm" id="confirmPassengerPhone" placeholder="请输入手机号">
+                                </div>
+                                <div class="form-item-confirm">
+                                    <div class="form-label-confirm">备注</div>
+                                    <input type="text" class="form-input-confirm" id="confirmPassengerRemark" placeholder="选填">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-confirm-section">
+                            <div class="confirm-section-title">支付方式</div>
+                            <div class="payment-options">
+                                <div class="payment-item active" onclick="selectPaymentMethod('company')">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span class="payment-text">企业支付</span>
+                                    <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <circle cx="10" cy="10" r="8" stroke="#1890FF" stroke-width="2"/>
+                                        <path d="M6 10L9 13L14 7" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="payment-item" onclick="selectPaymentMethod('personal')">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <rect x="1" y="4" width="22" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                                        <line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span class="payment-text">个人支付</span>
+                                    <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <circle cx="10" cy="10" r="8" stroke="#1890FF" stroke-width="2"/>
+                                        <path d="M6 10L9 13L14 7" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-bottom-bar">
+                            <div class="bottom-bar-price">
+                                <span class="bottom-price-label">预估总价</span>
+                                <div style="display: flex; align-items: baseline;">
+                                    <span class="bottom-price-symbol">¥</span>
+                                    <span class="bottom-price-value" id="confirmBottomPrice">0</span>
+                                </div>
+                            </div>
+                            <button class="bottom-bar-btn" id="confirmTaxiOrderBtn">确认叫车</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 常用地址页面 -->
+                <div id="addresses-index" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">常用地址</div>
+                            <div class="header-right" onclick="addAddress()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="address-item">
+                                <div class="address-header">
+                                    <div class="address-type">家</div>
+                                    <div class="address-name">张三</div>
+                                    <div class="address-phone">13800138000</div>
+                                </div>
+                                <div class="address-detail">北京市朝阳区建国路88号SOHO现代城A座2301室</div>
+                                <div class="address-actions">
+                                    <div class="action-btn edit" onclick="editAddress()">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M13 2H4C3.4 2 3 2.4 3 3V14C3 14.6 3.4 15 4 15H13L17 19L21 15L17 11H13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="action-text">编辑</span>
+                                    </div>
+                                    <div class="action-btn delete" onclick="deleteAddress(0)">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M5 5H15M15 5V18C15 18.6 14.6 19 14 19H6C5.4 19 5 18.6 5 18V5M15 5H5M10 8V15M7 11H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="action-text">删除</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="address-item">
+                                <div class="address-header">
+                                    <div class="address-type">公司</div>
+                                    <div class="address-name">张三</div>
+                                    <div class="address-phone">13800138000</div>
+                                </div>
+                                <div class="address-detail">北京市海淀区中关村大街1号中关村广场C座15层</div>
+                                <div class="address-actions">
+                                    <div class="action-btn edit" onclick="editAddress()">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M13 2H4C3.4 2 3 2.4 3 3V14C3 14.6 3.4 15 4 15H13L17 19L21 15L17 11H13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="action-text">编辑</span>
+                                    </div>
+                                    <div class="action-btn delete" onclick="deleteAddress(1)">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M5 5H15M15 5V18C15 18.6 14.6 19 14 19H6C5.4 19 5 18.6 5 18V5M15 5H5M10 8V15M7 11H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="action-text">删除</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 发票信息添加/编辑页面 -->
+                <div id="invoice-edit" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title" id="invoiceEditTitle">添加发票</div>
+                            <div class="header-right" onclick="saveInvoice()">
+                                <span class="save-btn">保存</span>
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="form-section">
+                                <div class="form-item">
+                                    <div class="label">发票类型</div>
+                                    <div class="type-options">
+                                        <div class="type-option active" onclick="selectInvoiceType('company')">企业发票</div>
+                                        <div class="type-option" onclick="selectInvoiceType('personal')">个人发票</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">发票抬头</div>
+                                    <input type="text" class="input" id="invoiceTitle" placeholder="请输入发票抬头">
+                                </div>
+                                
+                                <div class="form-item" id="taxNumberSection">
+                                    <div class="label">税号</div>
+                                    <input type="text" class="input" id="invoiceTaxNumber" placeholder="请输入税号">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">开户行</div>
+                                    <input type="text" class="input" id="invoiceBank" placeholder="请输入开户行">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">银行账号</div>
+                                    <input type="text" class="input" id="invoiceAccount" placeholder="请输入银行账号">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">地址</div>
+                                    <input type="text" class="input" id="invoiceAddress" placeholder="请输入地址">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">电话</div>
+                                    <input type="tel" class="input" id="invoicePhone" placeholder="请输入电话">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">设为默认</div>
+                                    <div class="switch-container">
+                                        <label class="switch">
+                                            <input type="checkbox" id="invoiceDefault">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 发票信息页面 -->
+                <div id="invoice-index" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">发票信息</div>
+                            <div class="header-right" onclick="addInvoice()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="invoice-item">
+                                <div class="invoice-header">
+                                    <div class="invoice-type">企业发票</div>
+                                    <div class="invoice-status">默认</div>
+                                </div>
+                                <div class="invoice-content">
+                                    <div class="invoice-row">
+                                        <div class="label">发票抬头</div>
+                                        <div class="value">北京科技有限公司</div>
+                                    </div>
+                                    <div class="invoice-row">
+                                        <div class="label">税号</div>
+                                        <div class="value">91110000MA12345678</div>
+                                    </div>
+                                    <div class="invoice-row">
+                                        <div class="label">开户行</div>
+                                        <div class="value">中国工商银行北京分行</div>
+                                    </div>
+                                    <div class="invoice-row">
+                                        <div class="label">银行账号</div>
+                                        <div class="value">6222021234567890123</div>
+                                    </div>
+                                    <div class="invoice-row">
+                                        <div class="label">地址</div>
+                                        <div class="value">北京市海淀区中关村大街1号</div>
+                                    </div>
+                                    <div class="invoice-row">
+                                        <div class="label">电话</div>
+                                        <div class="value">010-12345678</div>
+                                    </div>
+                                </div>
+                                <div class="invoice-actions">
+                                    <div class="action-btn default" onclick="setDefault(0)">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="8" fill="#1890FF"/>
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="action-text">设为默认</span>
+                                    </div>
+                                    <div class="action-btn edit" onclick="editInvoice()">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M13 2H4C3.4 2 3 2.4 3 3V14C3 14.6 3.4 15 4 15H13L17 19L21 15L17 11H13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="action-text">编辑</span>
+                                    </div>
+                                    <div class="action-btn delete" onclick="deleteInvoice(0)">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M5 5H15M15 5V18C15 18.6 14.6 19 14 19H6C5.4 19 5 18.6 5 18V5M15 5H5M10 8V15M7 11H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="action-text">删除</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 紧急联系人添加/编辑页面 -->
+                <div id="contact-edit" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title" id="contactEditTitle">添加联系人</div>
+                            <div class="header-right" onclick="saveContact()">
+                                <span class="save-btn">保存</span>
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="form-section">
+                                <div class="form-item">
+                                    <div class="label">姓名</div>
+                                    <input type="text" class="input" id="contactName" placeholder="请输入联系人姓名">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">关系</div>
+                                    <div class="type-options">
+                                        <div class="type-option active" onclick="selectRelation('spouse')">配偶</div>
+                                        <div class="type-option" onclick="selectRelation('parent')">父母</div>
+                                        <div class="type-option" onclick="selectRelation('child')">子女</div>
+                                        <div class="type-option" onclick="selectRelation('other')">其他</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">手机号</div>
+                                    <input type="tel" class="input" id="contactPhone" placeholder="请输入手机号">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">地址</div>
+                                    <input type="text" class="input" id="contactAddress" placeholder="请输入地址">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 紧急联系人页面 -->
+                <div id="contact-index" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">紧急联系人</div>
+                            <div class="header-right" onclick="addContact()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="contact-item">
+                                <div class="contact-header">
+                                    <div class="contact-name">李四</div>
+                                    <div class="contact-relation">配偶</div>
+                                </div>
+                                <div class="contact-info">
+                                    <div class="info-row">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M2 3C2 3 3.5 4 5 4C6.5 4 8 3 8 3V17C8 17 6.5 16 5 16C3.5 16 2 17 2 17V3Z" stroke="currentColor" stroke-width="2"/>
+                                            <path d="M12 3C12 3 13.5 4 15 4C16.5 4 18 3 18 3V17C18 17 16.5 16 15 16C13.5 16 12 17 12 17V3Z" stroke="currentColor" stroke-width="2"/>
+                                            <path d="M8 8H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M8 12H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                        <span class="info-text">13900139000</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M10 2C5.6 2 2 5.6 2 10C2 14.4 5.6 18 10 18C14.4 18 18 14.4 18 10C18 5.6 14.4 2 10 2Z" stroke="currentColor" stroke-width="2"/>
+                                            <path d="M10 8C11.1 8 12 8.9 12 10C12 11.1 11.1 12 10 12C8.9 12 8 11.1 8 10C8 8.9 8.9 8 10 8Z" stroke="currentColor" stroke-width="2"/>
+                                        </svg>
+                                        <span class="info-text">北京市朝阳区建国路88号</span>
+                                    </div>
+                                </div>
+                                <div class="contact-actions">
+                                    <div class="action-btn edit" onclick="editContact()">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M13 2H4C3.4 2 3 2.4 3 3V14C3 14.6 3.4 15 4 15H13L17 19L21 15L17 11H13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="action-text">编辑</span>
+                                    </div>
+                                    <div class="action-btn delete" onclick="deleteContact(0)">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M5 5H15M15 5V18C15 18.6 14.6 19 14 19H6C5.4 19 5 18.6 5 18V5M15 5H5M10 8V15M7 11H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="action-text">删除</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 帮助中心页面 -->
+                <div id="help-index" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">帮助中心</div>
+                            <div class="header-right"></div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="search-bar">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="14" y1="14" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <input type="text" class="search-input" placeholder="搜索问题">
+                            </div>
+                            
+                            <div class="faq-section">
+                                <div class="section-title">常见问题</div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question" onclick="toggleFAQ(0)">
+                                        <span class="question-text">如何预订机票？</span>
+                                        <svg class="arrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                            <path d="M6 13.5L10.5 9L6 4.5" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <div class="faq-answer" id="faq-answer-0" style="display: none;">
+                                        <span class="answer-text">您可以在首页选择"机票"选项，输入出发地、目的地和日期，点击搜索后选择合适的航班进行预订。</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question" onclick="toggleFAQ(1)">
+                                        <span class="question-text">如何修改订单信息？</span>
+                                        <svg class="arrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                            <path d="M6 13.5L10.5 9L6 4.5" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <div class="faq-answer" id="faq-answer-1" style="display: none;">
+                                        <span class="answer-text">您可以在"我的订单"页面找到相应订单，点击"修改"按钮进行信息修改。请注意，部分订单可能无法修改，请以系统提示为准。</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-section">
+                                <div class="section-title">联系我们</div>
+                                <div class="contact-info">
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M2 3C2 3 3.5 4 5 4C6.5 4 8 3 8 3V17C8 17 6.5 16 5 16C3.5 16 2 17 2 17V3Z" stroke="currentColor" stroke-width="2"/>
+                                            <path d="M12 3C12 3 13.5 4 15 4C16.5 4 18 3 18 3V17C18 17 16.5 16 15 16C13.5 16 12 17 12 17V3Z" stroke="currentColor" stroke-width="2"/>
+                                            <path d="M8 8H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M8 12H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                        <span class="contact-text">客服热线：400-123-4567</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2"/>
+                                            <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="contact-text">邮箱：service@example.com</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                            <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span class="contact-text">工作时间：周一至周五 9:00-18:00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 意见反馈页面 -->
+                <div id="feedback-index" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">意见反馈</div>
+                            <div class="header-right"></div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="form-section">
+                                <div class="form-item">
+                                    <div class="label">反馈类型</div>
+                                    <div class="type-options">
+                                        <div class="type-option active" onclick="selectType('suggestion')">功能建议</div>
+                                        <div class="type-option" onclick="selectType('bug')">bug反馈</div>
+                                        <div class="type-option" onclick="selectType('other')">其他问题</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">反馈内容</div>
+                                    <textarea class="textarea" placeholder="请详细描述您的问题或建议" rows="6"></textarea>
+                                    <div class="counter">0/500</div>
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">联系方式</div>
+                                    <input type="text" class="input" placeholder="请留下您的手机号或邮箱，以便我们回复">
+                                </div>
+                                
+                                <div class="form-item">
+                                    <div class="label">上传图片</div>
+                                    <div class="upload-section">
+                                        <div class="upload-btn" onclick="chooseImage()">
+                                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                                <rect x="10" y="10" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/>
+                                                <path d="M20 15V25M15 20H25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                            <span class="upload-text">添加图片</span>
+                                        </div>
+                                    </div>
+                                    <span class="tip">最多可上传3张图片</span>
+                                </div>
+                            </div>
+                            
+                            <div class="submit-btn" onclick="submitFeedback()">提交反馈</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 机票详情页面 -->
+                <div id="flight-detail" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">航班详情</div>
+                            <div class="header-right"></div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="flight-detail-card">
+                                <div class="flight-detail-route">
+                                    <div class="route-item">
+                                        <div class="time" id="flightDetailDepartureTime">08:30</div>
+                                        <div class="city" id="flightDetailDepartureCity">北京</div>
+                                        <div class="airport" id="flightDetailDepartureAirport">首都国际机场</div>
+                                        <div class="date" id="flightDetailDate">2024-01-20</div>
+                                    </div>
+                                    
+                                    <div class="route-duration">
+                                        <div class="duration" id="flightDetailDuration">2小时15分</div>
+                                        <div class="flight-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path d="M21 16L13 14L5 16L9 22H15L21 16Z" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M13 2V14" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M5 10L13 14L21 10" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                        <div class="direct-tag" id="flightDetailIsDirect">直飞</div>
+                                    </div>
+                                    
+                                    <div class="route-item">
+                                        <div class="time" id="flightDetailArrivalTime">10:45</div>
+                                        <div class="city" id="flightDetailArrivalCity">上海</div>
+                                        <div class="airport" id="flightDetailArrivalAirport">浦东国际机场</div>
+                                        <div class="date" id="flightDetailArrivalDate">2024-01-20</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flight-info-section">
+                                    <div class="info-row">
+                                        <div class="info-label">航空公司</div>
+                                        <div class="info-value" id="flightDetailAirline">中国国际航空</div>
+                                    </div>
+                                    <div class="info-row">
+                                        <div class="info-label">航班号</div>
+                                        <div class="info-value" id="flightDetailFlightNo">CA1234</div>
+                                    </div>
+                                    <div class="info-row">
+                                        <div class="info-label">机型</div>
+                                        <div class="info-value" id="flightDetailAircraftType">波音737</div>
+                                    </div>
+                                    <div class="info-row">
+                                        <div class="info-label">餐食</div>
+                                        <div class="info-value" id="flightDetailMeal">含早餐</div>
+                                    </div>
+                                    <div class="info-row">
+                                        <div class="info-label">行李额</div>
+                                        <div class="info-value" id="flightDetailBaggagePolicy">2件23公斤</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="section-divider-detail">
+                                <span class="divider-text-detail">舱位选择</span>
+                            </div>
+                            
+                            <div class="cabin-types-list" id="cabinTypesList">
+                                <!-- 舱位列表将通过 JavaScript 动态生成 -->
+                            </div>
+                        </div>
+                        
+                        <div class="detail-bottom-bar" id="flightDetailBottomBar">
+                            <div class="bottom-bar-price">
+                                <div class="bottom-price-label">票价</div>
+                                <div class="bottom-price-value">
+                                    <span class="bottom-price-symbol">¥</span>
+                                    <span class="bottom-price-amount" id="selectedPrice">0</span>
+                                </div>
+                            </div>
+                            <button class="bottom-bar-btn primary" id="bookFlightBtn">预订</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 火车票详情页面 -->
+                <div id="train-detail" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">车次详情</div>
+                            <div class="header-right"></div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="train-detail-card">
+                                <div class="train-detail-header">
+                                    <div class="train-no" id="trainDetailNo">G1</div>
+                                    <div class="train-type" id="trainDetailType">高速动车</div>
+                                </div>
+                                
+                                <div class="train-detail-route">
+                                    <div class="route-item">
+                                        <div class="time" id="trainDetailDepartureTime">07:00</div>
+                                        <div class="station" id="trainDetailDepartureStation">北京南站</div>
+                                        <div class="date" id="trainDetailDepartureDate">今天</div>
+                                    </div>
+                                    
+                                    <div class="route-duration">
+                                        <div class="duration" id="trainDetailDuration">4小时28分</div>
+                                        <div class="train-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <rect x="4" y="2" width="16" height="16" rx="3" stroke="#1890FF" stroke-width="2"/>
+                                                <path d="M8 2V0H16V2" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <circle cx="8" cy="20" r="2" stroke="#1890FF" stroke-width="2"/>
+                                                <circle cx="16" cy="20" r="2" stroke="#1890FF" stroke-width="2"/>
+                                            </svg>
+                                        </div>
+                                        <div class="direct-tag" id="trainDetailTag">直达</div>
+                                    </div>
+                                    
+                                    <div class="route-item">
+                                        <div class="time" id="trainDetailArrivalTime">11:28</div>
+                                        <div class="station" id="trainDetailArrivalStation">上海虹桥站</div>
+                                        <div class="date" id="trainDetailArrivalDate">今天</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="section-divider-detail">
+                                <span class="divider-text-detail">座位选择</span>
+                            </div>
+                            
+                            <div class="seat-types-list" id="seatTypesList">
+                                <!-- 座位类型将通过 JavaScript 动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 火车票预订页面 -->
+                <div id="train-order-confirm" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">确认订单</div>
+                            <div class="header-right"></div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="order-confirm-section">
+                                <div class="confirm-section-title">行程信息</div>
+                                <div class="confirm-train-card">
+                                    <div class="train-info">
+                                        <div class="train-header">
+                                            <div class="train-no" id="confirmTrainNo">G1</div>
+                                            <div class="train-type" id="confirmTrainType">高速动车</div>
+                                        </div>
+                                        <div class="train-time">
+                                            <div class="time-block">
+                                                <div class="time" id="confirmDepartureTime">07:00</div>
+                                                <div class="station" id="confirmDepartureStation">北京南站</div>
+                                            </div>
+                                            <div class="train-duration">
+                                                <div class="duration" id="confirmDuration">4小时28分</div>
+                                                <div class="train-icon">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <rect x="4" y="2" width="16" height="16" rx="3" stroke="#1890FF" stroke-width="2"/>
+                                                        <path d="M8 2V0H16V2" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <circle cx="8" cy="20" r="2" stroke="#1890FF" stroke-width="2"/>
+                                                        <circle cx="16" cy="20" r="2" stroke="#1890FF" stroke-width="2"/>
+                                                    </svg>
+                                                </div>
+                                                <div class="direct-tag">直达</div>
+                                            </div>
+                                            <div class="time-block">
+                                                <div class="time" id="confirmArrivalTime">11:28</div>
+                                                <div class="station" id="confirmArrivalStation">上海虹桥站</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="order-confirm-section">
+                                <div class="confirm-section-title">乘客信息</div>
+                                <div class="confirm-form">
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">姓名</span>
+                                        <input type="text" class="form-input-confirm" id="trainPassengerName" placeholder="请输入乘客姓名">
+                                    </div>
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">身份证号</span>
+                                        <input type="text" class="form-input-confirm" id="trainPassengerId" placeholder="请输入身份证号">
+                                    </div>
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">手机号</span>
+                                        <input type="tel" class="form-input-confirm" id="trainPassengerPhone" placeholder="请输入手机号">
+                                    </div>
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">座位类型</span>
+                                        <div class="seat-type-select" id="trainSeatType">二等座</div>
+                                    </div>
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">保险</span>
+                                        <div class="insurance-select">
+                                            <label class="switch">
+                                                <input type="checkbox" id="trainInsurance" checked>
+                                                <span class="slider"></span>
+                                            </label>
+                                            <span class="insurance-text">20元/人</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="order-confirm-section">
+                                <div class="confirm-section-title">价格明细</div>
+                                <div class="price-detail-list">
+                                    <div class="price-detail-item">
+                                        <span class="price-label-detail">票价</span>
+                                        <span class="price-value-detail" id="priceTicket">¥553</span>
+                                    </div>
+                                    <div class="price-detail-item">
+                                        <span class="price-label-detail">保险</span>
+                                        <span class="price-value-detail" id="priceInsurance">¥20</span>
+                                    </div>
+                                    <div class="price-total-line">
+                                        <span class="total-label">合计</span>
+                                        <span class="total-price">
+                                            <span class="total-symbol">¥</span>
+                                            <span class="total-value" id="confirmTotalPrice">573</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="order-confirm-section">
+                                <div class="confirm-section-title">支付方式</div>
+                                <div class="payment-options">
+                                    <div class="payment-item active" data-type="company">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                                            <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                                            <rect x="6" y="14" width="4" height="3" rx="1" fill="currentColor"/>
+                                        </svg>
+                                        <span class="payment-text">企业对公支付</span>
+                                        <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="8" fill="#1890FF"/>
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-bottom-bar">
+                                <div class="bottom-bar-price">
+                                    <span class="bottom-price-label">合计</span>
+                                    <span class="bottom-price-symbol">¥</span>
+                                    <span class="bottom-price-value" id="confirmBottomPrice">573</span>
+                                </div>
+                                <button class="bottom-bar-btn primary" id="submitTrainOrderBtn">确认支付</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 关于我们页面 -->
+                <div id="about-index" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">关于我们</div>
+                            <div class="header-right"></div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="logo-section">
+                                <div class="logo">
+                                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                                        <rect x="20" y="20" width="80" height="80" rx="20" fill="#E6F7FF"/>
+                                        <path d="M40 60H80M60 40V80" stroke="#1890FF" stroke-width="8" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                                <div class="company-name">企业商旅服务平台</div>
+                                <div class="version">版本 v1.0.0</div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <div class="info-item" onclick="showAgreement()">
+                                    <span class="info-text">服务协议</span>
+                                    <svg class="arrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                        <path d="M6 13.5L10.5 9L6 4.5" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="info-item" onclick="showPrivacy()">
+                                    <span class="info-text">隐私政策</span>
+                                    <svg class="arrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                        <path d="M6 13.5L10.5 9L6 4.5" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="info-item" onclick="checkUpdate()">
+                                    <span class="info-text">检查更新</span>
+                                    <svg class="arrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                        <path d="M6 13.5L10.5 9L6 4.5" stroke="#CCCCCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <div class="description">
+                                <span class="desc-text">企业商旅服务平台致力于为企业提供便捷、高效的差旅管理解决方案，帮助企业降低差旅成本，提升出行体验。</span>
+                            </div>
+                            
+                            <div class="contact-info">
+                                <div class="contact-item">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M2 3C2 3 3.5 4 5 4C6.5 4 8 3 8 3V17C8 17 6.5 16 5 16C3.5 16 2 17 2 17V3Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M12 3C12 3 13.5 4 15 4C16.5 4 18 3 18 3V17C18 17 16.5 16 15 16C13.5 16 12 17 12 17V3Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M8 8H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M8 12H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    <span class="contact-text">客服热线：400-123-4567</span>
+                                </div>
+                                <div class="contact-item">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span class="contact-text">邮箱：service@example.com</span>
+                                </div>
+                                <div class="contact-item">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M10 2C5.6 2 2 5.6 2 10C2 14.4 5.6 18 10 18C14.4 18 18 14.4 18 10C18 5.6 14.4 2 10 2Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M10 8C11.1 8 12 8.9 12 10C12 11.1 11.1 12 10 12C8.9 12 8 11.1 8 10C8 8.9 8.9 8 10 8Z" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    <span class="contact-text">地址：北京市朝阳区建国路88号</span>
+                                </div>
+                            </div>
+                            
+                            <div class="copyright">
+                                <span class="copyright-text">© 2026 企业商旅服务平台 版权所有</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 机票订单确认页 -->
+                <div id="flight-order-confirm" class="sub-page">
+                    <div class="detail-page">
+                        <div class="page-header">
+                            <div class="header-left" onclick="goBack()">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="header-title">确认订单</div>
+                            <div class="header-right"></div>
+                        </div>
+                        
+                        <div class="content">
+                            <div class="order-confirm-section">
+                                <div class="confirm-section-title">航班信息</div>
+                                <div class="confirm-flight-card">
+                                    <div class="flight-route">
+                                        <div class="route-item">
+                                            <div class="time" id="confirmFlightDepartureTime">08:30</div>
+                                            <div class="city" id="confirmFlightDepartureCity">北京</div>
+                                            <div class="airport" id="confirmFlightDepartureAirport">首都国际机场</div>
+                                        </div>
+                                        <div class="route-duration">
+                                            <div class="duration" id="confirmFlightDuration">2小时15分</div>
+                                            <div class="flight-icon">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M21 16L13 14L5 16L9 22H15L21 16Z" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M13 2V14" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M5 10L13 14L21 10" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </div>
+                                            <div class="cabin-class" id="confirmFlightCabinClass">经济舱</div>
+                                        </div>
+                                        <div class="route-item">
+                                            <div class="time" id="confirmFlightArrivalTime">10:45</div>
+                                            <div class="city" id="confirmFlightArrivalCity">上海</div>
+                                            <div class="airport" id="confirmFlightArrivalAirport">浦东国际机场</div>
+                                        </div>
+                                    </div>
+                                    <div class="flight-info">
+                                        <div class="info-row">
+                                            <div class="info-label">航空公司</div>
+                                            <div class="info-value" id="confirmFlightAirline">中国国际航空</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <div class="info-label">航班号</div>
+                                            <div class="info-value" id="confirmFlightNo">CA1234</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <div class="info-label">出发日期</div>
+                                            <div class="info-value" id="confirmFlightDate">2024-01-20</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="order-confirm-section">
+                                <div class="confirm-section-title">乘机人信息</div>
+                                <div class="confirm-form">
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">姓名</span>
+                                        <input type="text" class="form-input-confirm" id="confirmPassengerName" placeholder="请输入乘机人姓名">
+                                    </div>
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">身份证号</span>
+                                        <input type="text" class="form-input-confirm" id="confirmPassengerID" placeholder="请输入身份证号" maxlength="18">
+                                    </div>
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">手机号</span>
+                                        <input type="tel" class="form-input-confirm" id="flightPassengerPhone" placeholder="请输入手机号" maxlength="11">
+                                    </div>
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">乘机人数</span>
+                                        <div class="guest-count-selector">
+                                            <button class="count-btn" id="decreaseSeatCount">-</button>
+                                            <span class="count-value" id="seatCount">1</span>
+                                            <button class="count-btn" id="increaseSeatCount">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-item-confirm">
+                                        <span class="form-label-confirm">保险</span>
+                                        <div class="insurance-option">
+                                            <label class="switch">
+                                                <input type="checkbox" id="confirmInsurance" checked>
+                                                <span class="slider"></span>
+                                            </label>
+                                            <span class="insurance-text">航空意外险（¥30/人）</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="order-confirm-section">
+                                <div class="confirm-section-title">价格明细</div>
+                                <div class="price-detail-list">
+                                    <div class="price-detail-item">
+                                        <span class="price-label-detail">机票费用</span>
+                                        <span class="price-value-detail"><span id="priceDetailFlightFee">¥580</span> × <span id="priceDetailSeatCount">1</span>人</span>
+                                    </div>
+                                    <div class="price-detail-item" id="insuranceFeeItem">
+                                        <span class="price-label-detail">保险费用</span>
+                                        <span class="price-value-detail"><span id="priceDetailInsuranceFee">¥30</span> × <span id="priceDetailInsuranceCount">1</span>人</span>
+                                    </div>
+                                </div>
+                                <div class="price-total-line">
+                                    <span class="total-label">合计</span>
+                                    <span class="total-price">
+                                        <span class="total-symbol">¥</span>
+                                        <span class="total-value" id="flightConfirmTotalPrice">610</span>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="order-confirm-section">
+                                <div class="confirm-section-title">支付方式</div>
+                                <div class="payment-options">
+                                    <div class="payment-item active" data-type="company">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                                            <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                                            <rect x="6" y="14" width="4" height="3" rx="1" fill="currentColor"/>
+                                        </svg>
+                                        <span class="payment-text">企业对公支付</span>
+                                        <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="8" fill="#1890FF"/>
+                                            <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-bottom-bar">
+                            <div class="bottom-bar-price">
+                                <div class="bottom-price-label">合计</div>
+                                <div class="bottom-price-value">
+                                    <span class="bottom-price-symbol">¥</span>
+                                    <span class="bottom-price-amount" id="flightConfirmBottomPrice">610</span>
+                                </div>
+                            </div>
+                            <button class="bottom-bar-btn primary" id="submitFlightOrderBtn">确认支付</button>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- 酒店订单确认页 -->
                 <div id="hotel-order-confirm" class="sub-page">
                     <div class="detail-page">
@@ -1335,6 +2571,129 @@
                     </div>
                 </div>
 
+                <!-- 机票订单详情页 -->
+                <div id="flight-order-detail" class="sub-page">
+                    <div class="detail-page">
+                        <div class="order-status-header" id="flightOrderStatusHeader">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <circle cx="24" cy="24" r="20" fill="#52C41A" opacity="0.2"/>
+                                <circle cx="24" cy="24" r="16" fill="#52C41A"/>
+                                <path d="M18 24L22 28L30 20" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div class="order-status-info">
+                                <div class="order-status-text" id="flightOrderStatusText">已确认</div>
+                                <div class="order-status-desc" id="flightOrderStatusDesc">订单已确认，请按时登机</div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-detail-section">
+                            <div class="detail-section-title">订单信息</div>
+                            <div class="order-detail-card">
+                                <div class="detail-order-no">
+                                    <span class="detail-label">订单编号</span>
+                                    <span class="detail-value" id="flightDetailOrderNo">FL202401150001</span>
+                                </div>
+                                <div class="detail-order-time">
+                                    <span class="detail-label">创建时间</span>
+                                    <span class="detail-value" id="flightDetailCreateTime">2024-01-15 10:30:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-detail-section">
+                            <div class="detail-section-title">航班信息</div>
+                            <div class="detail-flight-card">
+                                <div class="detail-flight-info">
+                                    <div class="flight-route-detail">
+                                        <div class="route-city-detail">
+                                            <div class="city-name-detail" id="flightDetailDepartureCity">北京</div>
+                                            <div class="airport-name-detail" id="flightDetailDepartureAirport">北京首都国际机场</div>
+                                            <div class="time-detail" id="flightDetailDepartureTime">08:30</div>
+                                        </div>
+                                        <div class="route-arrow-detail">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path d="M12 6L19 12L12 18" stroke="#1890FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            <div class="duration-detail" id="flightDetailDuration">2小时15分</div>
+                                        </div>
+                                        <div class="route-city-detail">
+                                            <div class="city-name-detail" id="flightDetailArrivalCity">上海</div>
+                                            <div class="airport-name-detail" id="flightDetailArrivalAirport">上海浦东国际机场</div>
+                                            <div class="time-detail" id="flightDetailArrivalTime">10:45</div>
+                                        </div>
+                                    </div>
+                                    <div class="flight-info-detail">
+                                        <div class="info-item-detail">
+                                            <span class="info-label-detail">航空公司</span>
+                                            <span class="info-value-detail" id="flightDetailAirline">中国国际航空</span>
+                                        </div>
+                                        <div class="info-item-detail">
+                                            <span class="info-label-detail">航班号</span>
+                                            <span class="info-value-detail" id="flightDetailFlightNo">CA1234</span>
+                                        </div>
+                                        <div class="info-item-detail">
+                                            <span class="info-label-detail">出发日期</span>
+                                            <span class="info-value-detail" id="flightDetailDate">2024-01-20</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-detail-section">
+                            <div class="detail-section-title">乘机人信息</div>
+                            <div class="detail-passenger-card">
+                                <div class="detail-passenger-item">
+                                    <span class="detail-passenger-label">姓名</span>
+                                    <span class="detail-passenger-value" id="flightDetailPassengerName">张三</span>
+                                </div>
+                                <div class="detail-passenger-item">
+                                    <span class="detail-passenger-label">身份证号</span>
+                                    <span class="detail-passenger-value" id="flightDetailPassengerID">110101199001011234</span>
+                                </div>
+                                <div class="detail-passenger-item">
+                                    <span class="detail-passenger-label">手机号</span>
+                                    <span class="detail-passenger-value" id="flightDetailPassengerPhone">13800138000</span>
+                                </div>
+                                <div class="detail-passenger-item">
+                                    <span class="detail-passenger-label">乘机人数</span>
+                                    <span class="detail-passenger-value" id="flightDetailSeatCount">1</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="order-detail-section">
+                            <div class="detail-section-title">价格明细</div>
+                            <div class="detail-price-card">
+                                <div class="detail-price-item">
+                                    <span class="detail-price-label">机票费用</span>
+                                    <span class="detail-price-value" id="flightDetailFlightFee">¥580</span>
+                                </div>
+                                <div class="detail-price-item">
+                                    <span class="detail-price-label">保险费用</span>
+                                    <span class="detail-price-value" id="flightDetailInsuranceFee">¥30</span>
+                                </div>
+                                <div class="detail-price-total">
+                                    <span class="detail-total-label">支付金额</span>
+                                    <span class="detail-total-value">
+                                        <span class="detail-total-symbol">¥</span>
+                                        <span class="detail-total-amount" id="flightDetailTotalPrice">610</span>
+                                    </span>
+                                </div>
+                                <div class="detail-payment-method">
+                                    <span class="payment-method-label">支付方式</span>
+                                    <span class="payment-method-value">企业对公支付</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-bottom-bar" id="flightOrderDetailActions">
+                            <button class="bottom-bar-btn secondary" id="cancelFlightOrderBtn">取消订单</button>
+                            <button class="bottom-bar-btn primary" id="contactFlightServiceBtn">联系客服</button>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- 酒店订单详情页 -->
                 <div id="hotel-order-detail" class="sub-page">
                     <div class="detail-page">
@@ -1580,9 +2939,16 @@
                                 <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2"/>
                                 <line x1="14" y1="14" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                             </svg>
-                            <input type="text" class="search-input" placeholder="搜索地址">
+                            <input type="text" id="addressInput" class="search-input" placeholder="搜索地址" onkeyup="if(event.key === 'Enter') searchAddress()">
+                            <button class="search-btn" onclick="searchAddress()">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="14" y1="14" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
+                    <div id="addressResults" class="search-results"></div>
                     <div class="address-list-modal">
                         <div class="address-item-modal" data-name="当前位置" data-address="北京市朝阳区建国路附近">
                             <div class="address-icon-modal current">
@@ -1641,6 +3007,90 @@
             </div>
         </div>
 
+        <!-- 城市选择弹窗 -->
+        <div id="city-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="cityModalTitle">选择城市</h3>
+                    <button id="closeCityModal" class="close-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="search-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <input type="text" id="cityInput" placeholder="搜索城市" oninput="searchCity()">
+                    </div>
+                    <div class="city-list">
+                        <div class="section-title">热门城市</div>
+                        <div class="city-grid">
+                            <div class="city-item" data-city="北京">北京</div>
+                            <div class="city-item" data-city="上海">上海</div>
+                            <div class="city-item" data-city="广州">广州</div>
+                            <div class="city-item" data-city="深圳">深圳</div>
+                            <div class="city-item" data-city="成都">成都</div>
+                            <div class="city-item" data-city="杭州">杭州</div>
+                            <div class="city-item" data-city="南京">南京</div>
+                            <div class="city-item" data-city="武汉">武汉</div>
+                            <div class="city-item" data-city="西安">西安</div>
+                            <div class="city-item" data-city="重庆">重庆</div>
+                        </div>
+                        <div class="section-title">全部城市</div>
+                        <div class="city-list-scroll">
+                            <div class="city-group">
+                                <div class="city-letter">A</div>
+                                <div class="city-item" data-city="鞍山">鞍山</div>
+                                <div class="city-item" data-city="安庆">安庆</div>
+                            </div>
+                            <div class="city-group">
+                                <div class="city-letter">B</div>
+                                <div class="city-item" data-city="北京">北京</div>
+                                <div class="city-item" data-city="上海">上海</div>
+                                <div class="city-item" data-city="广州">广州</div>
+                                <div class="city-item" data-city="深圳">深圳</div>
+                                <div class="city-item" data-city="成都">成都</div>
+                                <div class="city-item" data-city="杭州">杭州</div>
+                                <div class="city-item" data-city="南京">南京</div>
+                                <div class="city-item" data-city="武汉">武汉</div>
+                                <div class="city-item" data-city="西安">西安</div>
+                                <div class="city-item" data-city="重庆">重庆</div>
+                                <div class="city-item" data-city="厦门">厦门</div>
+                                <div class="city-item" data-city="青岛">青岛</div>
+                                <div class="city-item" data-city="大连">大连</div>
+                                <div class="city-item" data-city="天津">天津</div>
+                                <div class="city-item" data-city="苏州">苏州</div>
+                                <div class="city-item" data-city="无锡">无锡</div>
+                                <div class="city-item" data-city="宁波">宁波</div>
+                                <div class="city-item" data-city="福州">福州</div>
+                                <div class="city-item" data-city="长沙">长沙</div>
+                                <div class="city-item" data-city="济南">济南</div>
+                                <div class="city-item" data-city="哈尔滨">哈尔滨</div>
+                                <div class="city-item" data-city="沈阳">沈阳</div>
+                                <div class="city-item" data-city="郑州">郑州</div>
+                                <div class="city-item" data-city="昆明">昆明</div>
+                                <div class="city-item" data-city="贵阳">贵阳</div>
+                                <div class="city-item" data-city="南宁">南宁</div>
+                                <div class="city-item" data-city="南昌">南昌</div>
+                                <div class="city-item" data-city="合肥">合肥</div>
+                                <div class="city-item" data-city="太原">太原</div>
+                                <div class="city-item" data-city="兰州">兰州</div>
+                                <div class="city-item" data-city="西宁">西宁</div>
+                                <div class="city-item" data-city="银川">银川</div>
+                                <div class="city-item" data-city="乌鲁木齐">乌鲁木齐</div>
+                                <div class="city-item" data-city="拉萨">拉萨</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-results" id="cityResults"></div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Toast 提示 -->
         <div id="toast" class="toast hidden">
             <div class="toast-icon success" id="toastIcon">

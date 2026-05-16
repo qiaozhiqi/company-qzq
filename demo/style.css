@@ -265,24 +265,117 @@ html, body {
 }
 
 /* 打车页面 */
-.map-placeholder {
-    height: 240px;
-    background: linear-gradient(180deg, #E6F7FF 0%, #FFFFFF 100%);
+.map-container {
+    height: 200px;
+    border-bottom: 1px solid #E8E8E8;
+    position: relative;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+/* 搜索框样式 */
+.search-box {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    z-index: 100;
+}
+
+.search-input {
+    flex: 1;
+    height: 40px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    padding-right: 10px;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    color: #1890FF;
+    cursor: pointer;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.map-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.search-icon {
+    color: #999;
+    margin-right: 10px;
 }
 
-.map-tip {
-    font-size: 14px;
-    color: #999999;
-    margin-top: 16px;
+/* 地址选择弹窗样式 */
+.address-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.address-popup-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #E8E8E8;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+}
+
+.address-popup-title {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.address-popup-content {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.search-results {
+    margin-top: 10px;
+}
+
+.search-result-item {
+    padding: 15px;
+    border-bottom: 1px solid #F0F0F0;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background: #F5F5F5;
+}
+
+.result-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.result-address {
+    font-size: 13px;
+    color: #666;
 }
 
 .address-card {
@@ -490,6 +583,42 @@ html, body {
 .location-address {
     font-size: 13px;
     color: #999999;
+}
+
+/* 叫车按钮 */
+.call-taxi-section {
+    padding: 20px;
+    background: white;
+    margin-top: 10px;
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.call-taxi-btn {
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.call-taxi-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.call-taxi-btn:active {
+    transform: translateY(0);
+}
+
+.call-taxi-btn:disabled {
+    background: #CCCCCC;
+    cursor: not-allowed;
 }
 
 /* 酒店页面 */
@@ -1296,6 +1425,80 @@ html, body {
     font-size: 14px;
 }
 
+/* 日期选择器样式 */
+.date-picker {
+    padding: 16px 0;
+}
+
+.date-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.date-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.date-grid {
+    width: 100%;
+}
+
+.date-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.date-weekday {
+    text-align: center;
+    font-size: 13px;
+    color: #999999;
+    padding: 8px 0;
+}
+
+.date-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.date-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 14px;
+    color: #333333;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.date-day:hover {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.date-day.today {
+    background: #1890FF;
+    color: #FFFFFF;
+}
+
+.date-day.other-month {
+    color: #CCCCCC;
+}
+
+.date-day.other-month:hover {
+    background: #F5F5F5;
+    color: #999999;
+}
+
 /* 响应式优化 */
 @media (max-width: 375px) {
     .login-container {
@@ -1309,6 +1512,12 @@ html, body {
     .car-type-item {
         min-width: 80px;
         padding: 12px 16px;
+    }
+    
+    .date-day {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
     }
 }
 
@@ -2945,4 +3154,1449 @@ html, body {
 
 .train-price .seat-status.waiting-list {
     color: #FAAD14;
+}
+
+/* ==================== 个人中心功能页面样式 ==================== */
+
+/* 页面通用样式 */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #F5F5F5;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-left,
+.header-right {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333333;
+}
+
+.header-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;
+    flex: 1;
+    text-align: center;
+}
+
+.content {
+    padding: 12px 16px;
+}
+
+/* 常用地址页面样式 */
+.address-item {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.address-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.address-type {
+    min-width: 28px;
+    height: 18px;
+    background: #E6F7FF;
+    color: #1890FF;
+    font-size: 11px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+}
+
+.address-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    margin-right: 12px;
+}
+
+/* 城市选择样式 */
+.city-list {
+    margin-bottom: 20px;
+}
+
+.city-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.city-item {
+    padding: 12px 8px;
+    text-align: center;
+    background: #f9f9f9;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.city-item:hover {
+    background: #1890FF;
+    color: white;
+}
+
+.city-list-scroll {
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+.city-group {
+    margin-bottom: 16px;
+}
+
+.city-letter {
+    font-size: 12px;
+    font-weight: 600;
+    color: #999;
+    margin-bottom: 8px;
+    padding-left: 4px;
+}
+
+.city-list-scroll .city-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+
+.city-list-scroll .city-item:hover {
+    background: #1890FF;
+    color: white;
+}
+
+/* 日期选择样式 */
+.date-picker-container {
+    padding: 16px;
+}
+
+.date-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.date-picker-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.date-picker-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.date-nav-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.month-year {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.weekday {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    padding: 8px 0;
+}
+
+.date-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.date-cell:hover {
+    background: #f0f0f0;
+}
+
+.date-cell.today {
+    background: #E6F7FF;
+    color: #1890FF;
+    font-weight: 600;
+}
+
+.date-cell.selected {
+    background: #1890FF;
+    color: white;
+    font-weight: 600;
+}
+
+.date-cell.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.date-cell.disabled:hover {
+    background: none;
+}
+
+.date-picker-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.date-picker-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.date-picker-btn.cancel {
+    background: #f5f5f5;
+    color: #666;
+}
+
+.date-picker-btn.confirm {
+    background: #1890FF;
+    color: white;
+}
+
+.address-phone {
+    font-size: 14px;
+    color: #666666;
+}
+
+.address-detail {
+    font-size: 14px;
+    color: #666666;
+    line-height: 20px;
+    margin-bottom: 12px;
+}
+
+.address-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #666666;
+}
+
+.action-text {
+    font-size: 13px;
+}
+
+/* 发票信息页面样式 */
+.invoice-item {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.invoice-type {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.invoice-status {
+    min-width: 32px;
+    height: 18px;
+    background: #E6F7FF;
+    color: #1890FF;
+    font-size: 11px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.invoice-content {
+    margin-bottom: 12px;
+}
+
+.invoice-row {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: flex-start;
+}
+
+.label {
+    width: 60px;
+    font-size: 13px;
+    color: #999999;
+    flex-shrink: 0;
+}
+
+.value {
+    flex: 1;
+    font-size: 13px;
+    color: #333333;
+    line-height: 18px;
+}
+
+.invoice-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+/* ==================== 火车票详情和预订页面样式 ==================== */
+
+/* 火车票详情页面样式 */
+.train-detail-card {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.train-detail-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.train-detail-header .train-no {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1890FF;
+    margin-right: 12px;
+}
+
+.train-detail-header .train-type {
+    font-size: 14px;
+    color: #666;
+    background: #e6f7ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.train-detail-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.route-item {
+    text-align: center;
+    flex: 1;
+}
+
+.route-item .time {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.route-item .station {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.route-item .date {
+    font-size: 12px;
+    color: #999;
+}
+
+.route-duration {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.route-duration .duration {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.route-duration .train-icon {
+    margin-bottom: 8px;
+}
+
+.route-duration .direct-tag {
+    font-size: 12px;
+    color: #1890FF;
+    background: #e6f7ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.seat-types-list {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 80px;
+}
+
+.seat-type-card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+}
+
+.seat-type-card:hover {
+    border-color: #1890FF;
+}
+
+.seat-type-card.active {
+    border-color: #1890FF;
+    background: #f0f5ff;
+}
+
+.seat-type-info {
+    flex: 1;
+}
+
+.seat-type-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.seat-type-available {
+    font-size: 14px;
+    color: #52C41A;
+}
+
+.seat-type-price {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1890FF;
+}
+
+/* 火车票订单确认页面样式 */
+.confirm-train-card {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.seat-type-select {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+}
+
+.insurance-select {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.insurance-select .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+    margin-right: 12px;
+}
+
+.insurance-select .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.insurance-select .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.insurance-select .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.insurance-select input:checked + .slider {
+    background-color: #1890FF;
+}
+
+.insurance-select input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+.insurance-text {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .train-detail-route {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .route-item {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 12px;
+    }
+    
+    .route-duration {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        margin: 12px 0;
+    }
+    
+    .route-duration .duration {
+        margin-bottom: 0;
+    }
+    
+    .route-duration .train-icon {
+        margin: 0 12px;
+    }
+    
+    .route-duration .direct-tag {
+        margin-bottom: 0;
+    }
+}
+
+/* ==================== 机票详情页面样式 ==================== */
+
+/* 航班详情卡片样式 */
+.flight-detail-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 航班路线样式 */
+.flight-detail-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.flight-detail-route .route-item {
+    text-align: center;
+    flex: 1;
+}
+
+.flight-detail-route .route-item .time {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.flight-detail-route .route-item .city {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.flight-detail-route .route-item .airport {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.flight-detail-route .route-item .date {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 路线中间部分样式 */
+.flight-detail-route .route-duration {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.flight-detail-route .route-duration .duration {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 8px;
+}
+
+.flight-detail-route .route-duration .flight-icon {
+    margin-bottom: 8px;
+    color: #1890FF;
+}
+
+.flight-detail-route .route-duration .direct-tag {
+    font-size: 12px;
+    color: #1890FF;
+    background: #E6F7FF;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+/* 航班信息部分样式 */
+.flight-info-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.flight-info-section .info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.flight-info-section .info-label {
+    font-size: 12px;
+    color: #999999;
+}
+
+.flight-info-section .info-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+/* 舱位类型列表样式 */
+.cabin-types-list {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 80px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 舱位卡片样式 */
+.cabin-type-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #FFFFFF;
+    border: 2px solid #F5F5F5;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cabin-type-card:hover {
+    border-color: #1890FF;
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+}
+
+.cabin-type-card.active {
+    border-color: #1890FF;
+    background: #F0F5FF;
+}
+
+.cabin-type-info {
+    flex: 1;
+}
+
+.cabin-type-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.cabin-type-desc {
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 4px;
+}
+
+.cabin-type-available {
+    font-size: 12px;
+    color: #52C41A;
+    font-weight: 500;
+}
+
+.cabin-type-price {
+    text-align: right;
+}
+
+.cabin-type-price .price {
+    font-size: 20px;
+    font-weight: 600;
+    color: #FF4D4F;
+    margin-bottom: 2px;
+}
+
+.cabin-type-price .price-unit {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 底部操作栏样式 */
+#flightDetailBottomBar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: #FFFFFF;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #F0F0F0;
+    z-index: 1000;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
+}
+
+#flightDetailBottomBar .bottom-bar-price {
+    flex: 1;
+}
+
+#flightDetailBottomBar .bottom-price-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+#flightDetailBottomBar .bottom-price-value {
+    display: flex;
+    align-items: baseline;
+}
+
+#flightDetailBottomBar .bottom-price-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+    margin-right: 2px;
+}
+
+#flightDetailBottomBar .bottom-price-amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+#flightDetailBottomBar .bottom-bar-btn {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 16px;
+}
+
+#flightDetailBottomBar .bottom-bar-btn:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+}
+
+#flightDetailBottomBar .bottom-bar-btn:disabled {
+    background: #CCCCCC;
+    cursor: not-allowed;
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+    .flight-detail-route {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .flight-detail-route .route-item {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 16px;
+    }
+    
+    .flight-detail-route .route-duration {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 16px 0;
+        border-top: 1px solid #F5F5F5;
+        border-bottom: 1px solid #F5F5F5;
+        margin: 16px 0;
+    }
+    
+    .flight-detail-route .route-duration .duration {
+        margin-bottom: 0;
+    }
+    
+    .flight-detail-route .route-duration .flight-icon {
+        margin: 0 12px;
+    }
+    
+    .flight-detail-route .route-duration .direct-tag {
+        margin-bottom: 0;
+    }
+    
+    .flight-info-section {
+        grid-template-columns: 1fr;
+    }
+    
+    #flightDetailBottomBar {
+        padding: 12px;
+    }
+    
+    #flightDetailBottomBar .bottom-bar-btn {
+        padding: 10px 24px;
+        font-size: 14px;
+    }
+}
+
+/* ==================== 航班订单确认页面样式 ==================== */
+
+/* 航班确认卡片样式 */
+.confirm-flight-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 航班路线样式 */
+.confirm-flight-card .flight-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.confirm-flight-card .route-item {
+    text-align: center;
+    flex: 1;
+}
+
+.confirm-flight-card .route-item .time {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.confirm-flight-card .route-item .city {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 2px;
+}
+
+.confirm-flight-card .route-item .airport {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 路线中间部分样式 */
+.confirm-flight-card .route-duration {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 12px;
+}
+
+.confirm-flight-card .route-duration .duration {
+    font-size: 12px;
+    color: #666666;
+    margin-bottom: 8px;
+}
+
+.confirm-flight-card .route-duration .flight-icon {
+    margin-bottom: 8px;
+    color: #1890FF;
+}
+
+.confirm-flight-card .route-duration .cabin-class {
+    font-size: 12px;
+    color: #1890FF;
+    background: #E6F7FF;
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+/* 航班信息样式 */
+.confirm-flight-card .flight-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.confirm-flight-card .info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.confirm-flight-card .info-label {
+    font-size: 11px;
+    color: #999999;
+}
+
+.confirm-flight-card .info-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #333333;
+}
+
+/* 保险选项样式 */
+.insurance-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.insurance-option .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.insurance-option .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.insurance-option .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.insurance-option .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.insurance-option input:checked + .slider {
+    background-color: #1890FF;
+}
+
+.insurance-option input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+.insurance-text {
+    font-size: 14px;
+    color: #666666;
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+    .confirm-flight-card .flight-route {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .confirm-flight-card .route-item {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 12px;
+    }
+    
+    .confirm-flight-card .route-duration {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-top: 1px solid #F5F5F5;
+        border-bottom: 1px solid #F5F5F5;
+        margin: 12px 0;
+    }
+    
+    .confirm-flight-card .route-duration .duration {
+        margin-bottom: 0;
+    }
+    
+    .confirm-flight-card .route-duration .flight-icon {
+        margin: 0 12px;
+    }
+    
+    .confirm-flight-card .route-duration .cabin-class {
+        margin-bottom: 0;
+    }
+    
+    .confirm-flight-card .flight-info {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .confirm-flight-card .info-row {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+/* 紧急联系人页面样式 */
+.contact-item {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.contact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.contact-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.contact-relation {
+    min-width: 40px;
+    height: 18px;
+    background: #E6F7FF;
+    color: #1890FF;
+    font-size: 11px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-info {
+    margin-bottom: 12px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    color: #666666;
+}
+
+.info-text {
+    font-size: 13px;
+    margin-left: 8px;
+    flex: 1;
+}
+
+.contact-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+}
+
+/* 帮助中心页面样式 */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 0 12px;
+    margin-bottom: 12px;
+    height: 40px;
+    color: #999999;
+}
+
+.search-input {
+    flex: 1;
+    font-size: 14px;
+    color: #333333;
+    margin-left: 8px;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.faq-section {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 12px;
+}
+
+.faq-item {
+    border-bottom: 1px solid #F5F5F5;
+    padding: 12px 0;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.question-text {
+    font-size: 14px;
+    color: #333333;
+    flex: 1;
+    margin-right: 8px;
+    line-height: 20px;
+}
+
+.faq-answer {
+    margin-top: 8px;
+    padding-left: 0;
+}
+
+.answer-text {
+    font-size: 13px;
+    color: #666666;
+    line-height: 20px;
+}
+
+.contact-section {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 意见反馈页面样式 */
+.form-section {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-item {
+    margin-bottom: 16px;
+}
+
+.form-item:last-child {
+    margin-bottom: 0;
+}
+
+.type-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.type-option {
+    padding: 8px 12px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #666666;
+    cursor: pointer;
+}
+
+.type-option.active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 10px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #333333;
+    resize: none;
+    border: none;
+    outline: none;
+}
+
+.counter {
+    font-size: 11px;
+    color: #999999;
+    text-align: right;
+    margin-top: 4px;
+}
+
+.input {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #333333;
+    border: none;
+    outline: none;
+}
+
+.upload-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.upload-btn {
+    width: 80px;
+    height: 80px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #DDDDDD;
+    cursor: pointer;
+    color: #999999;
+}
+
+.upload-text {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.tip {
+    font-size: 11px;
+    color: #999999;
+    margin-top: 4px;
+}
+
+.submit-btn {
+    width: 100%;
+    height: 44px;
+    background: #1890FF;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* 关于我们页面样式 */
+.logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    background: #E6F7FF;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.company-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.version {
+    font-size: 12px;
+    color: #999999;
+}
+
+.info-section {
+    background: #FFFFFF;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-text {
+    font-size: 14px;
+    color: #333333;
+}
+
+.description {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.desc-text {
+    font-size: 13px;
+    color: #666666;
+    line-height: 20px;
+    text-align: center;
+}
+
+.copyright {
+    text-align: center;
+    padding: 12px 0;
+}
+
+.copyright-text {
+    font-size: 11px;
+    color: #999999;
+}
+
+/* 空状态样式 */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+}
+
+.empty-text {
+    font-size: 14px;
+    color: #999999;
+    margin: 16px 0;
+}
+
+.add-btn {
+    width: 120px;
+    height: 36px;
+    background: #1890FF;
+    color: #FFFFFF;
+    font-size: 14px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }

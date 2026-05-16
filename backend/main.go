@@ -34,6 +34,35 @@ type Hotel struct {
 	Description string   `json:"description"`
 }
 
+type TaxiOrder struct {
+	ID              string    `json:"id"`
+	OrderNo         string    `json:"orderNo"`
+	Status          string    `json:"status"`
+	StartLocation   string    `json:"startLocation"`
+	StartAddress    string    `json:"startAddress"`
+	EndLocation     string    `json:"endLocation"`
+	EndAddress      string    `json:"endAddress"`
+	CarType         string    `json:"carType"`
+	Distance        string    `json:"distance"`
+	Duration        string    `json:"duration"`
+	EstimatedPrice  string    `json:"estimatedPrice"`
+	TotalPrice      float64   `json:"totalPrice,omitempty"`
+	PassengerName   string    `json:"passengerName"`
+	PassengerPhone  string    `json:"passengerPhone"`
+	PassengerRemark string    `json:"passengerRemark,omitempty"`
+	PaymentMethod   string    `json:"paymentMethod"`
+	DriverName      string    `json:"driverName,omitempty"`
+	DriverPhone     string    `json:"driverPhone,omitempty"`
+	DriverCarNo     string    `json:"driverCarNo,omitempty"`
+	DriverCarType   string    `json:"driverCarType,omitempty"`
+	DriverLocation  string    `json:"driverLocation,omitempty"`
+	StartTime       string    `json:"startTime,omitempty"`
+	EndTime         string    `json:"endTime,omitempty"`
+	CancelReason    string    `json:"cancelReason,omitempty"`
+	CancelTime      string    `json:"cancelTime,omitempty"`
+	CreatedAt       time.Time `json:"createTime"`
+}
+
 type RoomType struct {
 	ID             string   `json:"id"`
 	HotelID        string   `json:"hotelId"`
@@ -175,6 +204,8 @@ var (
 	trains         = make(map[string]*Train)
 	trainOrders    = make(map[string]*TrainOrder)
 	trainOrderList []*TrainOrder
+	taxiOrders     = make(map[string]*TaxiOrder)
+	taxiOrderList  []*TaxiOrder
 	mu             sync.RWMutex
 )
 
@@ -617,6 +648,10 @@ func generateTrainOrderID() string {
 	return "train_" + uuid.New().String()[:8]
 }
 
+func generateTaxiOrderID() string {
+	return "taxi_" + uuid.New().String()[:8]
+}
+
 func generateOrderNo(prefix string) string {
 	return prefix + time.Now().Format("20060102150405") + fmt.Sprintf("%04d", uuid.New().ID()%10000)
 }
@@ -644,6 +679,7 @@ func getFlightList(w http.ResponseWriter, r *http.Request) {
 	}
 	departureCity := r.URL.Query().Get("departureCity")
 	arrivalCity := r.URL.Query().Get("arrivalCity")
+	departureDate := r.URL.Query().Get("departureDate")
 	priceRange := r.URL.Query().Get("priceRange")
 	isDirect := r.URL.Query().Get("isDirect")
 
@@ -682,6 +718,10 @@ func getFlightList(w http.ResponseWriter, r *http.Request) {
 					continue
 				}
 			}
+		}
+		// 日期筛选（mock实现，所有日期都有票）
+		if departureDate != "" {
+			// 这里可以添加日期验证逻辑
 		}
 		filteredFlights = append(filteredFlights, f)
 	}
@@ -786,6 +826,7 @@ func createFlightOrder(w http.ResponseWriter, r *http.Request) {
 	if seatCount <= 0 {
 		seatCount = 1
 	}
+	// 确保座位数不超过可用座位数
 	if flight.AvailableSeats < seatCount {
 		jsonResponse(w, 400, "座位不足", nil)
 		return
@@ -1049,6 +1090,7 @@ func getTrainList(w http.ResponseWriter, r *http.Request) {
 	}
 	departureCity := r.URL.Query().Get("departureCity")
 	arrivalCity := r.URL.Query().Get("arrivalCity")
+	departureDate := r.URL.Query().Get("departureDate")
 	trainType := r.URL.Query().Get("trainType")
 
 	// 过滤火车票
@@ -1065,6 +1107,10 @@ func getTrainList(w http.ResponseWriter, r *http.Request) {
 		// 车次类型筛选
 		if trainType != "" && trainType != "all" && t.TrainType != trainType {
 			continue
+		}
+		// 日期筛选（mock实现，所有日期都有票）
+		if departureDate != "" {
+			// 这里可以添加日期验证逻辑
 		}
 		filteredTrains = append(filteredTrains, t)
 	}
@@ -1804,7 +1850,7 @@ func createOrder(w http.ResponseWriter, r *http.Request) {
 	order := &HotelOrder{
 		ID:            generateOrderID(),
 		OrderNo:       generateOrderNo("HT"),
-		Status:        "confirmed",
+		Status:        "pending",
 		HotelID:       req.HotelID,
 		RoomTypeID:    req.RoomTypeID,
 		CheckInDate:   req.CheckInDate,
@@ -1919,9 +1965,433 @@ func cancelOrder(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, 200, "订单取消成功", resp)
 }
 
+// 确认支付
+func confirmPayment(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/hotel-orders/")
+	path = strings.TrimSuffix(path, "/pay")
+	orderID := strings.TrimSuffix(path, "/")
+	if orderID == "" {
+		jsonResponse(w, 400, "订单ID不能为空", nil)
+		return
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	order, exists := orders[orderID]
+	if !exists {
+		// 尝试按订单号查找
+		for _, o := range orders {
+			if o.OrderNo == orderID {
+				order = o
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			jsonResponse(w, 404, "订单不存在", nil)
+			return
+		}
+	}
+
+	// 检查订单状态
+	if order.Status == "cancelled" {
+		jsonResponse(w, 400, "订单已取消", nil)
+		return
+	}
+	if order.Status == "completed" {
+		jsonResponse(w, 400, "订单已完成", nil)
+		return
+	}
+
+	// 更新订单状态
+	order.Status = "confirmed"
+
+	// 构建完整响应
+	type OrderResponse struct {
+		*HotelOrder
+		Hotel    *Hotel    `json:"hotel"`
+		RoomType *RoomType `json:"roomType"`
+	}
+
+	resp := OrderResponse{
+		HotelOrder: order,
+		Hotel:      hotels[order.HotelID],
+		RoomType:   roomTypes[order.RoomTypeID],
+	}
+
+	jsonResponse(w, 200, "支付成功", resp)
+}
+
+// 创建打车订单
+func createTaxiOrder(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		jsonResponse(w, 400, "读取请求体失败", nil)
+		return
+	}
+	defer r.Body.Close()
+
+	var req struct {
+		StartLocation   string `json:"startLocation"`
+		StartAddress    string `json:"startAddress"`
+		EndLocation     string `json:"endLocation"`
+		EndAddress      string `json:"endAddress"`
+		CarType         string `json:"carType"`
+		Distance        string `json:"distance"`
+		Duration        string `json:"duration"`
+		EstimatedPrice  string `json:"estimatedPrice"`
+		PassengerName   string `json:"passengerName"`
+		PassengerPhone  string `json:"passengerPhone"`
+		PassengerRemark string `json:"passengerRemark"`
+		PaymentMethod   string `json:"paymentMethod"`
+	}
+
+	if err := json.Unmarshal(body, &req); err != nil {
+		jsonResponse(w, 400, "参数解析失败: "+err.Error(), nil)
+		return
+	}
+
+	// 参数验证
+	if req.StartLocation == "" || req.StartAddress == "" || req.EndLocation == "" || req.EndAddress == "" || req.CarType == "" || req.PassengerName == "" || req.PassengerPhone == "" {
+		jsonResponse(w, 400, "参数不完整", nil)
+		return
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	// 创建订单
+	order := &TaxiOrder{
+		ID:              generateTaxiOrderID(),
+		OrderNo:         generateOrderNo("TX"),
+		Status:          "confirmed",
+		StartLocation:   req.StartLocation,
+		StartAddress:    req.StartAddress,
+		EndLocation:     req.EndLocation,
+		EndAddress:      req.EndAddress,
+		CarType:         req.CarType,
+		Distance:        req.Distance,
+		Duration:        req.Duration,
+		EstimatedPrice:  req.EstimatedPrice,
+		PassengerName:   req.PassengerName,
+		PassengerPhone:  req.PassengerPhone,
+		PassengerRemark: req.PassengerRemark,
+		PaymentMethod:   req.PaymentMethod,
+		CreatedAt:       time.Now(),
+	}
+
+	// 保存订单
+	taxiOrders[order.ID] = order
+	taxiOrderList = append([]*TaxiOrder{order}, taxiOrderList...) // 插入到开头
+
+	jsonResponse(w, 200, "订单创建成功", order)
+}
+
+// 获取打车订单列表
+func getTaxiOrderList(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+	if page <= 0 {
+		page = 1
+	}
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("pageSize"))
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+	status := r.URL.Query().Get("status")
+
+	// 过滤订单
+	var filteredOrders []*TaxiOrder
+	for _, o := range taxiOrderList {
+		if status != "" && status != "all" && o.Status != status {
+			continue
+		}
+		filteredOrders = append(filteredOrders, o)
+	}
+
+	// 分页
+	total := int64(len(filteredOrders))
+	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
+	start := (page - 1) * pageSize
+	end := start + pageSize
+	if end > len(filteredOrders) {
+		end = len(filteredOrders)
+	}
+
+	var pagedOrders []*TaxiOrder
+	if start < len(filteredOrders) {
+		pagedOrders = filteredOrders[start:end]
+	}
+
+	jsonResponse(w, 200, "success", PageResult{
+		List:       pagedOrders,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: totalPages,
+	})
+}
+
+// 获取打车订单详情
+func getTaxiOrderDetail(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/taxi-orders/")
+	path = strings.TrimSuffix(path, "/cancel")
+	path = strings.TrimSuffix(path, "/status")
+	orderID := strings.TrimSuffix(path, "/")
+	if orderID == "" {
+		jsonResponse(w, 400, "订单ID不能为空", nil)
+		return
+	}
+
+	mu.RLock()
+	defer mu.RUnlock()
+
+	order, exists := taxiOrders[orderID]
+	if !exists {
+		// 尝试按订单号查找
+		for _, o := range taxiOrders {
+			if o.OrderNo == orderID {
+				order = o
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			jsonResponse(w, 404, "订单不存在", nil)
+			return
+		}
+	}
+
+	jsonResponse(w, 200, "success", order)
+}
+
+// 取消打车订单
+func cancelTaxiOrder(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/taxi-orders/")
+	path = strings.TrimSuffix(path, "/cancel")
+	orderID := strings.TrimSuffix(path, "/")
+	if orderID == "" {
+		jsonResponse(w, 400, "订单ID不能为空", nil)
+		return
+	}
+
+	// 读取取消原因
+	var req struct {
+		CancelReason string `json:"cancelReason"`
+	}
+	body, _ := ioutil.ReadAll(r.Body)
+	json.Unmarshal(body, &req)
+	defer r.Body.Close()
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	order, exists := taxiOrders[orderID]
+	if !exists {
+		// 尝试按订单号查找
+		for _, o := range taxiOrders {
+			if o.OrderNo == orderID {
+				order = o
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			jsonResponse(w, 404, "订单不存在", nil)
+			return
+		}
+	}
+
+	// 检查订单状态
+	if order.Status == "cancelled" {
+		jsonResponse(w, 400, "订单已取消", nil)
+		return
+	}
+	if order.Status == "completed" {
+		jsonResponse(w, 400, "已完成订单不能取消", nil)
+		return
+	}
+
+	// 更新订单状态
+	order.Status = "cancelled"
+	order.CancelReason = req.CancelReason
+	order.CancelTime = time.Now().Format("2006-01-02 15:04:05")
+
+	jsonResponse(w, 200, "订单取消成功", order)
+}
+
+// 更新打车订单状态
+func updateTaxiOrderStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	path := strings.TrimPrefix(r.URL.Path, "/api/taxi-orders/")
+	path = strings.TrimSuffix(path, "/status")
+	orderID := strings.TrimSuffix(path, "/")
+	if orderID == "" {
+		jsonResponse(w, 400, "订单ID不能为空", nil)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		jsonResponse(w, 400, "读取请求体失败", nil)
+		return
+	}
+	defer r.Body.Close()
+
+	var req struct {
+		Status         string `json:"status"`
+		DriverName     string `json:"driverName,omitempty"`
+		DriverPhone    string `json:"driverPhone,omitempty"`
+		DriverCarNo    string `json:"driverCarNo,omitempty"`
+		DriverCarType  string `json:"driverCarType,omitempty"`
+		DriverLocation string `json:"driverLocation,omitempty"`
+		TotalPrice     float64 `json:"totalPrice,omitempty"`
+	}
+
+	if err := json.Unmarshal(body, &req); err != nil {
+		jsonResponse(w, 400, "参数解析失败: "+err.Error(), nil)
+		return
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	order, exists := taxiOrders[orderID]
+	if !exists {
+		// 尝试按订单号查找
+		for _, o := range taxiOrders {
+			if o.OrderNo == orderID {
+				order = o
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			jsonResponse(w, 404, "订单不存在", nil)
+			return
+		}
+	}
+
+	// 更新订单状态
+	order.Status = req.Status
+
+	// 更新司机信息
+	if req.DriverName != "" {
+		order.DriverName = req.DriverName
+	}
+	if req.DriverPhone != "" {
+		order.DriverPhone = req.DriverPhone
+	}
+	if req.DriverCarNo != "" {
+		order.DriverCarNo = req.DriverCarNo
+	}
+	if req.DriverCarType != "" {
+		order.DriverCarType = req.DriverCarType
+	}
+	if req.DriverLocation != "" {
+		order.DriverLocation = req.DriverLocation
+	}
+
+	// 更新价格
+	if req.TotalPrice > 0 {
+		order.TotalPrice = req.TotalPrice
+	}
+
+	// 更新时间
+	if req.Status == "active" && order.StartTime == "" {
+		order.StartTime = time.Now().Format("2006-01-02 15:04:05")
+	} else if req.Status == "completed" && order.EndTime == "" {
+		order.EndTime = time.Now().Format("2006-01-02 15:04:05")
+	}
+
+	jsonResponse(w, 200, "状态更新成功", order)
+}
+
 // 健康检查
 func healthCheck(w http.ResponseWriter, r *http.Request) {
 	jsonResponse(w, 200, "ok", nil)
+}
+
+// 获取城市列表
+func getCityList(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	// 从现有数据中提取城市列表
+	cities := make(map[string]bool)
+	
+	// 从火车票数据中提取城市
+	for _, train := range trains {
+		cities[train.DepartureCity] = true
+		cities[train.ArrivalCity] = true
+	}
+	
+	// 从航班数据中提取城市
+	for _, flight := range flights {
+		cities[flight.DepartureCity] = true
+		cities[flight.ArrivalCity] = true
+	}
+	
+	// 转换为数组
+	var cityList []string
+	for city := range cities {
+		cityList = append(cityList, city)
+	}
+
+	jsonResponse(w, 200, "success", cityList)
+}
+
+// 获取日期信息
+func getDateInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "OPTIONS" {
+		jsonResponse(w, 200, "ok", nil)
+		return
+	}
+
+	// 生成未来30天的日期
+	var dates []string
+	today := time.Now()
+	
+	for i := 0; i < 30; i++ {
+		date := today.AddDate(0, 0, i)
+		dates = append(dates, date.Format("2006-01-02"))
+	}
+
+	jsonResponse(w, 200, "success", dates)
 }
 
 // ==================== 主函数 ====================
@@ -1933,8 +2403,17 @@ func main() {
 	// 创建路由
 	mux := http.NewServeMux()
 
+	// 静态文件服务
+	mux.Handle("/", http.FileServer(http.Dir("../demo")))
+
 	// 健康检查
 	mux.HandleFunc("/api/health", healthCheck)
+
+	// 城市列表
+	mux.HandleFunc("/api/cities", getCityList)
+
+	// 日期信息
+	mux.HandleFunc("/api/dates", getDateInfo)
 
 	// 酒店相关
 	mux.HandleFunc("/api/hotels", getHotelList)
@@ -1955,6 +2434,8 @@ func main() {
 		// 检查是否是取消订单请求
 		if strings.HasSuffix(r.URL.Path, "/cancel") {
 			cancelOrder(w, r)
+		} else if strings.HasSuffix(r.URL.Path, "/pay") {
+			confirmPayment(w, r)
 		} else {
 			getOrderDetail(w, r)
 		}
@@ -2002,9 +2483,30 @@ func main() {
 		}
 	})
 
+	// 打车订单相关
+	mux.HandleFunc("/api/taxi-orders", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			createTaxiOrder(w, r)
+		} else {
+			getTaxiOrderList(w, r)
+		}
+	})
+	mux.HandleFunc("/api/taxi-orders/", func(w http.ResponseWriter, r *http.Request) {
+		// 检查是否是取消订单请求
+		if strings.HasSuffix(r.URL.Path, "/cancel") {
+			cancelTaxiOrder(w, r)
+		} else if strings.HasSuffix(r.URL.Path, "/status") {
+			updateTaxiOrderStatus(w, r)
+		} else {
+			getTaxiOrderDetail(w, r)
+		}
+	})
+
 	log.Println("Server starting on :8080...")
 	log.Println("API endpoints:")
 	log.Println("  GET  /api/health")
+	log.Println("  GET  /api/cities")
+	log.Println("  GET  /api/dates")
 	log.Println("  GET  /api/hotels")
 	log.Println("  GET  /api/hotels/{id}")
 	log.Println("  GET  /api/room-types/{id}")
@@ -2024,6 +2526,11 @@ func main() {
 	log.Println("  POST /api/train-orders")
 	log.Println("  GET  /api/train-orders/{id}")
 	log.Println("  POST /api/train-orders/{id}/cancel")
+	log.Println("  GET  /api/taxi-orders")
+	log.Println("  POST /api/taxi-orders")
+	log.Println("  GET  /api/taxi-orders/{id}")
+	log.Println("  POST /api/taxi-orders/{id}/cancel")
+	log.Println("  POST /api/taxi-orders/{id}/status")
 
 	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
