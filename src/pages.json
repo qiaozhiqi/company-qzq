@@ -1,0 +1,231 @@
+{
+    "pages": [
+        {
+            "path": "pages/login/login",
+            "style": {
+                "navigationBarTitleText": "企业账号登录",
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "pages/taxi/index",
+            "style": {
+                "navigationBarTitleText": "公务打车",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/taxi/address-select",
+            "style": {
+                "navigationBarTitleText": "选择地址"
+            }
+        },
+        {
+            "path": "pages/taxi/order-confirm",
+            "style": {
+                "navigationBarTitleText": "确认订单"
+            }
+        },
+        {
+            "path": "pages/taxi/trip-detail",
+            "style": {
+                "navigationBarTitleText": "行程详情"
+            }
+        },
+        {
+            "path": "pages/hotel/index",
+            "style": {
+                "navigationBarTitleText": "酒店预订",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/hotel/hotel-detail",
+            "style": {
+                "navigationBarTitleText": "酒店详情"
+            }
+        },
+        {
+            "path": "pages/hotel/room-detail",
+            "style": {
+                "navigationBarTitleText": "房型详情"
+            }
+        },
+        {
+            "path": "pages/hotel/order-confirm",
+            "style": {
+                "navigationBarTitleText": "确认预订"
+            }
+        },
+        {
+            "path": "pages/hotel/order-detail",
+            "style": {
+                "navigationBarTitleText": "订单详情"
+            }
+        },
+        {
+            "path": "pages/hotel/payment",
+            "style": {
+                "navigationBarTitleText": "企业对公支付"
+            }
+        },
+        {
+            "path": "pages/flight/index",
+            "style": {
+                "navigationBarTitleText": "机票预订",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/flight/flight-detail",
+            "style": {
+                "navigationBarTitleText": "航班详情"
+            }
+        },
+        {
+            "path": "pages/flight/order-confirm",
+            "style": {
+                "navigationBarTitleText": "确认预订"
+            }
+        },
+        {
+            "path": "pages/flight/order-detail",
+            "style": {
+                "navigationBarTitleText": "订单详情"
+            }
+        },
+        {
+            "path": "pages/train/index",
+            "style": {
+                "navigationBarTitleText": "火车票预订",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/train/train-detail",
+            "style": {
+                "navigationBarTitleText": "车次详情"
+            }
+        },
+        {
+            "path": "pages/train/order-confirm",
+            "style": {
+                "navigationBarTitleText": "确认预订"
+            }
+        },
+        {
+            "path": "pages/train/order-detail",
+            "style": {
+                "navigationBarTitleText": "订单详情"
+            }
+        },
+        {
+            "path": "pages/orders/index",
+            "style": {
+                "navigationBarTitleText": "我的订单",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/orders/order-detail",
+            "style": {
+                "navigationBarTitleText": "订单详情"
+            }
+        },
+        {
+            "path": "pages/profile/index",
+            "style": {
+                "navigationBarTitleText": "我的"
+            }
+        },
+        {
+            "path": "pages/profile/addresses/index",
+            "style": {
+                "navigationBarTitleText": "常用地址"
+            }
+        },
+        {
+            "path": "pages/profile/invoice/index",
+            "style": {
+                "navigationBarTitleText": "发票信息"
+            }
+        },
+        {
+            "path": "pages/profile/contact/index",
+            "style": {
+                "navigationBarTitleText": "紧急联系人"
+            }
+        },
+        {
+            "path": "pages/profile/help/index",
+            "style": {
+                "navigationBarTitleText": "帮助中心"
+            }
+        },
+        {
+            "path": "pages/profile/feedback/index",
+            "style": {
+                "navigationBarTitleText": "意见反馈"
+            }
+        },
+        {
+            "path": "pages/profile/about/index",
+            "style": {
+                "navigationBarTitleText": "关于我们"
+            }
+        }
+    ],
+    "globalStyle": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "企业商旅",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "backgroundColor": "#F5F5F5",
+        "app-plus": {
+            "background": "#efeff4"
+        }
+    },
+    "tabBar": {
+        "color": "#999999",
+        "selectedColor": "#1890FF",
+        "backgroundColor": "#FFFFFF",
+        "borderStyle": "black",
+        "list": [
+            {
+                "pagePath": "pages/taxi/index",
+                "text": "公务打车",
+                "iconPath": "static/icons/taxi.png",
+                "selectedIconPath": "static/icons/taxi-active.png"
+            },
+            {
+                "pagePath": "pages/hotel/index",
+                "text": "酒店预订",
+                "iconPath": "static/icons/hotel.png",
+                "selectedIconPath": "static/icons/hotel-active.png"
+            },
+            {
+                "pagePath": "pages/flight/index",
+                "text": "机票预订",
+                "iconPath": "static/icons/flight.png",
+                "selectedIconPath": "static/icons/flight-active.png"
+            },
+            {
+                "pagePath": "pages/train/index",
+                "text": "火车票",
+                "iconPath": "static/icons/train.png",
+                "selectedIconPath": "static/icons/train-active.png"
+            },
+            {
+                "pagePath": "pages/orders/index",
+                "text": "我的订单",
+                "iconPath": "static/icons/order.png",
+                "selectedIconPath": "static/icons/order-active.png"
+            },
+            {
+                "pagePath": "pages/profile/index",
+                "text": "我的",
+                "iconPath": "static/icons/profile.png",
+                "selectedIconPath": "static/icons/profile-active.png"
+            }
+        ]
+    }
+}

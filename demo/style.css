@@ -1,0 +1,4602 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    color: #333333;
+    background: #f5f5f5;
+}
+
+.app-container {
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.page {
+    display: none;
+    min-height: 100vh;
+}
+
+.page.active {
+    display: block;
+}
+
+/* 登录页面 */
+.login-container {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #E6F7FF 0%, #FFFFFF 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px;
+}
+
+.login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px;
+    padding-bottom: 60px;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(24, 144, 255, 0.2);
+}
+
+.app-name {
+    font-size: 36px;
+    font-weight: bold;
+    color: #1890FF;
+    margin-top: 24px;
+}
+
+.app-desc {
+    font-size: 14px;
+    color: #999999;
+    margin-top: 12px;
+}
+
+.login-form {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.form-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.form-item:last-of-type {
+    border-bottom: none;
+}
+
+.form-label {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    height: 36px;
+    font-size: 16px;
+    color: #333333;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.form-input::placeholder {
+    color: #CCCCCC;
+}
+
+.password-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toggle-password {
+    font-size: 14px;
+    color: #1890FF;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.form-tip {
+    margin-top: 24px;
+    padding: 12px 16px;
+    background: #FFFBE6;
+    border-radius: 8px;
+}
+
+.tip-text {
+    font-size: 12px;
+    color: #FAAD14;
+    line-height: 1.6;
+}
+
+.login-btn {
+    width: 100%;
+    height: 56px;
+    margin-top: 36px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 500;
+    border: none;
+    border-radius: 28px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.login-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.login-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 36px 0;
+    margin-top: auto;
+}
+
+.footer-text {
+    font-size: 12px;
+    color: #CCCCCC;
+}
+
+/* 主应用容器 */
+#main-app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 顶部导航栏 */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding: 0 16px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #F0F0F0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333333;
+}
+
+/* 内容区域 */
+.content-area {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 60px;
+}
+
+.sub-page {
+    display: none;
+}
+
+.sub-page.active {
+    display: block;
+}
+
+/* 底部 TabBar */
+.tabbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 56px;
+    background: #FFFFFF;
+    border-top: 1px solid #E8E8E8;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    z-index: 1000;
+}
+
+.tabbar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 6px 0;
+    cursor: pointer;
+}
+
+.tabbar-item.active .tabbar-icon {
+    color: #1890FF;
+}
+
+.tabbar-item.active .tabbar-label {
+    color: #1890FF;
+}
+
+.tabbar-icon {
+    width: 24px;
+    height: 24px;
+    color: #999999;
+    margin-bottom: 2px;
+}
+
+.tabbar-label {
+    font-size: 10px;
+    color: #999999;
+}
+
+/* 打车页面 */
+.map-container {
+    height: 200px;
+    border-bottom: 1px solid #E8E8E8;
+    position: relative;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+/* 搜索框样式 */
+.search-box {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    z-index: 100;
+}
+
+.search-input {
+    flex: 1;
+    height: 40px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    padding-right: 10px;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    color: #1890FF;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-icon {
+    color: #999;
+    margin-right: 10px;
+}
+
+/* 地址选择弹窗样式 */
+.address-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.address-popup-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #E8E8E8;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+}
+
+.address-popup-title {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.address-popup-content {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.search-results {
+    margin-top: 10px;
+}
+
+.search-result-item {
+    padding: 15px;
+    border-bottom: 1px solid #F0F0F0;
+    cursor: pointer;
+}
+
+.search-result-item:hover {
+    background: #F5F5F5;
+}
+
+.result-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.result-address {
+    font-size: 13px;
+    color: #666;
+}
+
+.address-card {
+    background: #FFFFFF;
+    margin: -24px 16px 0;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.address-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+}
+
+.address-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+}
+
+.blue-dot {
+    background: #1890FF;
+}
+
+.green-dot {
+    background: #52C41A;
+}
+
+.address-info {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.address-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.address-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.arrow {
+    flex-shrink: 0;
+}
+
+.address-divider {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 8px 0;
+    margin-left: 20px;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: #F0F0F0;
+}
+
+.swap-btn {
+    position: absolute;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: #E6F7FF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.car-type-section {
+    margin-top: 20px;
+    padding: 0 16px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 16px;
+}
+
+.car-type-list {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.car-type-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    min-width: 100px;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.car-type-item.active {
+    border-color: #1890FF;
+    background: #E6F7FF;
+}
+
+.car-type-item.active .car-icon {
+    color: #1890FF;
+}
+
+.car-icon {
+    margin-bottom: 8px;
+    color: #666666;
+}
+
+.car-name {
+    font-size: 14px;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.car-price {
+    display: flex;
+    align-items: baseline;
+}
+
+.car-price .symbol {
+    font-size: 12px;
+    color: #1890FF;
+}
+
+.car-price .value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1890FF;
+}
+
+.car-price .unit {
+    font-size: 12px;
+    color: #999999;
+}
+
+.quick-locations {
+    margin-top: 20px;
+    padding: 0 16px;
+}
+
+.location-list {
+    background: #FFFFFF;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.location-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #F5F5F5;
+    cursor: pointer;
+}
+
+.location-item:last-child {
+    border-bottom: none;
+}
+
+.location-icon {
+    width: 48px;
+    height: 48px;
+    background: #E6F7FF;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    color: #1890FF;
+}
+
+.location-info {
+    flex: 1;
+}
+
+.location-name {
+    font-size: 16px;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.location-address {
+    font-size: 13px;
+    color: #999999;
+}
+
+/* 叫车按钮 */
+.call-taxi-section {
+    padding: 20px;
+    background: white;
+    margin-top: 10px;
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.call-taxi-btn {
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.call-taxi-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.call-taxi-btn:active {
+    transform: translateY(0);
+}
+
+.call-taxi-btn:disabled {
+    background: #CCCCCC;
+    cursor: not-allowed;
+}
+
+/* 酒店页面 */
+.search-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: #FFFFFF;
+    gap: 12px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    background: #F5F5F5;
+    border-radius: 20px;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.city-text {
+    font-size: 14px;
+    color: #333333;
+    font-weight: 500;
+}
+
+.search-input-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    background: #F5F5F5;
+    border-radius: 20px;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.search-placeholder {
+    font-size: 13px;
+    color: #999999;
+}
+
+.filter-section {
+    background: #FFFFFF;
+    margin-top: 12px;
+    padding: 16px;
+}
+
+.date-filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+}
+
+.date-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.date-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.date-value {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.date-week {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 2px;
+}
+
+.date-arrow {
+    padding: 0 16px;
+    color: #1890FF;
+}
+
+.nights-badge {
+    background: #1890FF;
+    color: #FFFFFF;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.quick-filter {
+    background: #FFFFFF;
+    margin-top: 12px;
+    padding: 12px 0;
+}
+
+.filter-list {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 0 16px;
+}
+
+.filter-item {
+    display: inline-flex;
+    padding: 8px 16px;
+    background: #F5F5F5;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #666666;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.filter-item.active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.hotel-list {
+    padding: 16px;
+}
+
+.hotel-card {
+    display: flex;
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+.hotel-image {
+    width: 140px;
+    height: 120px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hotel-info {
+    flex: 1;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.hotel-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hotel-tags {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    font-size: 11px;
+    color: #1890FF;
+    background: #E6F7FF;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.hotel-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    font-size: 14px;
+    color: #CCCCCC;
+}
+
+.star.filled {
+    color: #FAAD14;
+}
+
+.star.half {
+    color: #FAAD14;
+}
+
+.rating-score {
+    font-size: 14px;
+    font-weight: 500;
+    color: #FAAD14;
+}
+
+.review-count {
+    font-size: 12px;
+    color: #999999;
+}
+
+.hotel-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #999999;
+}
+
+.location-text {
+    font-size: 12px;
+}
+
+.hotel-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-left: 8px;
+}
+
+.hotel-price .price-symbol {
+    font-size: 12px;
+    color: #FF4D4F;
+}
+
+.hotel-price .price-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.hotel-price .price-unit {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 订单页面 */
+.tabs-section {
+    background: #FFFFFF;
+    padding: 12px 0;
+    margin-top: 0;
+}
+
+.tabs-list {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 16px;
+}
+
+.tab-item {
+    font-size: 15px;
+    color: #666666;
+    padding: 8px 16px;
+    position: relative;
+    cursor: pointer;
+}
+
+.tab-item.active {
+    color: #1890FF;
+    font-weight: 500;
+}
+
+.tab-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 3px;
+    background: #1890FF;
+    border-radius: 2px;
+}
+
+.orders-list {
+    padding: 16px;
+}
+
+.order-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F5F5F5;
+    margin-bottom: 12px;
+}
+
+.order-type {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.type-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.type-icon.taxi {
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+}
+
+.type-icon.hotel {
+    background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
+}
+
+.type-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.order-status {
+    font-size: 14px;
+}
+
+.order-status.completed {
+    color: #52C41A;
+}
+
+.order-status.cancelled {
+    color: #999999;
+}
+
+.order-status.confirmed,
+.order-status.matched {
+    color: #1890FF;
+}
+
+.order-status.active {
+    color: #FAAD14;
+}
+
+.order-content {
+    margin-bottom: 12px;
+}
+
+.route-info {
+    flex: 1;
+}
+
+.route-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.route-line {
+    width: 1px;
+    height: 24px;
+    background: #E8E8E8;
+    margin-left: 6px;
+}
+
+.order-subtitle {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 8px;
+    padding-left: 22px;
+}
+
+.order-main {
+    display: flex;
+}
+
+.hotel-image-small {
+    width: 120px;
+    height: 90px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hotel-info-small {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.hotel-name-small {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hotel-subtitle {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 4px;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+}
+
+.order-time {
+    font-size: 12px;
+    color: #999999;
+}
+
+.order-price {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.order-price .price-label {
+    font-size: 12px;
+    color: #999999;
+    margin-right: 4px;
+}
+
+.order-price .price-symbol {
+    font-size: 12px;
+    color: #FF4D4F;
+}
+
+.order-price .price-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.order-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+}
+
+.action-btn {
+    padding: 8px 20px;
+    border-radius: 16px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.action-btn.secondary {
+    background: #F5F5F5;
+    color: #666666;
+}
+
+.action-btn.primary {
+    background: #1890FF;
+    color: #FFFFFF;
+}
+
+/* 个人中心页面 */
+.user-card {
+    display: flex;
+    align-items: center;
+    padding: 24px 16px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.user-info {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.user-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+}
+
+.user-company {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 4px;
+}
+
+.user-department {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.menu-section {
+    background: #FFFFFF;
+    margin-top: 12px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #F5F5F5;
+    cursor: pointer;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.menu-icon.taxi {
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+}
+
+.menu-icon.hotel {
+    background: linear-gradient(135deg, #52C41A 0%, #389E0D 100%);
+}
+
+.menu-icon.address {
+    background: linear-gradient(135deg, #FAAD14 0%, #D48806 100%);
+}
+
+.menu-icon.invoice {
+    background: linear-gradient(135deg, #722ED1 0%, #531DAB 100%);
+}
+
+.menu-icon.contact {
+    background: linear-gradient(135deg, #13C2C2 0%, #08979C 100%);
+}
+
+.menu-icon.help {
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+}
+
+.menu-icon.feedback {
+    background: linear-gradient(135deg, #FA8C16 0%, #D46B08 100%);
+}
+
+.menu-icon.about {
+    background: linear-gradient(135deg, #8C8C8C 0%, #595959 100%);
+}
+
+.menu-content {
+    flex: 1;
+}
+
+.menu-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 2px;
+}
+
+.menu-desc {
+    font-size: 12px;
+    color: #999999;
+}
+
+.logout-section {
+    padding: 24px 16px;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid #FFE8E6;
+    cursor: pointer;
+}
+
+.logout-text {
+    font-size: 16px;
+    color: #FF4D4F;
+    font-weight: 500;
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0 80px;
+}
+
+.footer-text {
+    font-size: 12px;
+    color: #CCCCCC;
+    margin-bottom: 4px;
+}
+
+.version-text {
+    font-size: 11px;
+    color: #DDDDDD;
+}
+
+/* 弹窗 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: flex-end;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    border-radius: 16px 16px 0 0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999999;
+}
+
+.modal-body {
+    padding: 16px;
+}
+
+.search-section {
+    margin-bottom: 16px;
+}
+
+.search-section .search-box {
+    background: #F5F5F5;
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    background: transparent;
+}
+
+.address-list-modal {
+    background: #FFFFFF;
+}
+
+.address-item-modal {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #F5F5F5;
+    cursor: pointer;
+}
+
+.address-item-modal:last-child {
+    border-bottom: none;
+}
+
+.address-icon-modal {
+    width: 40px;
+    height: 40px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    color: #666666;
+}
+
+.address-icon-modal.current {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.address-info-modal {
+    flex: 1;
+}
+
+.address-name-modal {
+    font-size: 15px;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.address-detail-modal {
+    font-size: 12px;
+    color: #999999;
+}
+
+.section-divider {
+    padding: 12px 0;
+}
+
+.divider-text {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #FFFFFF;
+    padding: 16px 24px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 3000;
+    min-width: 120px;
+}
+
+.toast.hidden {
+    display: none;
+}
+
+.toast-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.toast-text {
+    font-size: 14px;
+}
+
+/* 日期选择器样式 */
+.date-picker {
+    padding: 16px 0;
+}
+
+.date-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.date-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.date-grid {
+    width: 100%;
+}
+
+.date-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.date-weekday {
+    text-align: center;
+    font-size: 13px;
+    color: #999999;
+    padding: 8px 0;
+}
+
+.date-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.date-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 14px;
+    color: #333333;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.date-day:hover {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.date-day.today {
+    background: #1890FF;
+    color: #FFFFFF;
+}
+
+.date-day.other-month {
+    color: #CCCCCC;
+}
+
+.date-day.other-month:hover {
+    background: #F5F5F5;
+    color: #999999;
+}
+
+/* 响应式优化 */
+@media (max-width: 375px) {
+    .login-container {
+        padding: 0 16px;
+    }
+    
+    .login-form {
+        padding: 24px;
+    }
+    
+    .car-type-item {
+        min-width: 80px;
+        padding: 12px 16px;
+    }
+    
+    .date-day {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+}
+
+/* ==================== 详情页面通用样式 ==================== */
+
+.detail-page {
+    min-height: 100vh;
+    background: #F5F5F5;
+    padding-bottom: 80px;
+}
+
+/* 酒店详情页样式 */
+
+.hotel-detail-header {
+    position: relative;
+    height: 240px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.hotel-detail-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.hotel-detail-info {
+    background: #FFFFFF;
+    margin-top: -16px;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.hotel-detail-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 12px;
+}
+
+.hotel-detail-tags {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.hotel-detail-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.hotel-detail-rating .rating-score {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FAAD14;
+}
+
+.hotel-detail-rating .review-count {
+    font-size: 12px;
+    color: #999999;
+}
+
+.hotel-detail-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    color: #999999;
+}
+
+.hotel-detail-location .location-text {
+    font-size: 13px;
+}
+
+.hotel-detail-description {
+    font-size: 13px;
+    color: #666666;
+    line-height: 1.6;
+    margin-top: 8px;
+}
+
+/* 分隔线样式 */
+
+.section-divider-detail {
+    padding: 16px;
+    background: #F5F5F5;
+}
+
+.divider-text-detail {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+}
+
+/* 房型列表样式 */
+
+.room-types-list {
+    background: #FFFFFF;
+    padding: 16px;
+}
+
+.room-type-card {
+    display: flex;
+    background: #FFFFFF;
+    border: 1px solid #F0F0F0;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.room-type-card:hover {
+    border-color: #1890FF;
+    box-shadow: 0 2px 12px rgba(24, 144, 255, 0.1);
+}
+
+.room-card-image {
+    width: 120px;
+    height: 90px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);
+    flex-shrink: 0;
+}
+
+.room-card-info {
+    flex: 1;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.room-card-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.room-card-specs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.room-card-specs .spec-text {
+    font-size: 12px;
+    color: #999999;
+    background: #F5F5F5;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.room-card-cancel {
+    font-size: 11px;
+    color: #52C41A;
+    margin-bottom: 4px;
+}
+
+.room-card-availability {
+    font-size: 11px;
+    color: #FAAD14;
+}
+
+.room-card-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    margin-left: 12px;
+}
+
+.room-card-price .price-symbol {
+    font-size: 12px;
+    color: #FF4D4F;
+}
+
+.room-card-price .price-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.room-card-price .price-unit {
+    font-size: 11px;
+    color: #999999;
+}
+
+.room-card-price .original-price {
+    font-size: 11px;
+    color: #999999;
+    text-decoration: line-through;
+    margin-top: 2px;
+}
+
+.empty-rooms {
+    text-align: center;
+    padding: 40px;
+    color: #999999;
+    font-size: 14px;
+}
+
+/* 房型详情页样式 */
+
+.room-detail-header {
+    position: relative;
+    height: 240px;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.room-detail-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.room-detail-info {
+    background: #FFFFFF;
+    margin-top: -16px;
+    border-radius: 16px 16px 0 0;
+    padding: 20px 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.room-detail-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 12px;
+}
+
+.room-detail-price {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 16px;
+}
+
+.room-detail-price .price-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+}
+
+.room-detail-price .price-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.room-detail-price .price-unit {
+    font-size: 13px;
+    color: #999999;
+    margin-left: 4px;
+}
+
+.room-detail-price .original-price {
+    font-size: 14px;
+    color: #999999;
+    text-decoration: line-through;
+    margin-left: 8px;
+}
+
+.room-detail-specs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.room-detail-specs .spec-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #666666;
+}
+
+.room-detail-specs .spec-text {
+    font-size: 13px;
+}
+
+.room-detail-cancel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.room-detail-cancel .cancel-text {
+    font-size: 13px;
+    color: #52C41A;
+}
+
+.room-detail-availability {
+    font-size: 13px;
+    color: #FAAD14;
+    font-weight: 500;
+}
+
+.room-detail-availability .available-count {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* 房型设施列表 */
+
+.room-facilities-list {
+    background: #FFFFFF;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.facility-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #F5F5F5;
+    border-radius: 8px;
+}
+
+.facility-item .facility-text {
+    font-size: 13px;
+    color: #333333;
+}
+
+.no-facilities {
+    text-align: center;
+    padding: 40px;
+    color: #999999;
+    font-size: 14px;
+    grid-column: span 2;
+}
+
+/* 底部操作栏 */
+
+.detail-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: #FFFFFF;
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #F0F0F0;
+    z-index: 1000;
+}
+
+.bottom-bar-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.bottom-bar-price .bottom-price-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 2px;
+}
+
+.bottom-bar-price .bottom-price-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+}
+
+.bottom-bar-price .bottom-price-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.bottom-bar-btn {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.bottom-bar-btn:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+}
+
+.bottom-bar-btn.secondary {
+    background: #F5F5F5;
+    color: #666666;
+}
+
+.bottom-bar-btn.primary {
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+}
+
+/* 订单确认页样式 */
+
+.order-confirm-section {
+    background: #FFFFFF;
+    margin-bottom: 12px;
+}
+
+.confirm-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    padding: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.confirm-hotel-card {
+    display: flex;
+    padding: 16px;
+}
+
+.confirm-hotel-image {
+    width: 100px;
+    height: 80px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);
+    flex-shrink: 0;
+}
+
+.confirm-hotel-info {
+    flex: 1;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.confirm-hotel-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.confirm-room-name {
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 8px;
+}
+
+.confirm-dates {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.confirm-dates .date-label {
+    font-size: 12px;
+    color: #999999;
+}
+
+.confirm-dates .date-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.confirm-dates .date-arrow {
+    color: #1890FF;
+    font-weight: bold;
+}
+
+.confirm-dates .nights-badge-detail {
+    background: #1890FF;
+    color: #FFFFFF;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* 确认表单样式 */
+
+.confirm-form {
+    padding: 0 16px;
+}
+
+.form-item-confirm {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.form-item-confirm:last-child {
+    border-bottom: none;
+}
+
+.form-label-confirm {
+    width: 80px;
+    font-size: 14px;
+    color: #333333;
+    flex-shrink: 0;
+}
+
+.form-input-confirm {
+    flex: 1;
+    font-size: 14px;
+    color: #333333;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.form-input-confirm::placeholder {
+    color: #CCCCCC;
+}
+
+.guest-count-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.guest-count-selector .count-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    color: #666666;
+    cursor: pointer;
+}
+
+.guest-count-selector .count-btn:active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.guest-count-selector .count-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* 价格明细样式 */
+
+.price-detail-list {
+    padding: 0 16px;
+}
+
+.price-detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.price-detail-item .price-label-detail {
+    font-size: 14px;
+    color: #666666;
+}
+
+.price-detail-item .price-value-detail {
+    font-size: 14px;
+    color: #333333;
+}
+
+.price-total-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-top: 1px solid #F5F5F5;
+    margin-top: 8px;
+}
+
+.price-total-line .total-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.price-total-line .total-price {
+    display: flex;
+    align-items: baseline;
+}
+
+.price-total-line .total-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+}
+
+.price-total-line .total-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+/* 支付方式样式 */
+
+.payment-options {
+    padding: 12px 16px;
+}
+
+.payment-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.payment-item.active {
+    background: #E6F7FF;
+    border-color: #1890FF;
+}
+
+.payment-item .payment-text {
+    flex: 1;
+    font-size: 14px;
+    color: #333333;
+    margin-left: 10px;
+}
+
+.payment-item .check-icon {
+    display: none;
+}
+
+.payment-item.active .check-icon {
+    display: block;
+}
+
+/* 订单详情页样式 */
+
+.order-status-header {
+    display: flex;
+    align-items: center;
+    padding: 24px 16px;
+    background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);
+}
+
+.order-status-info {
+    margin-left: 16px;
+}
+
+.order-status-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1890FF;
+    margin-bottom: 4px;
+}
+
+.order-status-desc {
+    font-size: 13px;
+    color: #666666;
+}
+
+.order-detail-section {
+    background: #FFFFFF;
+    margin-bottom: 12px;
+}
+
+.detail-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    padding: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.order-detail-card {
+    padding: 0 16px;
+}
+
+.detail-order-no,
+.detail-order-time {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.detail-order-time {
+    border-bottom: none;
+}
+
+.detail-order-no .detail-label,
+.detail-order-time .detail-label {
+    font-size: 14px;
+    color: #999999;
+}
+
+.detail-order-no .detail-value,
+.detail-order-time .detail-value {
+    font-size: 14px;
+    color: #333333;
+}
+
+.detail-hotel-card {
+    display: flex;
+    padding: 16px;
+}
+
+.detail-hotel-image {
+    width: 100px;
+    height: 80px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #E6F7FF 0%, #BAE7FF 100%);
+    flex-shrink: 0;
+}
+
+.detail-hotel-info {
+    flex: 1;
+    margin-left: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-hotel-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.detail-room-name {
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 12px;
+}
+
+.detail-dates-info {
+    display: flex;
+    gap: 16px;
+}
+
+.detail-dates-info .date-info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-dates-info .date-info-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.detail-dates-info .date-info-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.detail-guest-card {
+    padding: 0 16px;
+}
+
+.detail-guest-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.detail-guest-item:last-child {
+    border-bottom: none;
+}
+
+.detail-guest-item .detail-guest-label {
+    font-size: 14px;
+    color: #999999;
+}
+
+.detail-guest-item .detail-guest-value {
+    font-size: 14px;
+    color: #333333;
+}
+
+.detail-price-card {
+    padding: 0 16px;
+}
+
+.detail-price-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.detail-price-item:last-child {
+    border-bottom: none;
+}
+
+.detail-price-item .detail-price-label {
+    font-size: 14px;
+    color: #666666;
+}
+
+.detail-price-item .detail-price-value {
+    font-size: 14px;
+    color: #333333;
+}
+
+.detail-price-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid #F5F5F5;
+    margin-top: 8px;
+}
+
+.detail-price-total .detail-total-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.detail-price-total .detail-total-value {
+    display: flex;
+    align-items: baseline;
+}
+
+.detail-price-total .detail-total-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+}
+
+.detail-price-total .detail-total-amount {
+    font-size: 22px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.detail-payment-method {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-top: 1px solid #F5F5F5;
+}
+
+.detail-payment-method .payment-method-label {
+    font-size: 14px;
+    color: #999999;
+}
+
+.detail-payment-method .payment-method-value {
+    font-size: 14px;
+    color: #333333;
+}
+
+/* 取消订单弹窗样式 */
+
+.modal-small .modal-content {
+    max-height: 80vh;
+}
+
+.cancel-reason-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 12px;
+}
+
+.cancel-reason-list {
+    margin-bottom: 20px;
+}
+
+.cancel-reason-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.cancel-reason-item:last-child {
+    border-bottom: none;
+}
+
+.cancel-reason-item.active {
+    color: #1890FF;
+}
+
+.reason-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #CCCCCC;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+}
+
+.reason-radio.checked {
+    border-color: #1890FF;
+}
+
+.reason-radio.checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #1890FF;
+    border-radius: 50%;
+}
+
+.reason-text {
+    font-size: 14px;
+    color: #333333;
+}
+
+.cancel-reason-item.active .reason-text {
+    color: #1890FF;
+}
+
+.cancel-confirm-section {
+    border-top: 1px solid #F5F5F5;
+    padding-top: 16px;
+}
+
+.cancel-warning {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #FFFBE6;
+    border-radius: 8px;
+}
+
+.warning-text {
+    font-size: 13px;
+    color: #D48806;
+}
+
+.cancel-confirm-btn {
+    width: 100%;
+    padding: 14px;
+    background: #FF4D4F;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.cancel-confirm-btn:active {
+    opacity: 0.9;
+}
+
+/* 加载遮罩样式 */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-overlay.hidden {
+    display: none;
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+}
+
+.loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #FFFFFF;
+}
+
+/* Toast 图标样式扩展 */
+
+.toast-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.toast-icon.success svg circle {
+    fill: #52C41A;
+}
+
+.toast-icon.error svg circle {
+    fill: #FF4D4F;
+}
+
+.toast-icon.error path {
+    stroke: #FF4D4F;
+}
+
+/* 导航栏返回按钮 */
+
+#backBtn {
+    display: none;
+}
+
+
+
+/* 订单详情页操作按钮 */
+
+#orderDetailActions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+#orderDetailActions .bottom-bar-btn {
+    flex: 1;
+    text-align: center;
+}
+
+/* 星星评分样式 */
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    font-size: 14px;
+    color: #CCCCCC;
+}
+
+.star.filled {
+    color: #FAAD14;
+}
+
+.star.half {
+    color: #FAAD14;
+    position: relative;
+}
+
+/* 图片占位符样式 */
+
+.hotel-detail-image svg,
+.room-detail-image svg,
+.room-card-image svg,
+.confirm-hotel-image svg,
+.detail-hotel-image svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* 页面滚动优化 */
+
+.detail-page {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ==================== 机票页面样式 ==================== */
+
+.flight-search-card {
+    background: #FFFFFF;
+    margin: 16px;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.flight-search-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.city-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 16px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.city-selector .city-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.city-selector .city-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.city-selector .arrow {
+    margin-top: 4px;
+}
+
+.flight-search-date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.flight-search-date .date-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flight-search-date .date-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.flight-search-date .date-value {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.flight-search-date .date-week {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 2px;
+}
+
+.flight-filter-section {
+    margin-bottom: 20px;
+}
+
+.flight-filter-section .filter-title {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 12px;
+}
+
+.flight-filter-section .filter-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.flight-filter-section .filter-option {
+    display: inline-flex;
+    padding: 8px 16px;
+    background: #F5F5F5;
+    border-radius: 16px;
+    font-size: 13px;
+    color: #666666;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.flight-filter-section .filter-option.active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.flight-search-btn {
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.flight-search-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.flight-list-section {
+    padding: 0 16px;
+    margin-top: 24px;
+}
+
+.flight-list {
+    margin-top: 16px;
+}
+
+.flight-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.flight-card:hover {
+    box-shadow: 0 4px 20px rgba(24, 144, 255, 0.15);
+}
+
+.flight-info {
+    margin-bottom: 12px;
+}
+
+.airline-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.airline-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.flight-no {
+    font-size: 12px;
+    color: #999999;
+}
+
+.flight-time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flight-time .time-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flight-time .time {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.flight-time .city {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 4px;
+}
+
+.flight-duration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+}
+
+.flight-duration::before,
+.flight-duration::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    width: 60px;
+    height: 1px;
+    background: #E8E8E8;
+}
+
+.flight-duration::before {
+    left: 0;
+}
+
+.flight-duration::after {
+    right: 0;
+}
+
+.flight-duration .duration {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.flight-duration .direct-tag,
+.flight-duration .overnight-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-top: 4px;
+}
+
+.flight-duration .direct-tag {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.flight-duration .overnight-tag {
+    background: #FFFBE6;
+    color: #FAAD14;
+}
+
+.flight-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+}
+
+.flight-price .price-info {
+    display: flex;
+    align-items: baseline;
+}
+
+.flight-price .price-symbol {
+    font-size: 12px;
+    color: #FF4D4F;
+}
+
+.flight-price .price-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+.flight-price .price-unit {
+    font-size: 12px;
+    color: #999999;
+    margin-left: 4px;
+}
+
+.flight-price .seat-info {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* ==================== 火车票页面样式 ==================== */
+
+.train-search-card {
+    background: #FFFFFF;
+    margin: 16px;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.train-search-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.train-search-date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.train-search-date .date-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.train-search-date .date-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.train-search-date .date-value {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.train-search-date .date-week {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 2px;
+}
+
+.train-filter-section {
+    margin-bottom: 20px;
+}
+
+.train-filter-section .filter-title {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 12px;
+}
+
+.train-filter-section .filter-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.train-filter-section .filter-option {
+    display: inline-flex;
+    padding: 8px 16px;
+    background: #F5F5F5;
+    border-radius: 16px;
+    font-size: 13px;
+    color: #666666;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.train-filter-section .filter-option.active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.train-search-btn {
+    width: 100%;
+    height: 48px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.train-search-btn:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.train-list-section {
+    padding: 0 16px;
+    margin-top: 24px;
+}
+
+.train-list {
+    margin-top: 16px;
+}
+
+.train-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.train-card:hover {
+    box-shadow: 0 4px 20px rgba(24, 144, 255, 0.15);
+}
+
+.train-info {
+    margin-bottom: 12px;
+}
+
+.train-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.train-no {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.train-type {
+    font-size: 11px;
+    padding: 2px 8px;
+    background: #F5F5F5;
+    color: #666666;
+    border-radius: 8px;
+}
+
+.train-time {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.train-time .time-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.train-time .time {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.train-time .station {
+    font-size: 12px;
+    color: #999999;
+    margin-top: 4px;
+}
+
+.train-duration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+}
+
+.train-duration::before,
+.train-duration::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    width: 60px;
+    height: 1px;
+    background: #E8E8E8;
+}
+
+.train-duration::before {
+    left: 0;
+}
+
+.train-duration::after {
+    right: 0;
+}
+
+.train-duration .duration {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.train-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.train-price .price-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 12px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    min-width: 80px;
+}
+
+.train-price .seat-type {
+    font-size: 11px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.train-price .price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FF4D4F;
+}
+
+.train-price .seat-status {
+    font-size: 10px;
+    margin-top: 4px;
+}
+
+.train-price .seat-status:not(.no-ticket):not(.waiting-list) {
+    color: #52C41A;
+}
+
+.train-price .seat-status.no-ticket {
+    color: #999999;
+}
+
+.train-price .seat-status.waiting-list {
+    color: #FAAD14;
+}
+
+/* ==================== 个人中心功能页面样式 ==================== */
+
+/* 页面通用样式 */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #F5F5F5;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-left,
+.header-right {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333333;
+}
+
+.header-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;
+    flex: 1;
+    text-align: center;
+}
+
+.content {
+    padding: 12px 16px;
+}
+
+/* 常用地址页面样式 */
+.address-item {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.address-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.address-type {
+    min-width: 28px;
+    height: 18px;
+    background: #E6F7FF;
+    color: #1890FF;
+    font-size: 11px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+}
+
+.address-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    margin-right: 12px;
+}
+
+/* 城市选择样式 */
+.city-list {
+    margin-bottom: 20px;
+}
+
+.city-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.city-item {
+    padding: 12px 8px;
+    text-align: center;
+    background: #f9f9f9;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.city-item:hover {
+    background: #1890FF;
+    color: white;
+}
+
+.city-list-scroll {
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+.city-group {
+    margin-bottom: 16px;
+}
+
+.city-letter {
+    font-size: 12px;
+    font-weight: 600;
+    color: #999;
+    margin-bottom: 8px;
+    padding-left: 4px;
+}
+
+.city-list-scroll .city-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+
+.city-list-scroll .city-item:hover {
+    background: #1890FF;
+    color: white;
+}
+
+/* 日期选择样式 */
+.date-picker-container {
+    padding: 16px;
+}
+
+.date-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.date-picker-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.date-picker-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.date-nav-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.month-year {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.weekday {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    padding: 8px 0;
+}
+
+.date-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.date-cell:hover {
+    background: #f0f0f0;
+}
+
+.date-cell.today {
+    background: #E6F7FF;
+    color: #1890FF;
+    font-weight: 600;
+}
+
+.date-cell.selected {
+    background: #1890FF;
+    color: white;
+    font-weight: 600;
+}
+
+.date-cell.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.date-cell.disabled:hover {
+    background: none;
+}
+
+.date-picker-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.date-picker-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.date-picker-btn.cancel {
+    background: #f5f5f5;
+    color: #666;
+}
+
+.date-picker-btn.confirm {
+    background: #1890FF;
+    color: white;
+}
+
+.address-phone {
+    font-size: 14px;
+    color: #666666;
+}
+
+.address-detail {
+    font-size: 14px;
+    color: #666666;
+    line-height: 20px;
+    margin-bottom: 12px;
+}
+
+.address-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #666666;
+}
+
+.action-text {
+    font-size: 13px;
+}
+
+/* 发票信息页面样式 */
+.invoice-item {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.invoice-type {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.invoice-status {
+    min-width: 32px;
+    height: 18px;
+    background: #E6F7FF;
+    color: #1890FF;
+    font-size: 11px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.invoice-content {
+    margin-bottom: 12px;
+}
+
+.invoice-row {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: flex-start;
+}
+
+.label {
+    width: 60px;
+    font-size: 13px;
+    color: #999999;
+    flex-shrink: 0;
+}
+
+.value {
+    flex: 1;
+    font-size: 13px;
+    color: #333333;
+    line-height: 18px;
+}
+
+.invoice-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+/* ==================== 火车票详情和预订页面样式 ==================== */
+
+/* 火车票详情页面样式 */
+.train-detail-card {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.train-detail-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.train-detail-header .train-no {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1890FF;
+    margin-right: 12px;
+}
+
+.train-detail-header .train-type {
+    font-size: 14px;
+    color: #666;
+    background: #e6f7ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.train-detail-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.route-item {
+    text-align: center;
+    flex: 1;
+}
+
+.route-item .time {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.route-item .station {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.route-item .date {
+    font-size: 12px;
+    color: #999;
+}
+
+.route-duration {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.route-duration .duration {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.route-duration .train-icon {
+    margin-bottom: 8px;
+}
+
+.route-duration .direct-tag {
+    font-size: 12px;
+    color: #1890FF;
+    background: #e6f7ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.seat-types-list {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 80px;
+}
+
+.seat-type-card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+}
+
+.seat-type-card:hover {
+    border-color: #1890FF;
+}
+
+.seat-type-card.active {
+    border-color: #1890FF;
+    background: #f0f5ff;
+}
+
+.seat-type-info {
+    flex: 1;
+}
+
+.seat-type-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.seat-type-available {
+    font-size: 14px;
+    color: #52C41A;
+}
+
+.seat-type-price {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1890FF;
+}
+
+/* 火车票订单确认页面样式 */
+.confirm-train-card {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.seat-type-select {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+}
+
+.insurance-select {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.insurance-select .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+    margin-right: 12px;
+}
+
+.insurance-select .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.insurance-select .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.insurance-select .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.insurance-select input:checked + .slider {
+    background-color: #1890FF;
+}
+
+.insurance-select input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+.insurance-text {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .train-detail-route {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .route-item {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 12px;
+    }
+    
+    .route-duration {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        margin: 12px 0;
+    }
+    
+    .route-duration .duration {
+        margin-bottom: 0;
+    }
+    
+    .route-duration .train-icon {
+        margin: 0 12px;
+    }
+    
+    .route-duration .direct-tag {
+        margin-bottom: 0;
+    }
+}
+
+/* ==================== 机票详情页面样式 ==================== */
+
+/* 航班详情卡片样式 */
+.flight-detail-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 航班路线样式 */
+.flight-detail-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.flight-detail-route .route-item {
+    text-align: center;
+    flex: 1;
+}
+
+.flight-detail-route .route-item .time {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.flight-detail-route .route-item .city {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.flight-detail-route .route-item .airport {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+.flight-detail-route .route-item .date {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 路线中间部分样式 */
+.flight-detail-route .route-duration {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.flight-detail-route .route-duration .duration {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 8px;
+}
+
+.flight-detail-route .route-duration .flight-icon {
+    margin-bottom: 8px;
+    color: #1890FF;
+}
+
+.flight-detail-route .route-duration .direct-tag {
+    font-size: 12px;
+    color: #1890FF;
+    background: #E6F7FF;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+/* 航班信息部分样式 */
+.flight-info-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.flight-info-section .info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.flight-info-section .info-label {
+    font-size: 12px;
+    color: #999999;
+}
+
+.flight-info-section .info-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+}
+
+/* 舱位类型列表样式 */
+.cabin-types-list {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 80px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 舱位卡片样式 */
+.cabin-type-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #FFFFFF;
+    border: 2px solid #F5F5F5;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cabin-type-card:hover {
+    border-color: #1890FF;
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+}
+
+.cabin-type-card.active {
+    border-color: #1890FF;
+    background: #F0F5FF;
+}
+
+.cabin-type-info {
+    flex: 1;
+}
+
+.cabin-type-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.cabin-type-desc {
+    font-size: 13px;
+    color: #666666;
+    margin-bottom: 4px;
+}
+
+.cabin-type-available {
+    font-size: 12px;
+    color: #52C41A;
+    font-weight: 500;
+}
+
+.cabin-type-price {
+    text-align: right;
+}
+
+.cabin-type-price .price {
+    font-size: 20px;
+    font-weight: 600;
+    color: #FF4D4F;
+    margin-bottom: 2px;
+}
+
+.cabin-type-price .price-unit {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 底部操作栏样式 */
+#flightDetailBottomBar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: #FFFFFF;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #F0F0F0;
+    z-index: 1000;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
+}
+
+#flightDetailBottomBar .bottom-bar-price {
+    flex: 1;
+}
+
+#flightDetailBottomBar .bottom-price-label {
+    font-size: 12px;
+    color: #999999;
+    margin-bottom: 4px;
+}
+
+#flightDetailBottomBar .bottom-price-value {
+    display: flex;
+    align-items: baseline;
+}
+
+#flightDetailBottomBar .bottom-price-symbol {
+    font-size: 14px;
+    color: #FF4D4F;
+    margin-right: 2px;
+}
+
+#flightDetailBottomBar .bottom-price-amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF4D4F;
+}
+
+#flightDetailBottomBar .bottom-bar-btn {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #1890FF 0%, #096DD9 100%);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 16px;
+}
+
+#flightDetailBottomBar .bottom-bar-btn:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+}
+
+#flightDetailBottomBar .bottom-bar-btn:disabled {
+    background: #CCCCCC;
+    cursor: not-allowed;
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+    .flight-detail-route {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .flight-detail-route .route-item {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 16px;
+    }
+    
+    .flight-detail-route .route-duration {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 16px 0;
+        border-top: 1px solid #F5F5F5;
+        border-bottom: 1px solid #F5F5F5;
+        margin: 16px 0;
+    }
+    
+    .flight-detail-route .route-duration .duration {
+        margin-bottom: 0;
+    }
+    
+    .flight-detail-route .route-duration .flight-icon {
+        margin: 0 12px;
+    }
+    
+    .flight-detail-route .route-duration .direct-tag {
+        margin-bottom: 0;
+    }
+    
+    .flight-info-section {
+        grid-template-columns: 1fr;
+    }
+    
+    #flightDetailBottomBar {
+        padding: 12px;
+    }
+    
+    #flightDetailBottomBar .bottom-bar-btn {
+        padding: 10px 24px;
+        font-size: 14px;
+    }
+}
+
+/* ==================== 航班订单确认页面样式 ==================== */
+
+/* 航班确认卡片样式 */
+.confirm-flight-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 航班路线样式 */
+.confirm-flight-card .flight-route {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.confirm-flight-card .route-item {
+    text-align: center;
+    flex: 1;
+}
+
+.confirm-flight-card .route-item .time {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.confirm-flight-card .route-item .city {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 2px;
+}
+
+.confirm-flight-card .route-item .airport {
+    font-size: 12px;
+    color: #999999;
+}
+
+/* 路线中间部分样式 */
+.confirm-flight-card .route-duration {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 12px;
+}
+
+.confirm-flight-card .route-duration .duration {
+    font-size: 12px;
+    color: #666666;
+    margin-bottom: 8px;
+}
+
+.confirm-flight-card .route-duration .flight-icon {
+    margin-bottom: 8px;
+    color: #1890FF;
+}
+
+.confirm-flight-card .route-duration .cabin-class {
+    font-size: 12px;
+    color: #1890FF;
+    background: #E6F7FF;
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+/* 航班信息样式 */
+.confirm-flight-card .flight-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.confirm-flight-card .info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.confirm-flight-card .info-label {
+    font-size: 11px;
+    color: #999999;
+}
+
+.confirm-flight-card .info-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #333333;
+}
+
+/* 保险选项样式 */
+.insurance-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.insurance-option .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.insurance-option .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.insurance-option .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.insurance-option .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.insurance-option input:checked + .slider {
+    background-color: #1890FF;
+}
+
+.insurance-option input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+.insurance-text {
+    font-size: 14px;
+    color: #666666;
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+    .confirm-flight-card .flight-route {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .confirm-flight-card .route-item {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 12px;
+    }
+    
+    .confirm-flight-card .route-duration {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-top: 1px solid #F5F5F5;
+        border-bottom: 1px solid #F5F5F5;
+        margin: 12px 0;
+    }
+    
+    .confirm-flight-card .route-duration .duration {
+        margin-bottom: 0;
+    }
+    
+    .confirm-flight-card .route-duration .flight-icon {
+        margin: 0 12px;
+    }
+    
+    .confirm-flight-card .route-duration .cabin-class {
+        margin-bottom: 0;
+    }
+    
+    .confirm-flight-card .flight-info {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .confirm-flight-card .info-row {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+/* 紧急联系人页面样式 */
+.contact-item {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.contact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.contact-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+}
+
+.contact-relation {
+    min-width: 40px;
+    height: 18px;
+    background: #E6F7FF;
+    color: #1890FF;
+    font-size: 11px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-info {
+    margin-bottom: 12px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    color: #666666;
+}
+
+.info-text {
+    font-size: 13px;
+    margin-left: 8px;
+    flex: 1;
+}
+
+.contact-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
+    padding-top: 12px;
+    border-top: 1px solid #F5F5F5;
+}
+
+/* 帮助中心页面样式 */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 0 12px;
+    margin-bottom: 12px;
+    height: 40px;
+    color: #999999;
+}
+
+.search-input {
+    flex: 1;
+    font-size: 14px;
+    color: #333333;
+    margin-left: 8px;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.faq-section {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333333;
+    margin-bottom: 12px;
+}
+
+.faq-item {
+    border-bottom: 1px solid #F5F5F5;
+    padding: 12px 0;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.question-text {
+    font-size: 14px;
+    color: #333333;
+    flex: 1;
+    margin-right: 8px;
+    line-height: 20px;
+}
+
+.faq-answer {
+    margin-top: 8px;
+    padding-left: 0;
+}
+
+.answer-text {
+    font-size: 13px;
+    color: #666666;
+    line-height: 20px;
+}
+
+.contact-section {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 意见反馈页面样式 */
+.form-section {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-item {
+    margin-bottom: 16px;
+}
+
+.form-item:last-child {
+    margin-bottom: 0;
+}
+
+.type-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.type-option {
+    padding: 8px 12px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #666666;
+    cursor: pointer;
+}
+
+.type-option.active {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+.textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 10px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #333333;
+    resize: none;
+    border: none;
+    outline: none;
+}
+
+.counter {
+    font-size: 11px;
+    color: #999999;
+    text-align: right;
+    margin-top: 4px;
+}
+
+.input {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #333333;
+    border: none;
+    outline: none;
+}
+
+.upload-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.upload-btn {
+    width: 80px;
+    height: 80px;
+    background: #F5F5F5;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #DDDDDD;
+    cursor: pointer;
+    color: #999999;
+}
+
+.upload-text {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.tip {
+    font-size: 11px;
+    color: #999999;
+    margin-top: 4px;
+}
+
+.submit-btn {
+    width: 100%;
+    height: 44px;
+    background: #1890FF;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* 关于我们页面样式 */
+.logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    background: #E6F7FF;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.company-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.version {
+    font-size: 12px;
+    color: #999999;
+}
+
+.info-section {
+    background: #FFFFFF;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-text {
+    font-size: 14px;
+    color: #333333;
+}
+
+.description {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.desc-text {
+    font-size: 13px;
+    color: #666666;
+    line-height: 20px;
+    text-align: center;
+}
+
+.copyright {
+    text-align: center;
+    padding: 12px 0;
+}
+
+.copyright-text {
+    font-size: 11px;
+    color: #999999;
+}
+
+/* 空状态样式 */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+}
+
+.empty-text {
+    font-size: 14px;
+    color: #999999;
+    margin: 16px 0;
+}
+
+.add-btn {
+    width: 120px;
+    height: 36px;
+    background: #1890FF;
+    color: #FFFFFF;
+    font-size: 14px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
